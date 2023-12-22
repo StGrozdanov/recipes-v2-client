@@ -2,25 +2,22 @@
   "name": "recipes-v2-client",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
-    "@types/node": "^16.18.68",
-    "@types/react": "^18.2.45",
-    "@types/react-dom": "^18.2.18",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1",
-    "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4"
-  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "react-scripts test --watchAll=false",
+    "eject": "react-scripts eject",
+    "lint": "eslint src --ext ts --ext tsx --ext js",
+    "type-check": "tsc --pretty --noEmit",
+    "test:int": "playwright test tests/integration --pass-with-no-tests",
+    "test:e2e": "playwright test tests/e2e --pass-with-no-tests",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.@(ts|tsx)": [
+      "npm run lint"
+    ],
+    "*.{js}": "eslint --cache --fix"
   },
   "eslintConfig": {
     "extends": [
@@ -39,5 +36,32 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.68",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "typescript": "^4.9.5",
+    "web-vitals": "^2.1.4",
+    "animate.css": "^4.1.1",
+    "eslint-plugin-react-func": "^0.1.18",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
+    "moment": "^2.29.4",
+    "playwright": "^1.40.1",
+    "react-router-dom": "^6.20.1",
+    "sass": "^1.69.5"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.1",
+    "eslint": "^8.55.0",
+    "husky": "^8.0.0"
   }
 }
