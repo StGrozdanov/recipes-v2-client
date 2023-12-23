@@ -68,6 +68,7 @@
   "devDependencies": {
     "@playwright/test": "^1.40.1",
     "eslint": "^8.55.0",
+    "eslint-plugin-jsdoc": "^46.9.1",
     "husky": "^8.0.0"
   }
 }
