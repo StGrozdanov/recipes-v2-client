@@ -84,7 +84,12 @@
           "*.cts"
         ],
         "rules": {
-          "require-jsdoc": 2
+          "require-jsdoc": [
+            2,
+            {
+              "context": "exported-function"
+            }
+          ]
         }
       }
     ]
