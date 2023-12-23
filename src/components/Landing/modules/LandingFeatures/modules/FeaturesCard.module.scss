@@ -1,0 +1,152 @@
+@use 'src/scss/common/colors' as *;
+@use 'src/scss/common/animations' as *;
+@use 'src/scss/common/fonts' as *;
+@use 'src/scss/common/media' as *;
+@use 'sass:map';
+
+$border-color: $orange-accent-color;
+$background-color: rgba(170, 109, 33, 10%);
+$figure-size: 200px;
+
+@mixin text() {
+    text-align: center;
+    z-index: 2;
+    color: white;
+}
+
+@mixin pseudoElementProperties() {
+    background: $border-color;
+    content: "";
+    position: absolute;
+    width: 2px;
+    height: 83px;
+    margin-top: -41px;
+    z-index: 1;
+}
+
+.inner {
+    border-color: $border-color;
+    position: absolute;
+    top: 0;
+    width: $figure-size;
+    height: $figure-size;
+    background: $background-color;
+    border-width: 2px;
+    border-style: solid;
+    transform: rotate(45deg);
+
+    @include maxWidthMediaQuery(1000px) {
+        position: static;
+    }
+
+    &:before,
+    &:after {
+        @include pseudoElementProperties();
+        transform: rotate(45deg);
+        right: auto;
+        left: 27px;
+        bottom: auto;
+        top: 27px;
+    }
+
+    &:after {
+        height: 85px;
+        right: 27px;
+        left: auto;
+        bottom: -13px;
+        top: auto;
+    }
+}
+
+.outter {
+    position: absolute;
+    top: 20%;
+    transform: translate(-50%, -50%);
+    width: $figure-size;
+    height: $figure-size;
+    overflow: hidden;
+    z-index: 1;
+    @include smoothTransitionAnimation();
+
+    @include maxWidthMediaQuery(1000px) {
+        position: static;
+        margin: 15px 0;
+    }
+
+    &:before,
+    &:after {
+        @include pseudoElementProperties();
+        left: 0;
+        top: 50%;
+    }
+
+    &:after {
+        left: auto;
+        right: 0;
+        margin-top: -43px;
+        height: 83px;
+    }
+}
+
+.text {
+    @include text();
+    @include elegantCormorantFont('medium');
+}
+
+.text-heading {
+    @include text();
+}
+
+.content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    padding: 0 20px;
+}
+
+.icon {
+    margin: 0 auto;
+    font-size: 1.5rem;
+    z-index: 2;
+    color: $border-color;
+    display: block;
+}
+
+@include minWidthMediaQuery(1700px) {
+    .outter {
+        height: 250px;
+        width: 250px;
+
+        &:before {
+            height: 100px;
+            margin-top: -50px;
+        }
+
+        &:after {
+            margin-top: -50px;
+            height: 100px;
+        }
+    }
+
+    .inner {
+        width: 250px;
+        height: 250px;
+
+        &:before {
+            height: 103px;
+            margin-top: -25px;
+            left: 34px;
+            top: 9px;
+        }
+
+        &:after {
+            height: 103px;
+            right: 35px;
+            left: auto;
+            bottom: 14px;
+            top: 200px;
+        }
+    }
+}

@@ -1,0 +1,33 @@
+@use 'src/scss/common/media' as *;
+
+.features {
+    position: relative;
+
+    @include maxWidthMediaQuery(1000px) {
+        display: inline-grid;
+        height: fit-content;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .features-image-container {
+        height: 60vh;
+        object-fit: cover;
+
+        @include maxWidthMediaQuery(1000px) {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+        }
+
+        .features-image {
+            width: 100%;
+            height: 100%;
+            filter: brightness(0.35);
+
+            @include maxWidthMediaQuery(1000px) {
+                object-fit: cover;
+            }
+        }
+    }
+}

@@ -1,0 +1,15 @@
+@use "src/scss/common/colors" as *;
+@use "src/scss/common/media" as *;
+
+@mixin siteNavigation() {
+    display: flex;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    width: 100%;
+    background: $nav-background;
+    height: 13vh;
+    box-shadow: $nav-box-shadow;
+    align-items: center;
+    justify-content: space-around;
+}

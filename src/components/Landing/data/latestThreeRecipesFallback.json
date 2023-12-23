@@ -1,0 +1,17 @@
+[
+    {
+        "imageURL": "https://cook-book-shushanite.s3.eu-central-1.amazonaws.com/08885B50-4AA7-44DD-A976-B8C310B80235.jpeg",
+        "recipeName": "Сьомга със сос",
+        "category": "Риба"
+    },
+    {
+        "imageURL": "https://cook-book-shushanite.s3.eu-central-1.amazonaws.com/healthy-pancakes.jpg",
+        "recipeName": "бананови палачинки",
+        "category": "Тестени"
+    },
+    {
+        "imageURL": "https://cook-book-shushanite.s3.eu-central-1.amazonaws.com/pizza.webp",
+        "recipeName": "пица",
+        "category": "Тестени"
+    }
+]

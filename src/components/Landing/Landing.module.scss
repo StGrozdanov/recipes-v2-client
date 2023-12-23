@@ -1,0 +1,54 @@
+@use 'src/scss/common/colors' as *;
+@use 'src/scss/common/media' as *;
+
+.landing-section {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+
+    @include maxWidthMediaQuery(990px) {
+        flex-direction: column;
+        align-items: center;
+        align-content: center;
+    }
+}
+
+.landing-article {
+    display: flex;
+    flex-direction: column;
+    width: 50vw;
+    align-items: center;
+
+    @include maxWidthMediaQuery(990px) {
+        width: 100vw;
+    }
+}
+
+.landing-heading {
+    position: relative;
+    padding: 8px 16px;
+    background-color: $orange-accent-color;
+    color: white;
+    margin: 0 auto;
+    width: fit-content;
+    margin-top: 40px;
+    max-width: 100vw;
+
+    @include maxWidthMediaQuery(990px) {
+        font-size: 95%;
+    }
+
+    &:after {
+        border-color: $orange-accent-color transparent transparent;
+        border-style: solid;
+        border-width: 10px 16px 0;
+        bottom: -9px;
+        content: "";
+        display: block;
+        height: 0;
+        left: 53%;
+        margin-left: -8px;
+        position: absolute;
+        width: 0;
+    }
+}

@@ -1,0 +1,56 @@
+@use 'src/scss/common/media' as *;
+
+.card-container {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    @include minWidthMediaQuery(1600px){
+        margin: 40px 100px !important;
+    }
+} 
+
+.recipe-name {
+    text-align: center;
+}
+
+.picture-container {
+    width: 320px;
+    height: 215px;
+    box-shadow: 0px 1px 6px 3px #00000063;
+    overflow: hidden;
+
+    @include maxWidthMediaQuery(350px) {
+        width: 275px;
+        height: 190px;  
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        transition: transform .8s;
+
+        &:hover {
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+    }
+}
+
+.card-footer {
+    padding: 15px 0;
+    position: relative;
+
+    &:after {
+        content: "";
+        width: 50px;
+        height: 2px;
+        background-color: black;
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}

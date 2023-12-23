@@ -1,0 +1,28 @@
+@mixin button($background) {
+    padding: 6px 24px;
+    border-radius: 5px;
+    border-width: 0;
+    background-color: $background;
+    width: 85px;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+@mixin hoverEffect($background, $text-color) {
+    &:hover {
+        background-color: $background;
+        color: $text-color;
+    }
+}
+
+@mixin cancel-btn() {
+    @include button(#ff00008a);
+    @include hoverEffect(red, white)
+}
+
+@mixin confirm-btn() {
+    @include button(#00800069);
+    @include hoverEffect(green, white)
+}

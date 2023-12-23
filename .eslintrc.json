@@ -83,7 +83,19 @@
           "*.cts"
         ],
         "rules": {
-          "require-jsdoc": 2
+          "jsdoc/require-jsdoc": [
+            2,
+            {
+              "require": {
+                "FunctionDeclaration": true,
+                "MethodDefinition": false,
+                "ClassDeclaration": false,
+                "ArrowFunctionExpression": true,
+                "FunctionExpression": true
+              },
+              "context": "exported-function"
+            }
+          ]
         }
       }
     ]

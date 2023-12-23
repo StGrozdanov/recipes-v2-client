@@ -1,0 +1,58 @@
+@use 'src/scss/common/animations' as *;
+@use 'src/scss/common/media' as *;
+
+.notification {
+    padding: 2px 7px;
+    display: flex;
+    border-radius: 15px;
+    align-items: center;
+    justify-content: space-between;
+    width: 50vw;
+    position: fixed;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0px 1px 2px 1px #80808070;
+
+    @include minWidthMediaQuery(1500px) {
+        width: 30vw;
+    }
+
+    @include maxWidthMediaQuery(460px) {
+        width: 95vw;
+    }
+}
+
+.icon-container {
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 15px;
+    min-width: 40px;
+
+    @include maxWidthMediaQuery(460px) {
+        min-width: 40px;
+    }
+
+    .icon {
+        font-size: 200%;
+        color: white;
+        width: 100%;
+    }
+}
+
+.x-mark {
+    font-size: 120%;
+    color: gray;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.content {
+    padding: 0 10px;
+    text-align: center;
+    
+    @include fontSizeMediaQuery(460px, 0.7rem)
+}

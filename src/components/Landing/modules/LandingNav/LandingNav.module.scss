@@ -1,0 +1,41 @@
+@use "src/scss/common/colors" as *;
+@use "src/scss/common/media" as *;
+@use "src/scss/common/nav" as *;
+
+.landing-nav {
+    @include siteNavigation();
+
+    img {
+        width: 50px;
+
+        @include minWidthMediaQuery(1650px) {
+            width: 4vw;
+        }
+    }
+
+    .landing-nav-link {
+        background: $orange-accent-color;
+        text-decoration: none;
+        color: white;
+        padding: 6px 16px;
+
+        @include fontSizeMediaQuery(1650px, 1.3rem, 'min-width');
+    }
+
+    .landing-nav-link:hover {
+        background: green;
+        transition: 0.75s;
+    }
+}
+
+@include maxWidthMediaQuery(480px) {
+    .landing-nav {
+        img {
+            width: 35px;
+        }
+
+        .landing-nav-link {
+            padding: 5px 12px;
+        }
+    }
+}

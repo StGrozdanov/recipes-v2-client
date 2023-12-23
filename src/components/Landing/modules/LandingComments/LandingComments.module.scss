@@ -1,0 +1,137 @@
+@use 'src/scss/common/colors' as *;
+@use 'src/scss/common/fonts' as *;
+@use 'src/scss/common/media' as *;
+@use 'sass:map';
+
+$comment-background-color: rgb(193 119 28 / 30%);
+
+.comment {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 40px;
+    position: relative;
+    height: 125px;
+
+    @include maxWidthMediaQuery(990px) {
+        padding: 0 35px;
+    }
+
+    @include maxWidthMediaQuery(520px) {
+        height: 238px;
+    }
+
+    @include maxWidthMediaQuery(391px) {
+        height: 237.5px;
+    }
+
+}
+
+.comment-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    margin-left: 3.8vw;
+    @include customHeadingFont('regular');
+
+    @include maxWidthMediaQuery(520px) {
+        margin-bottom: 35px;
+    }
+}
+
+.comment-username {
+    margin-left: 35px;
+    color: $landing-green;
+    @include customHeadingFont('bold');
+
+    @include maxWidthMediaQuery(990px) {
+        margin-left: 8vw;
+    }
+}
+
+.image-container {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    left: 0;
+    top: 8%;
+    box-shadow: 0px 1px 6px 3px #00000063;
+    overflow: hidden;
+
+    @include maxWidthMediaQuery(990px) {
+        left: 6%;
+    }
+
+    @include maxWidthMediaQuery(640px) {
+        left: 4%;
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        transition: transform .8s;
+
+        &:hover {
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+    }
+}
+
+.target-recipe {
+    margin-left: 15px;
+
+    &:hover {
+        cursor: pointer;
+        color: $dark-orange-accent-color;
+        transition: .7s;
+    }
+}
+
+.date {
+    position: absolute;
+    right: 12%;
+
+    @include maxWidthMediaQuery(990px) {
+        right: 17%;
+    }
+
+    @include maxWidthMediaQuery(520px) {
+        top: 8vh;
+        right: 37vw;
+    }
+}
+
+.content {
+    padding: 20px 10px;
+    border-radius: 15px;
+    border-top: transparent;
+    background-color: $comment-background-color;
+    width: 80%;
+    text-align: center;
+    box-shadow: 0px 1px 1px 0px rgb(0 0 0 / 20%);
+    @include elegantCormorantFont('semi-bold');
+
+    @include maxWidthMediaQuery(520px) {
+        width: 90%;
+    }
+
+    &:after {
+        border-color: transparent transparent $comment-background-color transparent;
+        border-style: solid;
+        border-width: 0 16px 17px 0;
+        top: 31%;
+        content: "";
+        display: block;
+        height: 0;
+        left: 14%;
+        position: absolute;
+        width: 0;
+
+        @include maxWidthMediaQuery(990px) {
+            left: 20%;
+        }
+    }
+}

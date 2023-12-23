@@ -1,0 +1,97 @@
+@use 'src/scss/common/colors' as *;
+@use 'src/scss/common/animations' as *;
+@use 'src/scss/common/fonts' as *;
+@use 'src/scss/common/media' as *;
+
+@mixin articleContainer() {
+    display: flex;
+    justify-content: space-around;
+    margin-top: -18px;
+}
+
+.landing-description {
+    text-align: center;
+    position: relative;
+    border-bottom-left-radius: 30%;
+
+    &:after {
+        position: absolute;
+        bottom: -5%;
+        left: 50%;
+        transform: translate(-50%, 0);
+        border-radius: 50%;
+        content: "";
+        padding: 6vh 20vw 0 20vw;
+        background-color: white;
+        z-index: 1;
+    }
+
+    .heading {
+        margin: 0;
+        border-radius: 50%;
+        display: inline;
+        padding: 2.5vh 18vw 0 18vw;
+        background-color: white;
+        color: $landing-green;
+        @include customHeadingFont('bold');
+
+        @include fontSizeMediaQuery(1550px, 1.5rem, 'min-width');
+        @include fontSizeMediaQuery(1700px, 1.7rem, 'min-width');
+    }
+
+    .article-container {
+        @include articleContainer();
+    }
+
+    .animated-article-container {
+        @include articleContainer();
+        @include fadeInUpAnimation();
+    }
+
+    .article {
+        margin: 35px 0 30px 0;
+        width: 40vw;
+        font-size: 0.9rem;
+        @include elegantCormorantFont('medium');
+
+        @include fontSizeMediaQuery(1550px, 1rem, 'min-width');
+        @include fontSizeMediaQuery(1700px, 1.3rem, 'min-width');
+        @include fontSizeMediaQuery(1250px, 0.75rem);
+        @include fontSizeMediaQuery(395px, 0.72rem);
+
+        @include maxWidthMediaQuery(900px) {
+            margin-top: 30px;
+            margin-bottom: 70px;
+            width: 100%;
+            padding: 0 5px;
+        }
+
+        @include maxWidthMediaQuery(600px) {
+            margin-bottom: 50px;
+        }
+    }
+
+    .first-animated-text {
+        @include animatedTextWriter(left, 1s);
+    }
+
+    .second-animated-text {
+        @include animatedTextWriter(right, 2s);
+    }
+
+    .third-animated-text {
+        @include animatedTextWriter(left, 3s);
+    }
+
+    .no-secrets {
+        color: $landing-green;
+        margin-top: 15px;
+        width: 100%;
+        z-index: 5;
+        @include blinkingTextAnimation(1.1s);
+        @include elegantCormorantFont('bold');
+
+        @include fontSizeMediaQuery(1550px, 1.2rem, 'min-width');
+        @include fontSizeMediaQuery(1700px, 1.45rem, 'min-width');
+    }
+}

@@ -1,0 +1,14 @@
+[
+    {
+      "imageURL": "https://cook-book-shushanite.s3.eu-central-1.amazonaws.com/08885B50-4AA7-44DD-A976-B8C310B80235.jpeg",
+      "recipeName": "Сьомга със сос"
+    },
+    {
+      "imageURL": "https://cook-book-shushanite.s3.eu-central-1.amazonaws.com/bananov_keks_s_karamelena_glazura.jpg",
+      "recipeName": "кекс"
+    },
+    {
+      "imageURL": "https://cook-book-shushanite.s3.eu-central-1.amazonaws.com/spaghetti_bolognese.jpg",
+      "recipeName": "болонезе"
+    }
+  ]

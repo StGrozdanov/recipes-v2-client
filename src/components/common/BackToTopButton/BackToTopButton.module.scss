@@ -1,0 +1,55 @@
+@use 'src/scss/common/colors' as *;
+@use 'src/scss/common/media' as *;
+
+.button-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 56px;
+    color: white;
+    background-color: rgba(194, 138, 68, 0.7);
+    padding: 14px 16px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    z-index: 1;
+    animation: movebtn 1s ease-in-out;
+    opacity: 1;
+    transition: opacity .5s ease-in;
+
+    &:hover {
+        background-color: $orange-accent-color;
+        transition: background-color .3s ease-in-out;
+        animation: none;
+        cursor: pointer;
+    }
+
+    .icon {
+        font-size: 1.3rem;
+    }
+
+    @include minWidthMediaQuery(1800px) {
+        padding: 24px 26px;
+    }
+
+    @include maxWidthMediaQuery(450px) {
+        right: 20px;
+    }
+}
+
+@keyframes movebtn {
+    0% {
+        transform: translateY(0px);
+    }
+
+    25% {
+        transform: translateY(10px);
+    }
+
+    50% {
+        transform: translateY(0px);
+    }
+
+    75% {
+        transform: translateY(5px);
+    }
+}
