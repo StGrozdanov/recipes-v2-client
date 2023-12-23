@@ -83,7 +83,7 @@
           "*.cts"
         ],
         "rules": {
-          "jsdoc/require-jsdoc": [
+          "require-jsdoc": [
             2,
             {
               "require": {
