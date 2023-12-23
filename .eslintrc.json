@@ -71,7 +71,8 @@
             "ClassDeclaration": false,
             "ArrowFunctionExpression": true,
             "FunctionExpression": true
-          }
+          },
+          "context": "exported-function"
         }
       ]
     },
@@ -83,12 +84,7 @@
           "*.cts"
         ],
         "rules": {
-          "require-jsdoc": [
-            2,
-            {
-              "context": "exported-function"
-            }
-          ]
+          "require-jsdoc": 2
         }
       }
     ]
