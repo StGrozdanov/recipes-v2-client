@@ -11,5 +11,10 @@
     height: 13vh;
     box-shadow: $nav-box-shadow;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
+    padding: 0 100px;
+
+    @include maxWidthMediaQuery(550px) {
+        padding: 0 13px;
+    }
 }

@@ -158,7 +158,6 @@ $social-links-transition: all .75s ease 0s;
 
 .copyright {
     @include footerFont();
-    z-index: 2;
     position: absolute;
     left: 50%;
     font-size: 1.2rem;

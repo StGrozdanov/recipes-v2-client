@@ -1,0 +1,58 @@
+@use 'src/scss/common/media' as *;
+@use 'src/scss/common/animations' as *;
+
+.search-article {
+    position: absolute;
+    bottom: -53px;
+    width: 100%;
+    left: 0;
+    font-size: 1.2rem;
+    right: 0;
+    @include smoothTransitionAnimation($direction: -100%, $durration: 2s);
+
+    .search-input {
+        width: 100%;
+        position: relative;
+        padding: 15px 10vw;
+        font-size: 1.2rem;
+        background: rgba(214, 172, 119, 0.9);
+        border: none;
+        -webkit-appearance: none;
+        appearance: none;
+        -webkit-border-radius: 0;
+        border-radius: 0;
+
+        &:focus {
+            outline: none;
+        }
+
+        &::placeholder {
+            color: black;
+            opacity: 0.6;
+        }
+    }
+
+    .search-input-icon,
+    .cancel-input-icon {
+        position: absolute;
+        left: 7vw;
+        z-index: 1;
+        top: 2.5vh;
+
+        @include minWidthMediaQuery(1700px) {
+            top: 2vh;
+        }
+
+        @include maxWidthMediaQuery(650px) {
+            left: 2vw;
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .cancel-input-icon {
+        left: 90vw;
+    }
+}
