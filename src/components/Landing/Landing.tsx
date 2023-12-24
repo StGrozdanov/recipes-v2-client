@@ -5,7 +5,6 @@ import LandingFeatures from './modules/LandingFeatures/LandingFeatures';
 import styles from './Landing.module.scss';
 import LandingComments from "./modules/LandingComments/LandingComments";
 import BackToTopButton from "../common/BackToTopButton/BackToTopButton";
-import LoadingPan from "../common/LoadingPan/LoadingPan";
 import latestSixCommentsFallback from './data/latestSixCommentsFallback.json';
 import latestThreeRecipesFallback from './data/latestThreeRecipesFallback.json';
 import mostViewedRecipesFallback from './data/mostViewedRecipesFallback.json';
@@ -22,7 +21,6 @@ export default function Landing() {
         recipesFetchError,
         commentsFetchError,
         mostViewedFetchError,
-        isFetching,
     } = recipesAPI.getLandingPageData();
 
     const latestRecipes = recipesFetchError ? latestThreeRecipesFallback : latestRecipesData;
@@ -30,61 +28,59 @@ export default function Landing() {
     const mostViewedRecipes = mostViewedFetchError ? mostViewedRecipesFallback : mostViewedRecipesData;
 
     return (
-        isFetching
-            ? <LoadingPan style={{ width: 500 }} />
-            : <section>
-                <LandingNav />
-                <LandingHeader />
-                <LandingDescription />
-                <LandingFeatures />
-                <h3 className={styles["landing-heading"]}>Последни Публикации</h3>
-                <section className={styles["landing-section"]}>
+        <section>
+            <LandingNav />
+            <LandingHeader />
+            <LandingDescription />
+            <LandingFeatures />
+            <h3 className={styles["landing-heading"]}>Последни Публикации</h3>
+            <section className={styles["landing-section"]}>
+                {
+                    latestRecipes?.map((recipe, index) =>
+                        <Animate
+                            key={recipe.recipeName + 'animate'}
+                            animationName="fadeInUp"
+                            delay={index * 300}
+                            duration={2}
+                        >
+                            <RecipeCard key={recipe.recipeName} {...recipe} />
+                        </Animate>
+                    )
+                }
+            </section>
+
+            <section className={styles["landing-section"]}>
+                <article className={styles["landing-article"]}>
+                    <h3 className={styles["landing-heading"]}>
+                        Най-разглеждани Рецепти
+                    </h3>
                     {
-                        latestRecipes?.map((recipe, index) =>
-                            <Animate
-                                key={recipe.recipeName + 'animate'}
-                                animationName="fadeInUp"
-                                delay={index * 300}
-                                duration={2}
-                            >
+                        mostViewedRecipes?.map(recipe =>
+                            <Animate key={recipe.recipeName + 'animate'} animationName="fadeInDown">
                                 <RecipeCard key={recipe.recipeName} {...recipe} />
                             </Animate>
                         )
                     }
-                </section>
-
-                <section className={styles["landing-section"]}>
+                </article>
+                <Animate animationName="fadeInRight">
                     <article className={styles["landing-article"]}>
-                        <h3 className={styles["landing-heading"]}>
-                            Най-разглеждани Рецепти
-                        </h3>
+                        <h3 className={styles["landing-heading"]}>Последни Коментари</h3>
                         {
-                            mostViewedRecipes?.map(recipe =>
-                                <Animate key={recipe.recipeName + 'animate'} animationName="fadeInDown">
-                                    <RecipeCard key={recipe.recipeName} {...recipe} />
-                                </Animate>
-                            )
+                            latestComments?.map(comment => {
+                                comment.recipeName = capitalizatorUtil(comment.recipeName);
+
+                                return (
+                                    <LandingComments
+                                        key={comment.content + comment.createdAt}
+                                        {...comment}
+                                    />
+                                );
+                            })
                         }
                     </article>
-                    <Animate animationName="fadeInRight">
-                        <article className={styles["landing-article"]}>
-                            <h3 className={styles["landing-heading"]}>Последни Коментари</h3>
-                            {
-                                latestComments?.map(comment => {
-                                    comment.recipeName = capitalizatorUtil(comment.recipeName);
-
-                                    return (
-                                        <LandingComments
-                                            key={comment.content + comment.createdAt}
-                                            {...comment}
-                                        />
-                                    );
-                                })
-                            }
-                        </article>
-                    </Animate>
-                </section>
-                <BackToTopButton />
-            </section >
+                </Animate>
+            </section>
+            <BackToTopButton />
+        </section >
     )
 }

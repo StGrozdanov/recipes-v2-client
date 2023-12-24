@@ -1,6 +1,9 @@
 import { CommentsProps } from '../components/Landing/modules/LandingComments/LandingComments';
 import { RecipeProps } from '../components/RecipeCard/RecipeCard';
 import { useQueries } from 'react-query';
+import latestSixCommentsFallback from '../components/Landing/data/latestSixCommentsFallback.json';
+import latestThreeRecipesFallback from '../components/Landing/data/latestThreeRecipesFallback.json';
+import mostViewedRecipesFallback from '../components/Landing/data/mostViewedRecipesFallback.json';
 
 const BASE_URL = process.env.REACT_APP_DEV_BACKEND_URL || process.env.REACT_APP_BACKEND_URL;
 
@@ -17,15 +20,18 @@ export const getLandingPageData = () => {
     ] = useQueries([
         {
             queryKey: 'latestThreeRecipes',
-            queryFn: getLatestRecipes
+            queryFn: getLatestRecipes,
+            placeholderData: latestThreeRecipesFallback
         },
         {
             queryKey: 'latestSixComments',
-            queryFn: getLatestComments
+            queryFn: getLatestComments,
+            placeholderData: latestSixCommentsFallback
         },
         {
             queryKey: 'mostViewedRecipes',
-            queryFn: getMostViewedRecipes
+            queryFn: getMostViewedRecipes,
+            placeholderData: mostViewedRecipesFallback
         },
     ]);
 
