@@ -8,7 +8,7 @@ type NotificationProps = {
     message: string,
     isVisible: boolean,
     handler: () => void,
-    style: object,
+    style?: object,
 }
 
 const iconTypes = {
