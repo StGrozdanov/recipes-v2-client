@@ -14,7 +14,7 @@ const queryClient = new QueryClient({
         // Retry for other errors
         return failureCount <= 3;
       },
-      retryDelay: attemptIndex => Math.min(600 * 2 ** attemptIndex, 2000), // retry a failed request for 3 seconds only
+      retryDelay: attemptIndex => Math.min(600 * 2 ** attemptIndex, 2000), // retry a failed request for 2 seconds only
       refetchIntervalInBackground: false,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,

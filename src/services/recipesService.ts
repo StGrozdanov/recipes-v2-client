@@ -2,7 +2,7 @@ import { CommentsProps } from '../components/Landing/modules/LandingComments/Lan
 import { RecipeProps } from '../components/RecipeCard/RecipeCard';
 import { useQueries } from 'react-query';
 
-const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+const BASE_URL = process.env.REACT_APP_DEV_BACKEND_URL || process.env.REACT_APP_BACKEND_URL;
 
 /**
  * Used to fetch the latest recipes, the most viewed recipes and the latest comments data. It is an abstraction
@@ -61,7 +61,7 @@ const getLatestComments = async (): Promise<CommentsProps[]> => {
 }
 
 const getMostViewedRecipes = async (): Promise<RecipeProps[]> => {
-    const response = await fetch(`${BASE_URL}/recipes/most-viewed`);
+    const response = await fetch(`${BASE_URL}/recipes/most-popular`);
     const data = await response.json();
     if (!response.ok) {
         throw new Error(`status: ${response.status}, message: ${data}`);

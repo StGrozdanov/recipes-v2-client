@@ -29,9 +29,6 @@ export default function Landing() {
     const latestComments = commentsFetchError ? latestSixCommentsFallback : latestCommentsData;
     const mostViewedRecipes = mostViewedFetchError ? mostViewedRecipesFallback : mostViewedRecipesData;
 
-    console.log(recipesFetchError)
-    console.log(latestRecipes);
-
     return (
         isFetching
             ? <LoadingPan style={{ width: 500 }} />
@@ -74,7 +71,7 @@ export default function Landing() {
                             <h3 className={styles["landing-heading"]}>Последни Коментари</h3>
                             {
                                 latestComments?.map(comment => {
-                                    comment.recipe.recipeName = capitalizatorUtil(comment.recipe.recipeName);
+                                    comment.recipeName = capitalizatorUtil(comment.recipeName);
 
                                     return (
                                         <LandingComments
