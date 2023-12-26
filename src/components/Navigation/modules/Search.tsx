@@ -10,6 +10,7 @@ type SearchProps = {
 }
 
 const unmountedStyle = { left: '50vw', bottom: '100%', transition: 'all .6s ease-in' };
+const mountedStyle = {top: '85px', transition: 'all .6s ease-out' };
 const inputUnmountedStyle = { background: 'white', transition: 'all 0.7s ease-in' };
 
 export default function Search({ show, hideSearchHandler }: SearchProps) {
@@ -29,7 +30,7 @@ export default function Search({ show, hideSearchHandler }: SearchProps) {
     return (
         <form
             className={styles['search-article']}
-            style={!show ? unmountedStyle : {}}
+            style={!show ? unmountedStyle : mountedStyle}
             onSubmit={searchHandler}
         >
             <FontAwesomeIcon
