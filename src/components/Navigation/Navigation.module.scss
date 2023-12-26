@@ -43,12 +43,12 @@
     flex-direction: column;
     align-items: center;
     position: fixed;
-    right: -100%;
+    left: -100%;
     top: 0;
     width: 100%;
     height: 100%;
     text-align: center;
-    transition: 0.5s;
+    transition: 0.75s;
     background: white;
     background-color: hsla(0, 3%, 94%, .4);
     backdrop-filter: blur(15px);
@@ -58,6 +58,13 @@
     -o-background-size: cover;
     background-size: cover;
     z-index: 2;
+    overflow-y: scroll;
+    direction: rtl;
+
+    &::-webkit-scrollbar {
+        width: 0;
+        display: none;
+    }
 
     &:hover {
         cursor: pointer;
@@ -91,7 +98,7 @@
     width: 60px;
     position: absolute;
     bottom: -500px;
-    left: 50%;
+    left: 47%;
     z-index: 3;
 
     img {
@@ -165,8 +172,8 @@
 }
 
 .active-menu {
-    right: 0;
-    transition: 0.5s;
+    left: 0;
+    transition: 0.75s;
     margin-top: 0;
 }
 
@@ -209,6 +216,25 @@
             cursor: pointer;
         }
     }
+}
+
+.back {
+    z-index: 3;
+    position: absolute;
+    left: 10%;
+    top: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 200px;
+    font-weight: bolder;
+    color: #2f4f4f;
+    font-size: 1.25rem;
+
+    &:hover {
+        cursor: pointer;
+    }
+
 }
 
 .nav-right-section {

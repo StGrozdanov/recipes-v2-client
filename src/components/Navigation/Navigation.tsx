@@ -1,13 +1,30 @@
 import styles from './Navigation.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import Search from './modules/Search';
+import { Link } from 'react-router-dom';
+import { faLeftLong, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import Search from './modules/Search/Search';
+import MainMenu from './modules/Menus/MainMenu';
+import CategoriesMenu from './modules/Menus/CategoriesMenu';
 
 export default function Navigation() {
     const [isExpanded, setIsExpanded] = useState(false);
     const [showSearch, setShowSearch] = useState(false);
+    const [menu, setMenu] = useState('main');
+
+    const expandHandler = () => setIsExpanded(!isExpanded);
+
+    const switchMenuHandler = () => {
+        menu === 'main' ? setMenu('categories') : setMenu('main');
+        setIsExpanded(true);
+    }
+
+    const backClickHandler = () => {
+        expandHandler();
+        setTimeout(() => {
+            switchMenuHandler();
+        }, 400);
+    }
 
     return (
         <nav className={styles.navigation}>
@@ -19,7 +36,18 @@ export default function Navigation() {
                     Recipes
                 </h4>
             </Link>
-            <div className={styles['nav-logo']} style={isExpanded ? {} : { display: 'none' }}>
+            {
+                menu !== 'main' && isExpanded && <div
+                    onClick={backClickHandler}
+                    className={styles.back}
+                >
+                    <FontAwesomeIcon
+                        icon={faLeftLong}
+                    />
+                    Главно Меню
+                </div>
+            }
+            <div className={styles['nav-logo']} style={isExpanded && menu === 'main' ? {} : { display: 'none' }}>
                 <img src="/images/cooking.png" />
             </div>
             <section className={styles['nav-right-section']}>
@@ -40,24 +68,16 @@ export default function Navigation() {
                         }`
                     }
                 >
-                    <li className={styles['nav-item']} onClick={() => setIsExpanded(!isExpanded)}>
-                        <NavLink to='/catalogue' className={styles['nav-item-link']}>Каталог</NavLink>
-                    </li>
-                    <li className={styles['nav-item']} onClick={() => setIsExpanded(!isExpanded)}>
-                        <NavLink to='/categories' className={styles['nav-item-link']}>Категории</NavLink>
-                    </li>
-                    <li className={styles['nav-item']} onClick={() => setIsExpanded(!isExpanded)}>
-                        <NavLink to='/login' className={styles['nav-item-link']}>Вход</NavLink>
-                    </li>
-                    <li className={styles['nav-item']} onClick={() => setIsExpanded(!isExpanded)}>
-                        <NavLink to='/profile' className={styles['nav-item-link']}>Моят Профил</NavLink>
-                    </li>
-                    <li className={styles['nav-item']} onClick={() => setIsExpanded(!isExpanded)}>
-                        <NavLink to='/create' className={styles['nav-item-link']}>Създай Рецепта</NavLink>
-                    </li>
-                    <li className={styles['nav-item']} onClick={() => setIsExpanded(!isExpanded)}>
-                        <NavLink to='/logout' className={styles['nav-item-link']}>Изход</NavLink>
-                    </li>
+                    {
+                        menu === 'main'
+                            ? <MainMenu
+                                expandHandler={expandHandler}
+                                switchMenuHandler={switchMenuHandler}
+                            />
+                            : <CategoriesMenu
+                                expandHandler={expandHandler}
+                            />
+                    }
                 </ul>
                 <div
                     data-testid="burger-icon"
