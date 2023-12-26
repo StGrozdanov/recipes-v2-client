@@ -1,14 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faCircleCheck, faCircleInfo, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 import styles from './Notification.module.scss';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 type NotificationProps = {
     type: 'success' | 'info' | 'warning' | 'fail',
     message: string,
     isVisible: boolean,
-    handler: () => void,
-    style?: object,
+    style?: React.CSSProperties,
 }
 
 const iconTypes = {
@@ -28,12 +27,17 @@ export default function Notification({
     type,
     message,
     isVisible,
-    handler,
     style = {}
 }: NotificationProps) {
+    const [visible, setVisible] = useState(false);
+
     useEffect(() => {
         if (type === 'success' && isVisible) {
-            setTimeout(() => handler(), 2500);
+            setTimeout(() => setVisible(false), 2500);
+        } else if (isVisible) {
+            setVisible(true);
+        } else if (!isVisible) {
+            setVisible(false);
         }
     }, [isVisible])
 
@@ -41,12 +45,14 @@ export default function Notification({
         <article
             className={styles.notification}
             style={
-                !isVisible
-                    ? unmountedStyleNotification
-                    : !style
-                        ? { backgroundColor: iconTypes[type].background }
-                        : { ...style, backgroundColor: iconTypes[type].background }
+                visible
+                    ? {
+                        ...style,
+                        backgroundColor: iconTypes[type].background,
+                    }
+                    : unmountedStyleNotification
             }
+            onClick={() => setVisible(false)}
         >
             <div className={styles["icon-container"]} style={{ backgroundColor: iconTypes[type].color }}>
                 <FontAwesomeIcon
@@ -58,7 +64,7 @@ export default function Notification({
             <FontAwesomeIcon
                 icon={faXmark}
                 className={styles['x-mark']}
-                onClick={() => handler()}
+                onClick={() => setVisible(false)}
             />
         </article>
     );

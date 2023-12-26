@@ -1,0 +1,14 @@
+.cards-section {
+    margin-bottom: 200px;
+}
+
+.recipe-card-list {
+    display: flex;
+    padding: 0;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 100%;
+    margin: 0;
+}

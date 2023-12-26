@@ -1,0 +1,34 @@
+{
+    "pages": [
+        {
+            "imageURL": "https://cook-book-shushanite.s3.eu-central-1.amazonaws.com/bananov_keks_s_karamelena_glazura.jpg",
+            "recipeName": "кекс"
+        },
+        {
+            "imageURL": "https://cook-book-shushanite.s3.eu-central-1.amazonaws.com/spaghetti_bolognese.jpg",
+            "recipeName": "болонезе"
+        },
+        {
+            "imageURL": "https://cook-book-shushanite.s3.eu-central-1.amazonaws.com/musaka.jpg",
+            "recipeName": "мусака"
+        },
+        {
+            "imageURL": "https://cook-book-shushanite.s3.eu-central-1.amazonaws.com/baklava.jpg",
+            "recipeName": "баклава"
+        },
+        {
+            "imageURL": "https://cook-book-shushanite.s3.eu-central-1.amazonaws.com/banica.jpg",
+            "recipeName": "баница със сирене"
+        },
+        {
+            "imageURL": "https://cook-book-shushanite.s3.eu-central-1.amazonaws.com/tikvenik.jpg",
+            "recipeName": "тиквеник"
+        }
+    ],
+    "pageData": {
+        "prevPage": 0,
+        "nextPage": 3,
+        "firstPage": false,
+        "lastPage": true
+    }
+}

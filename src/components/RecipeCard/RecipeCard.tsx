@@ -7,16 +7,18 @@ export type RecipeProps = {
     imageURL: string,
     recipeName: string,
     category?: string,
+    style?: object,
 }
 
 export default function RecipeCard({
     imageURL,
     recipeName,
     category,
+    style,
 }: RecipeProps
 ) {
     return (
-        <article className={styles["card-container"]}>
+        <article className={styles["card-container"]} style={style ? style : {}}>
             <Link to={`/details/${recipeName}`}>
                 <header className={styles["picture-container"]}>
                     <FallbackImage src={imageURL} alt={"/images/food.jpg"} />

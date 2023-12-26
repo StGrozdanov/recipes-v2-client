@@ -4,6 +4,7 @@ import Footer from "./components/Footer/Footer";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { queryConfig } from "./configs/reactQueryConfig";
 import Navigation from "./components/Navigation/Navigation";
+import Catalogue from "./components/Catalogue/Catalogue";
 
 const queryClient = new QueryClient(queryConfig);
 
@@ -15,7 +16,7 @@ function App() {
       {currentPage !== '/' && <Navigation />}
       <Routes>
         <Route path='/' element={<Landing />} />
-        <Route path='/catalogue' element={<h1>hi</h1>} />
+        <Route path='/catalogue' element={<Catalogue />} />
       </Routes>
       <Footer />
     </QueryClientProvider>

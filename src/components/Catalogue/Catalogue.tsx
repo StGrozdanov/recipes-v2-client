@@ -1,0 +1,50 @@
+import { useEffect, useRef } from 'react';
+import styles from './Catalogue.module.scss';
+import RecipeCard from '../RecipeCard/RecipeCard';
+import BackToTopButton from '../common/BackToTopButton/BackToTopButton';
+import { useEndlessScroll } from '../../hooks/useEndlessScroll';
+import { capitalizatorUtil } from '../utils/capitalizatorUtil';
+import * as recipesAPI from '../../services/recipesService';
+import Notification from '../common/Notification/Notification';
+import recipesFallback from './recipesFallback.json';
+
+export default function Catalogue() {
+    const loader = useRef(null);
+    const isInViewport = useEndlessScroll({ loadingRef: loader });
+
+    const { fetchNextPage, hasNextPage, isLoading, data, isError } = recipesAPI.getRecipes();
+
+    useEffect(() => {
+        if (hasNextPage) {
+            fetchNextPage();
+        }
+    }, [fetchNextPage, hasNextPage, isInViewport]);
+
+    const recipes = isError ? recipesFallback.pages : data?.pages.flatMap(nestedPage => nestedPage.pages);
+
+    return (
+        <section className={styles["cards-section"]}>
+            <ul className={styles["recipe-card-list"]}>
+                {
+                    !isLoading && recipes?.map(recipe => {
+                        recipe.recipeName = capitalizatorUtil(recipe.recipeName);
+                        return (
+                            <RecipeCard
+                                key={recipe.imageURL + recipe.recipeName}
+                                {...recipe}
+                                style={{ margin: '40px 35px 10px 35px' }}
+                            />
+                        );
+                    })
+                }
+            </ul>
+            <div ref={loader} />
+            <BackToTopButton scrollVisibility={0} />
+            <Notification
+                type={'fail'}
+                isVisible={isError}
+                message={'Здравейте, имаме проблем с зареждането на всички рецепти и работим по отстраняването му.'}
+            />
+        </section >
+    )
+}

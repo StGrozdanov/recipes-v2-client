@@ -4,9 +4,11 @@ export const queryConfig: QueryClientConfig = {
     defaultOptions: {
         queries: {
             retry: (failureCount, error) => {
-                if (error instanceof Error && error.message === 'Failed to fetch') {
-                    // Disable retries for 'Failed to fetch' error. In cases such as 404, bad network, CORS - there is no need to refetch
-                    return false;
+                if (error instanceof Error) {
+                    if (error.message === 'Failed to fetch' || error.name === 'SyntaxError') {
+                        // Disable retries for 'Failed to fetch' error. In cases such as 404, bad network, CORS - there is no need to refetch
+                        return false;
+                    }
                 }
                 // Retry for other errors
                 return failureCount <= 3;

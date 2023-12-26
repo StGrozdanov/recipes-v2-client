@@ -6,10 +6,10 @@
     flex-direction: column;
     align-items: center;
 
-    @include minWidthMediaQuery(1600px){
+    @include minWidthMediaQuery(1600px) {
         margin: 40px 100px !important;
     }
-} 
+}
 
 .recipe-name {
     text-align: center;
@@ -23,7 +23,7 @@
 
     @include maxWidthMediaQuery(350px) {
         width: 275px;
-        height: 190px;  
+        height: 190px;
     }
 
     img {
