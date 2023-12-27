@@ -1,0 +1,190 @@
+@use 'src/scss/common/colors' as *;
+@use 'src/scss/common/fonts' as *;
+@use 'src/scss/common/media' as *;
+
+@mixin triangle() {
+    content: "";
+    position: absolute;
+    top: 100%;
+    width: 0;
+    height: 0;
+    border-top: 20px solid $dark-orange-accent-color;
+}
+
+.background {
+    background: url('../../../public/images/form-background.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    padding: 35px 0 250px 0;
+    margin-bottom: -30px;
+}
+
+.container {
+    margin: 0 auto;
+    width: 25vw;
+    height: 75vh;
+    position: relative;
+    background-color: white;
+}
+
+.form-header {
+    position: absolute;
+    text-align: center;
+    width: 110%;
+    right: 0;
+    left: -5%;
+    top: 2.5%;
+    padding: 13px 0;
+    position: relative;
+    background: linear-gradient(90deg, rgba(223, 164, 90, 1) 0%, rgba(246, 191, 104, 1) 20%, rgba(194, 138, 68, 1) 75%);
+    color: white;
+
+    h2 {
+        margin: 0;
+    }
+
+    &:after {
+        @include triangle();
+        left: 0;
+        border-left: 16px solid transparent;
+    }
+
+    &:before {
+        @include triangle();
+        right: 0;
+        border-right: 16px solid transparent;
+    }
+}
+
+.form {
+    margin-top: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    input {
+        border: none;
+        border-bottom: 1.5px solid rgba(128, 128, 128, 0.75);
+        margin-bottom: 30px;
+        font-size: 1.1rem;
+        padding-bottom: 8px;
+        padding-left: 25px;
+
+        &::placeholder {
+            color: rgba(128, 128, 128, 0.639);
+        }
+
+        &:focus {
+            outline: none;
+            border-bottom-color: black;
+        }
+    }
+
+    .submit-btn {
+        border: none;
+        background-color: rgba(222, 137, 0, 0.8);
+        padding: 7px 35px;
+        align-self: right;
+        align-self: flex-end;
+        color: white;
+        font-size: 1rem;
+        transition: all 0.5s;
+
+        &:hover {
+            cursor: pointer;
+            background: $orange-accent-color;
+        }
+    }
+}
+
+.form-footer {
+    text-align: center;
+    position: absolute;
+    bottom: -10px;
+    padding: 15px 0;
+    background: $orange-accent-color;
+    color: white;
+    width: 100%;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+.forgotten-password {
+    margin-left: 20px;
+    color: darkslategray;
+    position: absolute;
+    bottom: 15%;
+    border-bottom: 0.05rem solid darkslategrey;
+    padding-bottom: 2px;
+
+    &:hover {
+        border-bottom: 0.09rem solid darkslategray;
+    }
+}
+
+.input-container,
+.button-container {
+    position: relative;
+    width: 80%;
+    display: inline-block;
+}
+
+.button-container {
+    align-self: flex-end;
+    width: initial;
+    display: inline-block;
+    margin-right: 40px;
+}
+
+.icon,
+.continue-icon,
+.warning-icon {
+    position: absolute;
+    color: darkslategray;
+    top: 5%;
+    font-size: 0.9rem;
+}
+
+.warning-icon {
+    right: 7%;
+    top: 10%;
+    color: $orange-accent-color;
+}
+
+.continue-icon {
+    left: 7%;
+    top: 20%;
+    color: white;
+}
+
+.login-warning-icon {
+    color: $orange-accent-color;
+    position: absolute;
+    top: 18%;
+    text-align: center;
+    width: 100%;
+    font-size: 1.3rem;
+}
+
+.form-validation-msg {
+    position: absolute;
+    top: 20%;
+    text-align: center;
+    width: 100%;
+    color: $dark-orange-accent-color;
+}
+
+.fail-validation-msg {
+    color: $dark-orange-accent-color;
+    text-align: center;
+    position: absolute;
+    left: 0;
+    top: 55%;
+    font-weight: 600;
+    font-size: 0.75rem;
+}

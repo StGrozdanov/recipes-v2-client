@@ -1,10 +1,11 @@
 import { CommentsProps } from '../components/Landing/modules/LandingComments/LandingComments';
-import { useInfiniteQuery, useQueries, useQuery } from 'react-query';
+import { useInfiniteQuery, useMutation, useQueries, useQuery } from 'react-query';
 import latestSixCommentsFallback from '../components/Landing/data/latestSixCommentsFallback.json';
 import latestThreeRecipesFallback from '../components/Landing/data/latestThreeRecipesFallback.json';
 import mostViewedRecipesFallback from '../components/Landing/data/mostViewedRecipesFallback.json';
 import recipesFallback from '../components/Catalogue/recipesFallback.json';
-import { RecipeSummary, RecipesPlaceholderData, ResponsePages } from './types';
+import { LoginData, RecipeSummary, RecipesPlaceholderData, ResponsePages, User } from './types';
+import { useCallback } from 'react';
 
 const BASE_URL = process.env.REACT_APP_DEV_BACKEND_URL || process.env.REACT_APP_BACKEND_URL;
 
@@ -105,6 +106,29 @@ export const searchRecipesByCategory = (category: string) => {
     }
 }
 
+/**
+ * Used to send login request to the server
+ */
+export const useLogin = () => {
+    const {
+        mutate: loginMutation,
+        isSuccess,
+        isLoading,
+        isError
+    } = useMutation((data: LoginData) => loginRequest(data), { retry: 3 });
+
+    const login = useCallback(async (data: LoginData) => {
+        try {
+            const loginResponse = loginMutation(data);
+            return { loginResponse };
+        } catch (error) {
+            return { error };
+        }
+    }, [loginMutation]);
+
+    return { login, isSuccess, isLoading, isError };
+};
+
 const getLatestRecipes = async (): Promise<RecipeSummary[]> => {
     const response = await fetch(`${BASE_URL}/recipes/latest`);
     const data = await response.json();
@@ -153,6 +177,21 @@ const searchRecipesRequest = async (search: string): Promise<RecipeSummary[]> =>
 
 const searchByCategoryRecipesRequest = async (categoryName: string): Promise<RecipeSummary[]> => {
     const response = await fetch(`${BASE_URL}/recipes/category?name=${categoryName}`);
+    const data = await response.json();
+    if (!response.ok) {
+        throw new Error(`status: ${response.status}, message: ${data.error}`);
+    }
+    return data;
+}
+
+const loginRequest = async (loginData: LoginData): Promise<User> => {
+    const response = await fetch(`${BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+            'ContentType': 'application/json'
+        },
+        body: JSON.stringify(loginData),
+    });
     const data = await response.json();
     if (!response.ok) {
         throw new Error(`status: ${response.status}, message: ${data.error}`);

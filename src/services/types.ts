@@ -17,3 +17,20 @@ export type ResponsePages = {
 }
 
 export type RecipesPlaceholderData = InfiniteData<ResponsePages>
+
+export type LoginData = {
+    username: string,
+    password: string,
+}
+
+export type User = {
+    id: number,
+    username: string,
+    avatarUrl: string | null,
+    coverPhotoUrl: string | null,
+    email: string,
+    sessionToken: string,
+    refreshToken: string,
+    isAdministrator: boolean,
+    isModerator: boolean,
+}
