@@ -87,6 +87,24 @@ export const searchRecipes = (search: string) => {
     }
 }
 
+/**
+ * Used to search recipes by category that equals the search string
+ * @param category the category name
+ */
+export const searchRecipesByCategory = (category: string) => {
+    const {
+        data: recipesData,
+        error: recipesFetchError,
+        isFetching: recipesAreLoading
+    } = useQuery(['recipesCategorySearch', category], () => searchByCategoryRecipesRequest(category));
+
+    return {
+        recipesData,
+        recipesFetchError,
+        recipesAreLoading
+    }
+}
+
 const getLatestRecipes = async (): Promise<RecipeSummary[]> => {
     const response = await fetch(`${BASE_URL}/recipes/latest`);
     const data = await response.json();
@@ -126,6 +144,15 @@ const getRecipesRequest = async (page: number): Promise<ResponsePages> => {
 
 const searchRecipesRequest = async (search: string): Promise<RecipeSummary[]> => {
     const response = await fetch(`${BASE_URL}/recipes?search=${search}`);
+    const data = await response.json();
+    if (!response.ok) {
+        throw new Error(`status: ${response.status}, message: ${data.error}`);
+    }
+    return data;
+}
+
+const searchByCategoryRecipesRequest = async (categoryName: string): Promise<RecipeSummary[]> => {
+    const response = await fetch(`${BASE_URL}/recipes/category?name=${categoryName}`);
     const data = await response.json();
     if (!response.ok) {
         throw new Error(`status: ${response.status}, message: ${data.error}`);

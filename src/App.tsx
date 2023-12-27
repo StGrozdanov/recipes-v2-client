@@ -6,6 +6,7 @@ import { queryConfig } from "./configs/reactQueryConfig";
 import Navigation from "./components/Navigation/Navigation";
 import Catalogue from "./components/Catalogue/Catalogue";
 import Search from "./components/Search/Search";
+import Category from "./components/Category/Category";
 
 const queryClient = new QueryClient(queryConfig);
 
@@ -19,6 +20,7 @@ function App() {
         <Route path='/' element={<Landing />} />
         <Route path='/catalogue' element={<Catalogue />} />
         <Route path='/search' element={<Search />} />
+        <Route path='/category' element={<Category />} />
       </Routes>
       <Footer />
     </QueryClientProvider>

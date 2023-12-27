@@ -1,0 +1,57 @@
+@use 'src/scss/common/colors' as *;
+
+.search-section {
+    min-height: 75vh;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: .25;
+        z-index: -1;
+        background: url('../../../public/images/istockphoto-1209388288-612x612-removebg-preview.png') no-repeat center;
+        flex-shrink: 1;
+    }
+}
+
+.recipe-card-list {
+    display: flex;
+    padding: 0;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 100%;
+    margin: 0;
+}
+
+.filtration-heading {
+    text-align: center;
+    width: 100%;
+}
+
+.no-results {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    padding: 0 10px;
+
+    h3 {
+        text-align: center;
+    }
+
+    .return-anker {
+        font-weight: bold;
+        text-decoration: none;
+        color: $orange-accent-color;
+        font-size: 2rem;
+    }
+}
