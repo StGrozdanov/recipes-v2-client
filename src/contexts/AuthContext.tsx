@@ -18,8 +18,8 @@ type AuthContextType = {
 
 const defaultUserValues: User = {
     username: "",
-    avatarUrl: null,
-    coverPhotoUrl: null,
+    avatarURL: null,
+    coverPhotoURL: null,
     email: "",
     sessionToken: "",
     refreshToken: "",

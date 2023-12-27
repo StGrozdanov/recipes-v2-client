@@ -23,11 +23,18 @@ export type LoginData = {
     password: string,
 }
 
+export type RegistrationData = {
+    username: string,
+    password: string,
+    email: string,
+    repeatPassword: string,
+}
+
 export type User = {
     id: number,
     username: string,
-    avatarUrl: string | null,
-    coverPhotoUrl: string | null,
+    avatarURL: string | null,
+    coverPhotoURL: string | null,
     email: string,
     sessionToken: string,
     refreshToken: string,

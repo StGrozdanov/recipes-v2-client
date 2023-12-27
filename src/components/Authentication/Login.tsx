@@ -4,7 +4,7 @@ import { faRightToBracket, faUser, faKey, faExclamationTriangle } from '@fortawe
 import style from './Authenticate.module.scss';
 import { useFormik } from 'formik';
 import * as recipesAPI from '../../services/recipesService';
-import { LoginData, User } from '../../services/types';
+import { LoginData } from '../../services/types';
 import { validationSchemas } from '../../configs/yupConfig';
 import { useAuthContext } from '../../hooks/useAuthContext';
 
@@ -16,16 +16,17 @@ const initialLoginValues: LoginData = {
 export default function Login() {
     const { userLogin } = useAuthContext();
     const navigate = useNavigate();
-    const { login, isSuccess, isLoading, isError } = recipesAPI.useLogin();
+    const { login, isLoading, isError } = recipesAPI.useLogin();
 
     const submitHandler = async (values: LoginData) => {
         const { loginResponse } = await login(values);
+        const user = await loginResponse;
 
-        if (isSuccess) {
-            userLogin(loginResponse as unknown as User);
+        if (user) {
+            userLogin(user);
             navigate('/catalogue');
         }
-        
+
         formik.setTouched({ username: false, password: false });
     }
 

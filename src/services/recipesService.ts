@@ -4,7 +4,7 @@ import latestSixCommentsFallback from '../components/Landing/data/latestSixComme
 import latestThreeRecipesFallback from '../components/Landing/data/latestThreeRecipesFallback.json';
 import mostViewedRecipesFallback from '../components/Landing/data/mostViewedRecipesFallback.json';
 import recipesFallback from '../components/Catalogue/recipesFallback.json';
-import { LoginData, RecipeSummary, RecipesPlaceholderData, ResponsePages, User } from './types';
+import { LoginData, RecipeSummary, RecipesPlaceholderData, RegistrationData, ResponsePages, User } from './types';
 import { useCallback } from 'react';
 
 const BASE_URL = process.env.REACT_APP_DEV_BACKEND_URL || process.env.REACT_APP_BACKEND_URL;
@@ -111,10 +111,9 @@ export const searchRecipesByCategory = (category: string) => {
  */
 export const useLogin = () => {
     const {
-        mutate: loginMutation,
-        isSuccess,
+        mutateAsync: loginMutation,
         isLoading,
-        isError
+        isError,
     } = useMutation((data: LoginData) => loginRequest(data), { retry: 3 });
 
     const login = useCallback(async (data: LoginData) => {
@@ -126,7 +125,29 @@ export const useLogin = () => {
         }
     }, [loginMutation]);
 
-    return { login, isSuccess, isLoading, isError };
+    return { login, isLoading, isError };
+};
+
+/**
+ * Used to send register request to the server
+ */
+export const useRegistration = () => {
+    const {
+        mutateAsync: registrationMutation,
+        isLoading,
+        isError
+    } = useMutation((data: RegistrationData) => registerRequest(data), { retry: 3 });
+
+    const register = useCallback(async (data: RegistrationData) => {
+        try {
+            const registrationResponse = registrationMutation(data);
+            return { registrationResponse };
+        } catch (error) {
+            return { error };
+        }
+    }, [registrationMutation]);
+
+    return { register, isLoading, isError };
 };
 
 const getLatestRecipes = async (): Promise<RecipeSummary[]> => {
@@ -188,9 +209,60 @@ const loginRequest = async (loginData: LoginData): Promise<User> => {
     const response = await fetch(`${BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
-            'ContentType': 'application/json'
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify(loginData),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+        throw new Error(`status: ${response.status}, message: ${data.error}`);
+    }
+    return data;
+}
+
+const registerRequest = async (registrationData: RegistrationData): Promise<User> => {
+    const response = await fetch(`${BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(registrationData),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+        throw new Error(`status: ${response.status}, message: ${data.error}`);
+    }
+    return data;
+}
+
+/**
+ * Checks if the provided username is already registered in the server
+ */
+export const usernameIsAvailableRequest = async (username: string): Promise<boolean> => {
+    const response = await fetch(`${BASE_URL}/auth/check-username`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(username),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+        throw new Error(`status: ${response.status}, message: ${data.error}`);
+    }
+    return data;
+}
+
+/**
+ * Checks if the provided email is already registered in the server
+ */
+export const emailIsAvailableRequest = async (email: string): Promise<boolean> => {
+    const response = await fetch(`${BASE_URL}/auth/check-email`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(email),
     });
     const data = await response.json();
     if (!response.ok) {

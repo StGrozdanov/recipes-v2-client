@@ -9,6 +9,7 @@ import Search from "./components/Search/Search";
 import Category from "./components/Category/Category";
 import Login from "./components/Authentication/Login";
 import { AuthProvider } from "./contexts/AuthContext";
+import Register from "./components/Authentication/Register";
 
 const queryClient = new QueryClient(queryConfig);
 // If the mutation has been paused because the device is for example offline,
@@ -32,6 +33,7 @@ function App() {
           <Route path='/search' element={<Search />} />
           <Route path='/category' element={<Category />} />
           <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
         </Routes>
         <Footer />
       </AuthProvider>
