@@ -1,5 +1,5 @@
 import { CommentsProps } from '../components/Landing/modules/LandingComments/LandingComments';
-import { useInfiniteQuery, useQueries } from 'react-query';
+import { useInfiniteQuery, useQueries, useQuery } from 'react-query';
 import latestSixCommentsFallback from '../components/Landing/data/latestSixCommentsFallback.json';
 import latestThreeRecipesFallback from '../components/Landing/data/latestThreeRecipesFallback.json';
 import mostViewedRecipesFallback from '../components/Landing/data/mostViewedRecipesFallback.json';
@@ -69,6 +69,24 @@ export const getRecipes = () => {
     }
 }
 
+/**
+ * Used to search recipes by name including the search string
+ * @param search the search string 
+ */
+export const searchRecipes = (search: string) => {
+    const {
+        data: recipesData,
+        error: recipesFetchError,
+        isFetching: recipesAreLoading
+    } = useQuery(['recipesSearch', search], () => searchRecipesRequest(search));
+
+    return {
+        recipesData,
+        recipesFetchError,
+        recipesAreLoading
+    }
+}
+
 const getLatestRecipes = async (): Promise<RecipeSummary[]> => {
     const response = await fetch(`${BASE_URL}/recipes/latest`);
     const data = await response.json();
@@ -102,6 +120,15 @@ const getRecipesRequest = async (page: number): Promise<ResponsePages> => {
     const data: ResponsePages = await response.json();
     if (!response.ok) {
         throw new Error(`status: ${response.status}, message: ${data}`);
+    }
+    return data;
+}
+
+const searchRecipesRequest = async (search: string): Promise<RecipeSummary[]> => {
+    const response = await fetch(`${BASE_URL}/recipes?search=${search}`);
+    const data = await response.json();
+    if (!response.ok) {
+        throw new Error(`status: ${response.status}, message: ${data.error}`);
     }
     return data;
 }

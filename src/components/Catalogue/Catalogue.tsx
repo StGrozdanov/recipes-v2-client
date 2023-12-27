@@ -33,6 +33,7 @@ export default function Catalogue() {
                                 key={recipe.imageURL + recipe.recipeName}
                                 {...recipe}
                                 style={{ margin: '40px 35px 10px 35px' }}
+                                animate
                             />
                         );
                     })

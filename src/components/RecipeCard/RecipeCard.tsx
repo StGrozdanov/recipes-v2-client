@@ -8,6 +8,7 @@ export type RecipeProps = {
     recipeName: string,
     category?: string,
     style?: object,
+    animate?: boolean,
 }
 
 export default function RecipeCard({
@@ -15,10 +16,14 @@ export default function RecipeCard({
     recipeName,
     category,
     style,
+    animate,
 }: RecipeProps
 ) {
     return (
-        <article className={styles["card-container"]} style={style ? style : {}}>
+        <article
+            className={styles["card-container"] + (animate ? ' animate__animated animate__fadeInUp' : '')}
+            style={style ? style : {}}
+        >
             <Link to={`/details/${recipeName}`}>
                 <header className={styles["picture-container"]}>
                     <FallbackImage src={imageURL} alt={"/images/food.jpg"} />
