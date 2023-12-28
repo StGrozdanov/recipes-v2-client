@@ -46,7 +46,15 @@ const registrationValidationSchema = Yup.object({
     }),
 });
 
+const resetPasswordValidationSchema = Yup.object({
+    password: Yup.string().required('Дължина от минимум 4 символа').min(4, 'Дължина от минимум 4 символа'),
+    repeatPassword: Yup.string().test('passwords-match', 'Паролите трябва да съвпадат', function (value) {
+        return this.parent.password === value;
+    }),
+});
+
 export const validationSchemas = {
     loginValidationSchema,
     registrationValidationSchema,
+    resetPasswordValidationSchema,
 }

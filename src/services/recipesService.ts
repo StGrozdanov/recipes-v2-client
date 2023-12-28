@@ -4,7 +4,7 @@ import latestSixCommentsFallback from '../components/Landing/data/latestSixComme
 import latestThreeRecipesFallback from '../components/Landing/data/latestThreeRecipesFallback.json';
 import mostViewedRecipesFallback from '../components/Landing/data/mostViewedRecipesFallback.json';
 import recipesFallback from '../components/Catalogue/recipesFallback.json';
-import { LoginData, RecipeSummary, RecipesPlaceholderData, RegistrationData, ResponsePages, User } from './types';
+import { LoginData, RecipeSummary, RecipesPlaceholderData, RegistrationData, ResetPasswordParams, ResponsePages, User, VerificationCodeResponse } from './types';
 import { useCallback } from 'react';
 
 const BASE_URL = process.env.REACT_APP_DEV_BACKEND_URL || process.env.REACT_APP_BACKEND_URL;
@@ -114,7 +114,7 @@ export const useLogin = () => {
         mutateAsync: loginMutation,
         isLoading,
         isError,
-    } = useMutation((data: LoginData) => loginRequest(data), { retry: 3 });
+    } = useMutation((data: LoginData) => loginRequest(data));
 
     const login = useCallback(async (data: LoginData) => {
         try {
@@ -148,6 +148,68 @@ export const useRegistration = () => {
     }, [registrationMutation]);
 
     return { register, isLoading, isError };
+};
+
+/**
+ * Request verification code from the server for the password reset flow
+ */
+export const useRequestVerificationCode = () => {
+    const {
+        mutateAsync: requestVerificationMutation,
+        isLoading,
+        isError
+    } = useMutation((email: string) => requestVerficiationCodeFunc(email));
+
+    const requestVerificationCode = useCallback(async (email: string) => {
+        try {
+            const verificationCodeResponse = requestVerificationMutation(email);
+            return { verificationCodeResponse };
+        } catch (error) {
+            return { error };
+        }
+    }, [requestVerificationMutation]);
+
+    return { requestVerificationCode, isLoading, isError };
+};
+
+/**
+ * Used to verify the code as part of the password reset flow
+ */
+export const useVerifyResetPasswordCode = () => {
+    const {
+        mutateAsync: requestVerificationMutation,
+    } = useMutation((code: string) => verifyResetPasswordCodeFunc(code));
+
+    const requestVerificationCode = useCallback(async (code: string) => {
+        try {
+            const verificationCodeResponse = requestVerificationMutation(code);
+            return { verificationCodeResponse };
+        } catch (error) {
+            return { error };
+        }
+    }, [requestVerificationMutation]);
+
+    return { requestVerificationCode };
+};
+
+/**
+ * Used to reset the password of the user
+ */
+export const useResetPassword = () => {
+    const {
+        mutateAsync: resetPasswordMutation,
+    } = useMutation((params: ResetPasswordParams) => resetPasswordFunc(params));
+
+    const resetPassword = useCallback(async (params: ResetPasswordParams) => {
+        try {
+            const resetPasswordResponse = resetPasswordMutation(params);
+            return { resetPasswordResponse };
+        } catch (error) {
+            return { error };
+        }
+    }, [resetPasswordMutation]);
+
+    return { resetPassword };
 };
 
 const getLatestRecipes = async (): Promise<RecipeSummary[]> => {
@@ -263,6 +325,51 @@ export const emailIsAvailableRequest = async (email: string): Promise<boolean> =
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ email }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+        throw new Error(`status: ${response.status}, message: ${data.error}`);
+    }
+    return data;
+}
+
+const requestVerficiationCodeFunc = async (email: string): Promise<VerificationCodeResponse> => {
+    const response = await fetch(`${BASE_URL}/auth/generate-verification-code`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+        throw new Error(`status: ${response.status}, message: ${data.error}`);
+    }
+    return data;
+}
+
+const verifyResetPasswordCodeFunc = async (code: string): Promise<boolean> => {
+    const response = await fetch(`${BASE_URL}/auth/verify-code`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ code }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+        throw new Error(`status: ${response.status}, message: ${data.error}`);
+    }
+    return data;
+}
+
+const resetPasswordFunc = async ({ id, password }: ResetPasswordParams): Promise<boolean> => {
+    const response = await fetch(`${BASE_URL}/auth/reset-password`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id, password }),
     });
     const data = await response.json();
     if (!response.ok) {

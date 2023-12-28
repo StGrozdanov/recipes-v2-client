@@ -1,10 +1,7 @@
 import { createContext } from "react";
 import { useUserLocalStorage } from "../hooks/useLocalStorage";
 import { User } from "../services/types";
-
-type ContainerProps = {
-    children: React.ReactNode;
-}
+import { ContainerProps } from "./types";
 
 type AuthContextType = {
     isAuthenticated: boolean,

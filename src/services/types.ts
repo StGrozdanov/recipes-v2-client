@@ -41,3 +41,14 @@ export type User = {
     isAdministrator: boolean,
     isModerator: boolean,
 }
+
+export type VerificationCodeResponse = {
+    email: string,
+    username: string,
+    code: string,
+}
+
+export type ResetPasswordParams = {
+    id: string,
+    password: string,
+}

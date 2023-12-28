@@ -32,13 +32,7 @@ export default function Notification({
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
-        if (type === 'success' && isVisible) {
-            setTimeout(() => setVisible(false), 2500);
-        } else if (isVisible) {
-            setVisible(true);
-        } else if (!isVisible) {
-            setVisible(false);
-        }
+        setVisible(isVisible)
     }, [isVisible])
 
     return (

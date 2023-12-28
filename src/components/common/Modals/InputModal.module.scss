@@ -1,0 +1,67 @@
+@use 'src/scss/common/buttons' as *;
+
+.container {
+    position: fixed;
+    z-index: 2;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    height: 300px;
+    width: 400px;
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0px 2px 20px 0px #bdbdbd;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    h1 {
+        font-size: 1rem;
+        margin: 0;
+    }
+
+    svg {
+        font-size: 2rem;
+        color: #959ce9;
+
+        &:hover {
+            color: #7c85e8;
+        }
+    }
+}
+
+.input-section {
+    display: flex;
+    justify-content: space-between;
+
+    input {
+        border-radius: 20px;
+        border: 2px solid #D7D9EF;
+        padding: 10px;
+        width: 170px;
+        text-align: center;
+
+        &:focus {
+            outline: none !important;
+            border: 4px solid #D7D9EF;
+        }
+    }
+
+}
+
+.button-container {
+    display: flex;
+    align-content: center;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.cancel-btn {
+    @include cancel-btn()
+}
+
+.confirm-btn {
+    @include confirm-btn()
+}

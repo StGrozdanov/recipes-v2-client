@@ -10,6 +10,8 @@ import Category from "./components/Category/Category";
 import Login from "./components/Authentication/Login";
 import { AuthProvider } from "./contexts/AuthContext";
 import Register from "./components/Authentication/Register";
+import { InputModalProvider } from "./contexts/InputModalContext";
+import PasswordReset from "./components/Authentication/PasswordReset";
 
 const queryClient = new QueryClient(queryConfig);
 // If the mutation has been paused because the device is for example offline,
@@ -32,8 +34,13 @@ function App() {
           <Route path='/catalogue' element={<Catalogue />} />
           <Route path='/search' element={<Search />} />
           <Route path='/category' element={<Category />} />
-          <Route path='/login' element={<Login />} />
+          <Route path='/login' element={
+            <InputModalProvider>
+              <Login />
+            </InputModalProvider>
+          } />
           <Route path='/register' element={<Register />} />
+          <Route path='/reset-password/:id' element={<PasswordReset />} />
         </Routes>
         <Footer />
       </AuthProvider>
