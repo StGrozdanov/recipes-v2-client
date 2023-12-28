@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRepeat, faKey, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
 import style from './Authenticate.module.scss';
 import FailedValidationMessage from './FailedValidationMessage';
-import * as recipesAPI from '../../services/recipesService';
+import * as authService from '../../services/authService';
 import { useFormik } from 'formik';
 import { validationSchemas } from '../../configs/yupConfig';
 import Notification from '../common/Notification/Notification';
@@ -18,8 +18,8 @@ const initialResetPasswordValues = {
 export default function PasswordReset() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { requestVerificationCode } = recipesAPI.useVerifyResetPasswordCode();
-    const { resetPassword } = recipesAPI.useResetPassword();
+    const { requestVerificationCode } = authService.useVerifyResetPasswordCode();
+    const { resetPassword } = authService.useResetPassword();
     const [codeIsValid, setCodeIsValid] = useState(true);
     const [success, setSuccess] = useState(false);
 

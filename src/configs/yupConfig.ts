@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import * as recipesAPI from '../services/recipesService';
+import * as authService from '../services/authService';
 
 const loginValidationSchema = Yup.object({
     username: Yup.string().required('Username is required'),
@@ -15,7 +15,7 @@ const registrationValidationSchema = Yup.object({
         .test('is-username-available', 'Потребителското име е заето', async function (value) {
             if (value) {
                 try {
-                    const isAvailable = await recipesAPI.usernameIsAvailableRequest(value);
+                    const isAvailable = await authService.usernameIsAvailableRequest(value);
                     return isAvailable;
                 } catch (err) {
                     console.error(err);
@@ -32,7 +32,7 @@ const registrationValidationSchema = Yup.object({
         .test('is-email-available', 'Имейлът е зает', async function (value) {
             if (value) {
                 try {
-                    const isAvailable = await recipesAPI.emailIsAvailableRequest(value);
+                    const isAvailable = await authService.emailIsAvailableRequest(value);
                     return isAvailable;
                 } catch (err) {
                     console.error(err);
