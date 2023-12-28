@@ -24,7 +24,7 @@ export function useUserLocalStorage({ key, defaultValue }: UserLocalStorageProps
         }
     }
 
-    const clearLocalStorage = () => localStorage.setItem(key, '')
+    const clearLocalStorage = () => localStorage.removeItem(key)
 
     return {
         user: value,

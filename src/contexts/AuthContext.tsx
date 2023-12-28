@@ -46,9 +46,12 @@ export const AuthProvider = ({ children }: ContainerProps) => {
 
     const userLogin = (userData: User) => setUserLocalStorageValue(userData);
 
-    const userLogout = () => clearLocalStorage();
+    const userLogout = () => {
+        clearLocalStorage();
+        setUserLocalStorageValue(defaultUserValues);
+    };
 
-    const isAuthenticated = Boolean(user.sessionToken);
+    const isAuthenticated = user.sessionToken !== '';
 
     const isResourceOwner = (resourceOwnerId: number) => resourceOwnerId === user.id;
 
