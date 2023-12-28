@@ -1,4 +1,5 @@
 @use 'src/scss/common/buttons' as *;
+@use 'src/scss/common/colors' as *;
 
 .container {
     position: fixed;
@@ -8,7 +9,7 @@
     left: 50%;
     height: 300px;
     width: 400px;
-    background-color: white;
+    background-color: $orange-accent-color;
     border-radius: 20px;
     padding: 20px;
     text-align: center;
@@ -33,14 +34,11 @@
 }
 
 .input-section {
-    display: flex;
-    justify-content: space-between;
-
     input {
         border-radius: 20px;
         border: 2px solid #D7D9EF;
         padding: 10px;
-        width: 170px;
+        width: 200px;
         text-align: center;
 
         &:focus {
@@ -59,7 +57,7 @@
 }
 
 .cancel-btn {
-    @include cancel-btn()
+    @include cancel-btn();
 }
 
 .confirm-btn {

@@ -27,7 +27,7 @@ export default function InputModal({
             className={styles.container}
             style={content ? mountedStyleModal : unmountedStyleModal}
         >
-            <h1>{content}</h1>
+            <h1 style={{color: 'white'}}>{content}</h1>
             <section className={styles['input-section']}>
                 <input
                     type="text"
@@ -42,13 +42,13 @@ export default function InputModal({
                     className={styles['confirm-btn']}
                     onClick={onConfirm}
                 >
-                    Confirm
+                    Потвърди
                 </button>
                 <button
                     className={styles['cancel-btn']}
                     onClick={onCancel}
                 >
-                    Cancel
+                    Затвори
                 </button>
             </section>
         </article>
