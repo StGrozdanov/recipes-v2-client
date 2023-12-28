@@ -221,7 +221,7 @@ const loginRequest = async (loginData: LoginData): Promise<User> => {
 }
 
 const registerRequest = async (registrationData: RegistrationData): Promise<User> => {
-    const response = await fetch(`${BASE_URL}/auth/login`, {
+    const response = await fetch(`${BASE_URL}/auth/register`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
