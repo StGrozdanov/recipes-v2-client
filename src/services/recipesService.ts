@@ -244,7 +244,7 @@ export const usernameIsAvailableRequest = async (username: string): Promise<bool
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(username),
+        body: JSON.stringify({ username }),
     });
     const data = await response.json();
     if (!response.ok) {
@@ -262,7 +262,7 @@ export const emailIsAvailableRequest = async (email: string): Promise<boolean> =
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(email),
+        body: JSON.stringify({ email }),
     });
     const data = await response.json();
     if (!response.ok) {
