@@ -69,3 +69,11 @@ export type RecipeDetails = {
         id: string,
     }
 }
+
+export type UserProfileData = {
+    username: string,
+    avatarURL: string,
+    coverPhotoURL: string,
+    email: string,
+    createdRecipesCount: number,
+}

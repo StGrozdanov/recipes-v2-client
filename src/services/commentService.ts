@@ -3,8 +3,8 @@ import { CommentsProps } from "../components/Landing/modules/LandingComments/Lan
 import { BASE_URL } from "./recipesService";
 
 /**
- * Used to search recipes by category that equals the search string
- * @param category the category name
+ * Gets all comments for the given recipe
+ * @param recipeName the name of the recipe
  */
 export const getRecipeComments = (recipeName: string) => {
     const {

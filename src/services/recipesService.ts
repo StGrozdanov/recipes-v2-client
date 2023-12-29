@@ -106,8 +106,7 @@ export const searchRecipesByCategory = (category: string) => {
 }
 
 /**
- * Used to search recipes by category that equals the search string
- * @param category the category name
+ * Gets a recipe from the server
  */
 export const getASingleRecipe = (recipeName: string) => {
     const {
@@ -120,6 +119,23 @@ export const getASingleRecipe = (recipeName: string) => {
         recipe,
         recipeFetchError,
         recipeIsLoading
+    }
+}
+
+/**
+ * Gets all the recipes that the target user created
+ */
+export const getRecipesFromUser = (username: string) => {
+    const {
+        data: recipes,
+        error: recipesFetchError,
+        isFetching: recipesAreLoading
+    } = useQuery(['recipesByUser', username], () => getRecipesFromUserRequest(username));
+
+    return {
+        recipes,
+        recipesFetchError,
+        recipesAreLoading
     }
 }
 
@@ -180,6 +196,15 @@ const searchByCategoryRecipesRequest = async (categoryName: string): Promise<Rec
 
 const getASingleRecipeFunc = async (recipeName: string): Promise<RecipeDetails> => {
     const response = await fetch(`${BASE_URL}/recipes/${recipeName}`);
+    const data = await response.json();
+    if (!response.ok) {
+        throw new Error(`status: ${response.status}, message: ${data.error}`);
+    }
+    return data;
+}
+
+const getRecipesFromUserRequest = async (username: string): Promise<RecipeSummary[]> => {
+    const response = await fetch(`${BASE_URL}/recipes/user/${username}`);
     const data = await response.json();
     if (!response.ok) {
         throw new Error(`status: ${response.status}, message: ${data.error}`);

@@ -1,5 +1,6 @@
 import styles from './RecipeDetailsHeader.module.scss';
 import FallbackImage from '../../../common/FallbackImage/FallbackImage';
+import { Link } from 'react-router-dom';
 
 type RecipeDetailsHaderProps = {
     category?: string,
@@ -15,7 +16,8 @@ export default function RecipeDetailsHeader({ category, name, ownerName, image }
                 <h4 className={styles['recipe-category']}>{category}</h4>
                 <h2 className={styles['recipe-name']}>{name}</h2>
                 <h4 className={styles['recipe-owner']}>
-                    <span className={styles.published}>Публикувано от:</span> {ownerName}
+                    <span className={styles.published}>Публикувано от:</span>
+                    <Link to={`/user/${ownerName}`}>{ownerName}</Link>
                 </h4>
                 <h4 className={styles.method}>Метод на приготвяне</h4>
             </section>
