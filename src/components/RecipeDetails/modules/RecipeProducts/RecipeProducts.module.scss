@@ -1,0 +1,76 @@
+.products {
+    padding: 0 0 0 50px;
+    overflow-y: auto;
+    height: 95.5vh;
+    width: 100%;
+
+    &::-webkit-scrollbar {
+        width: 7px;
+    }
+
+    /* Track */
+    &::-webkit-scrollbar-track {
+        margin-top: 200px;
+        background: #57595f30;
+        border-radius: 50px;
+    }
+
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+        background: #4048608a;
+        border-radius: 50px;
+    }
+
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover {
+        background: #57595fc5;
+    }
+}
+
+.icon {
+    font-size: 1.25rem;
+    margin-right: 10px;
+}
+
+.list {
+    margin-top: 20px;
+    font-weight: 600;
+}
+
+.ul {
+    position: relative;
+    list-style: none;
+    padding: 0;
+
+    label {
+        display: flex;
+        position: relative;
+        align-items: center;
+        cursor: pointer;
+
+        span {
+            height: 15px;
+            width: 15px;
+            margin-right: 5px;
+            border: 1.5px solid #010101;
+            display: inline-block;
+            position: relative;
+            border-radius: 25px;
+        }
+
+        input {
+            display: none;
+        }
+    }
+
+    [type=checkbox]:checked+span:before {
+        content: '\2714';
+        font-family: 'Material Icons';
+        color: #2a5e03;
+        position: absolute;
+        top: -9px;
+        left: 0;
+        font-size: 18px;
+        -webkit-text-stroke: 0.8px;
+    }
+}

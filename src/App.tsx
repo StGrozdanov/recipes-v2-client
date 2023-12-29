@@ -12,6 +12,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import Register from "./components/Authentication/Register";
 import { InputModalProvider } from "./contexts/InputModalContext";
 import PasswordReset from "./components/Authentication/PasswordReset";
+import RecipeDetails from "./components/RecipeDetails/RecipeDetails";
 
 const queryClient = new QueryClient(queryConfig);
 // If the mutation has been paused because the device is for example offline,
@@ -41,6 +42,8 @@ function App() {
           } />
           <Route path='/register' element={<Register />} />
           <Route path='/reset-password/:id' element={<PasswordReset />} />
+          <Route path='/details/:name' element={<RecipeDetails />} />
+          <Route path='/details/:name/comments' element={<RecipeDetails />} />
         </Routes>
         <Footer />
       </AuthProvider>

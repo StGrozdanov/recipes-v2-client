@@ -4,7 +4,7 @@ import latestSixCommentsFallback from '../components/Landing/data/latestSixComme
 import latestThreeRecipesFallback from '../components/Landing/data/latestThreeRecipesFallback.json';
 import mostViewedRecipesFallback from '../components/Landing/data/mostViewedRecipesFallback.json';
 import recipesFallback from '../components/Catalogue/recipesFallback.json';
-import { RecipeSummary, RecipesPlaceholderData, ResponsePages } from './types';
+import { RecipeDetails, RecipeSummary, RecipesPlaceholderData, ResponsePages } from './types';
 
 export const BASE_URL = process.env.REACT_APP_DEV_BACKEND_URL || process.env.REACT_APP_BACKEND_URL;
 
@@ -105,6 +105,24 @@ export const searchRecipesByCategory = (category: string) => {
     }
 }
 
+/**
+ * Used to search recipes by category that equals the search string
+ * @param category the category name
+ */
+export const getASingleRecipe = (recipeName: string) => {
+    const {
+        data: recipe,
+        error: recipeFetchError,
+        isFetching: recipeIsLoading
+    } = useQuery(['recipe', recipeName.toLowerCase()], () => getASingleRecipeFunc(recipeName.toLowerCase()));
+
+    return {
+        recipe,
+        recipeFetchError,
+        recipeIsLoading
+    }
+}
+
 const getLatestRecipes = async (): Promise<RecipeSummary[]> => {
     const response = await fetch(`${BASE_URL}/recipes/latest`);
     const data = await response.json();
@@ -153,6 +171,15 @@ const searchRecipesRequest = async (search: string): Promise<RecipeSummary[]> =>
 
 const searchByCategoryRecipesRequest = async (categoryName: string): Promise<RecipeSummary[]> => {
     const response = await fetch(`${BASE_URL}/recipes/category?name=${categoryName}`);
+    const data = await response.json();
+    if (!response.ok) {
+        throw new Error(`status: ${response.status}, message: ${data.error}`);
+    }
+    return data;
+}
+
+const getASingleRecipeFunc = async (recipeName: string): Promise<RecipeDetails> => {
+    const response = await fetch(`${BASE_URL}/recipes/${recipeName}`);
     const data = await response.json();
     if (!response.ok) {
         throw new Error(`status: ${response.status}, message: ${data.error}`);

@@ -1,0 +1,78 @@
+@use 'src/scss/common/colors' as *;
+@use 'src/scss/common/fonts' as *;
+
+.container {
+    background: linear-gradient(130deg, rgba(53, 61, 81, 0.7008928571428572) 0%, rgba(53, 61, 81, 1) 20%);
+    color: white;
+    padding-left: 100px;
+    padding-top: 40px;
+    font-size: 1.25rem;
+    padding-bottom: 50px;
+    margin-bottom: -30px;
+}
+
+.panel-container {
+    position: absolute;
+    right: 10px;
+    top: 90px;
+    background: whitesmoke;
+    border-radius: 35px;
+    color: black;
+    padding: 50px 0 0 0;
+    font-size: 1rem;
+    width: 425px;
+    height: 118vh;
+    padding-right: 10px;
+}
+
+.top-section {
+    display: flex;
+}
+
+.method {
+    margin-top: 110px;
+}
+
+.methods-section {
+    display: flex;
+}
+
+.methods {
+    -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+    width: 600px;
+    height: 320px;
+    overflow-y: scroll;
+    position: relative;
+    padding-bottom: 70px;
+
+    &::-webkit-scrollbar {
+        width: 7px;
+    }
+
+    /* Track */
+    &::-webkit-scrollbar-track {
+        margin-top: 20px;
+        background: #57595f;
+        border-radius: 50px;
+    }
+
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+        background: #FCBE84;
+        border-radius: 50px;
+        height: 50px;
+    }
+
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover {
+        background: $orange-accent-color;
+    }
+}
+
+.current-method-step {
+    padding-left: 20px;
+    padding-top: 75px;
+    color: $white-orange-accent-color;
+    font-size: 1rem;
+}

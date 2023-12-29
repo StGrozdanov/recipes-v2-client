@@ -1,0 +1,125 @@
+@use 'src/scss/common/colors' as *;
+@use 'src/scss/common/fonts' as *;
+@use 'src/scss/common/animations' as *;
+@use 'src/scss/common/media' as *;
+
+.comment {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    height: 175px;
+    @include fadeInUpAnimation();
+
+    @include maxWidthMediaQuery(990px) {
+        padding: 0 35px;
+    }
+
+    @include maxWidthMediaQuery(520px) {
+        height: 238px;
+    }
+
+    @include maxWidthMediaQuery(391px) {
+        height: 237.5px;
+    }
+
+}
+
+.comment-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    margin-left: 2.5vw;
+    @include customHeadingFont('regular');
+
+    @include maxWidthMediaQuery(520px) {
+        margin-bottom: 35px;
+    }
+}
+
+.comment-username {
+    color: $landing-green;
+    @include customHeadingFont('bold');
+}
+
+.image-container {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    left: -35px;
+    top: 5%;
+    box-shadow: 0px 0px 4px 0px rgb(0 0 0 / 3%);
+    overflow: hidden;
+    border-radius: 50%;
+
+    @include maxWidthMediaQuery(990px) {
+        left: 6%;
+    }
+
+    @include maxWidthMediaQuery(640px) {
+        left: 4%;
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        transition: transform .8s;
+
+        &:hover {
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+    }
+}
+
+.date {
+    position: absolute;
+    right: 15%;
+
+    @include maxWidthMediaQuery(990px) {
+        right: 17%;
+    }
+
+    @include maxWidthMediaQuery(520px) {
+        top: 8vh;
+        right: 37vw;
+    }
+}
+
+.content {
+    padding: 20px 10px;
+    border-radius: 15px;
+    border-top: transparent;
+    background-color: rgba(162, 168, 186, 0.3);
+    width: 105%;
+    margin-right: 60px;
+    text-align: center;
+    box-shadow: 3px 6px 6px 0px rgb(0 0 0 / 20%);
+    @include elegantCormorantFont('semi-bold');
+
+    @include maxWidthMediaQuery(520px) {
+        width: 90%;
+    }
+}
+
+.icon-container {
+    position: absolute;
+    top: 24%;
+    right: 13%;
+}
+
+.icon {
+    margin-right: 10px;
+    color: rgba(87, 89, 95, 0.8);
+    cursor: pointer;
+}
+
+.edit-comment-input {
+    width: 100%;
+    padding: 7px;
+    border-radius: 12px;
+    border-width: 0;
+    text-align: center;
+}

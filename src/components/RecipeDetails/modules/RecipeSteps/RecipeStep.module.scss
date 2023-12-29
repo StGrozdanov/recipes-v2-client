@@ -1,0 +1,21 @@
+@use 'src/scss/common/colors' as *;
+@use 'src/scss/common/fonts' as *;
+
+.container {
+    display: flex;
+    position: relative;
+}
+
+.step {
+    color: $white-orange-accent-color;
+    transform: rotate(270deg);
+    position: absolute;
+    left: -5%;
+    top: 1%;
+}
+
+.text {
+    line-height: 1.75;
+    margin-bottom: 50px;
+    padding: 0 15px 0 43px;
+}

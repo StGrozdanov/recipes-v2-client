@@ -33,13 +33,14 @@ export type RegistrationData = {
 export type User = {
     id: number,
     username: string,
-    avatarURL: string | null,
+    avatarURL: string,
     coverPhotoURL: string | null,
     email: string,
     sessionToken: string,
     refreshToken: string,
     isAdministrator: boolean,
     isModerator: boolean,
+    avatar: string,
 }
 
 export type VerificationCodeResponse = {
@@ -51,4 +52,20 @@ export type VerificationCodeResponse = {
 export type ResetPasswordParams = {
     id: string,
     password: string,
+}
+
+export type RecipeDetails = {
+    recipeName: string,
+    products: string[],
+    steps: string[],
+    imageURL: string,
+    category: string,
+    difficulty: 'MEDIUM' | 'HARD' | 'EASY'
+    preparationTime: number,
+    calories: number,
+    protein: number,
+    owner: {
+        username: string,
+        id: string,
+    }
 }
