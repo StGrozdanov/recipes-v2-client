@@ -30,7 +30,7 @@ export default function Comment({ content, createdAt, owner }: CommentsProps) {
 
     return (
         <>
-            <article className={styles.comment} style={!true ? {display: 'none'} : {}}>
+            <article className={styles.comment}>
                 <header className={styles['comment-header']}>
                     <Link to={`/users/${owner.username}`}>
                         <div className={styles['image-container']}>
