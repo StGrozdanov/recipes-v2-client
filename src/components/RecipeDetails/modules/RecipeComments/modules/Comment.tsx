@@ -9,8 +9,8 @@ import { CommentsProps } from '../../../../Landing/modules/LandingComments/Landi
 export default function Comment({ content, createdAt, owner }: CommentsProps) {
     const [editComment, setEditComment] = useState(false);
     const [commentContent, setCommentContent] = useState(content);
-    const [showModal, setShowModal] = useState(false);
-    const [showComment, setShowComment] = useState(true);
+    // const [showModal, setShowModal] = useState(false);
+    // const [showComment, setShowComment] = useState(true);
 
     // async function editCommentHandler() {
     //     if (commentContent.trim() != '') {
@@ -30,7 +30,7 @@ export default function Comment({ content, createdAt, owner }: CommentsProps) {
 
     return (
         <>
-            <article className={styles.comment} style={!showComment ? {display: 'none'} : {}}>
+            <article className={styles.comment} style={!true ? {display: 'none'} : {}}>
                 <header className={styles['comment-header']}>
                     <Link to={`/users/${owner.username}`}>
                         <div className={styles['image-container']}>
@@ -71,7 +71,7 @@ export default function Comment({ content, createdAt, owner }: CommentsProps) {
                                     <FontAwesomeIcon
                                         icon={faTrashCan}
                                         className={styles.icon}
-                                        onClick={() => setShowModal(true)}
+                                        onClick={() => console.log('showing modal ...')}
                                     />
                                 </>
                         }
