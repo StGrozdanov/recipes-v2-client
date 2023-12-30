@@ -12,6 +12,7 @@ type AuthContextType = {
     userLogin: (loginData: User) => void,
     userLogout: () => void,
     avatar: string,
+    username: string,
 }
 
 const defaultUserValues: User = {
@@ -36,6 +37,7 @@ export const AuthContext = createContext<AuthContextType>({
     userLogin: (_loginData: User) => console.info('nothing here yet.'),
     userLogout: () => console.info('nothing here yet.'),
     avatar: '',
+    username: '',
 });
 
 export const AuthProvider = ({ children }: ContainerProps) => {
@@ -63,6 +65,8 @@ export const AuthProvider = ({ children }: ContainerProps) => {
 
     const avatar = user.avatarURL;
 
+    const username = user.username;
+
     return (
         <AuthContext.Provider value={{
             userLogin,
@@ -73,6 +77,7 @@ export const AuthProvider = ({ children }: ContainerProps) => {
             isResourceOwner,
             token,
             avatar,
+            username,
         }}>
             {children}
         </AuthContext.Provider>

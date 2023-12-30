@@ -3,11 +3,9 @@ import { useAuthContext } from "../../hooks/useAuthContext"
 import * as recipesService from "../../services/recipesService";
 import * as userService from "../../services/userService";
 import RecipeCard from "../RecipeCard/RecipeCard";
-import FallbackImage from "../common/FallbackImage/FallbackImage";
 import { capitalizatorUtil } from "../utils/capitalizatorUtil";
 import styles from './UserProfile.module.scss';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBowlRice, faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import ProfileCard from "./modules/ProfileCard";
 
 export default function UserProfile() {
     const { username } = useParams();
@@ -34,34 +32,7 @@ export default function UserProfile() {
                 }
             </section>
             <section className={styles["user-section-profile"]}>
-                <article className={styles["user-profile-article"]}>
-                    <header className={styles["user-profile-header"]}>
-                        <FallbackImage src={user?.coverPhotoURL || null} alt="/images/user-profile-header.jpeg" />
-                    </header>
-                    <div className={styles["user-profile-avatar-container"]}>
-                        <FallbackImage src={user?.avatarURL || null} alt="/images/avatar.png" />
-                    </div>
-                    <main className={styles["user-profile-article-info"]}>
-                        <h3 className={styles["username-header"]}>{user?.username}</h3>
-                        <p>
-                            <FontAwesomeIcon icon={faBowlRice} />
-                            {user?.createdRecipesCount} рецепти
-                        </p>
-                        <p>
-                            {
-                                isAuthenticated
-                                    ? <a href={`mailto:${user?.email}`}>
-                                        <FontAwesomeIcon icon={faEnvelope} />
-                                        {user?.email}
-                                    </a>
-                                    : <>
-                                        <FontAwesomeIcon icon={faEnvelope} />
-                                        (видим за потребители)
-                                    </>
-                            }
-                        </p>
-                    </main>
-                </article>
+                <ProfileCard user={user} isAuthenticated={isAuthenticated} />
             </section>
         </section>
     )

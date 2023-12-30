@@ -1,0 +1,59 @@
+.no-new-notifications {
+    text-align: center;
+}
+
+.notification-avatar-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.notification-article {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    background: #c28a44db;
+    padding: 15px;
+    width: 33vw;
+    border-radius: 25px;
+    margin-bottom: 25px;
+    box-shadow: 2px 2px 18px 0px #00000061;
+    position: relative;
+    color: white;
+
+    main {
+        margin-left: 20px;
+
+        p {
+            margin: 5px 0;
+        }
+    }
+
+    svg {
+        font-size: 140%;
+        position: absolute;
+        left: 92%;
+    }
+}
+
+.notification-article-header {
+    display: block;
+    background: none;
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    box-shadow: 1px -6px 20px 0px #00000021;
+}
+
+.notifications-container {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+
+    &::-webkit-scrollbar {
+        width: 0;
+        display: none;
+    }
+}

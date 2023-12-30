@@ -77,3 +77,12 @@ export type UserProfileData = {
     email: string,
     createdRecipesCount: number,
 }
+
+export type Notifications = {
+    id: number,
+    senderAvatar: string,
+    senderUsername: string,
+    action: "EDITED_RECIPE" | "CREATED_RECIPE" | "CREATED_COMMENT" | "EDITED_COMMENT",
+    locationName: string,
+    createdAt: string
+}

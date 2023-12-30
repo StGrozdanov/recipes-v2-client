@@ -14,6 +14,12 @@ import { InputModalProvider } from "./contexts/InputModalContext";
 import PasswordReset from "./components/Authentication/PasswordReset";
 import RecipeDetails from "./components/RecipeDetails/RecipeDetails";
 import UserProfile from "./components/UserProfile/UserProfile";
+import ProfileRoot from "./components/Profile/ProfileRoot";
+import Profile from "./components/Profile/modules/Profile/Profile";
+import Notifications from "./components/Profile/modules/Notifications/Notifications";
+import FavouriteRecipes from "./components/Profile/modules/FavouriteRecipes/FavouriteRecipes";
+import MyRecipes from "./components/Profile/modules/MyRecipes/MyRecipes";
+import ProfileEdit from "./components/Profile/modules/ProfileEdit/ProfileEdit";
 
 const queryClient = new QueryClient(queryConfig);
 // If the mutation has been paused because the device is for example offline,
@@ -46,6 +52,31 @@ function App() {
           <Route path='/details/:name' element={<RecipeDetails />} />
           <Route path='/details/:name/comments' element={<RecipeDetails />} />
           <Route path='/user/:username' element={<UserProfile />} />
+          <Route path='/profile' element={
+            <ProfileRoot>
+              <Profile />
+            </ProfileRoot>
+          } />
+          <Route path='/profile/notifications' element={
+            <ProfileRoot>
+              <Notifications />
+            </ProfileRoot>
+          } />
+          <Route path='/profile/favourite-recipes' element={
+            <ProfileRoot>
+              <FavouriteRecipes />
+            </ProfileRoot>
+          } />
+          <Route path='/profile/my-recipes' element={
+            <ProfileRoot>
+              <MyRecipes />
+            </ProfileRoot>
+          } />
+          <Route path='/profile/edit' element={
+            <ProfileRoot>
+              <ProfileEdit />
+            </ProfileRoot>
+          } />
         </Routes>
         <Footer />
       </AuthProvider>

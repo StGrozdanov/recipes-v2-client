@@ -53,7 +53,7 @@ export default function Login() {
 
             if (user) {
                 userLogin(user);
-                navigate('/catalogue');
+                navigate('/profile');
             }
         } catch (err) {
             setAuthError(true);

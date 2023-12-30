@@ -1,0 +1,46 @@
+.my-profile-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 80vh;
+}
+
+.user-profile {
+    margin: 50px auto;
+}
+
+.profile-navigation-button {
+    padding: 7px 14px;
+    border-radius: 25px;
+    border: 1px;
+    margin: 0;
+    margin-right: 15px;
+    background: #4b4a4f;
+    color: white;
+    cursor: pointer;
+
+    &:hover {
+        background: #c28a44;
+    }
+
+    svg {
+        margin-right: 3px;
+        font-size: 120%;
+    }
+}
+
+.active {
+    background: #c28a44;
+}
+
+.counter {
+    border: 1px solid red;
+    border-radius: 50%;
+    padding: 0px 5px;
+    background: red;
+    font-size: 80%;
+    position: absolute;
+    left: -2%;
+    bottom: 54%;
+    display: none;
+}

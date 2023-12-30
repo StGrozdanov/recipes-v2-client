@@ -27,7 +27,7 @@ export default function Register() {
 
         if (user) {
             userLogin(user);
-            navigate('/catalogue');
+            navigate('/profile');
         }
 
         formik.setTouched({ username: false, password: false, email: false, repeatPassword: false });
