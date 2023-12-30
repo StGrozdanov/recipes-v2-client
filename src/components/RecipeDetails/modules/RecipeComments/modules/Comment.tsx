@@ -32,12 +32,12 @@ export default function Comment({ content, createdAt, owner }: CommentsProps) {
         <>
             <article className={styles.comment}>
                 <header className={styles['comment-header']}>
-                    <Link to={`/users/${owner.username}`}>
+                    <Link to={`/user/${owner.username}`}>
                         <div className={styles['image-container']}>
                             <FallbackImage src={owner.avatarURL} alt={"/images/avatar.png"} />
                         </div>
                     </Link>
-                    <Link to={`/users/${owner.username}`}>
+                    <Link to={`/user/${owner.username}`}>
                         <h3 className={styles['comment-username']}>{owner.username}</h3>
                     </Link>
                     <span className={styles.date}>{createdAt.replace('T', ', ').substring(0, 17)}</span>

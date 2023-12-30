@@ -86,3 +86,9 @@ export type Notifications = {
     locationName: string,
     createdAt: string
 }
+
+export type UploadImageProps = {
+    username: string,
+    token: string,
+    formData: FormData,
+}

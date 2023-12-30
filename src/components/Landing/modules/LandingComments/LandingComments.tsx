@@ -24,7 +24,7 @@ export default function LandingComments({
         <article className={styles.comment}>
             <header className={styles['comment-header']}>
                 <h3 className={styles['comment-username']}>{owner.username}, </h3>
-                <Link to={`/users/${owner.username}`}>
+                <Link to={`/user/${owner.username}`}>
                     <div className={styles['image-container']}>
                         <FallbackImage src={owner.avatarURL} alt={"/images/avatar.png"} />
                     </div>
