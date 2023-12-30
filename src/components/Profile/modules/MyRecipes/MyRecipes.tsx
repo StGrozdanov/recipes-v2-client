@@ -1,5 +1,12 @@
+import { useAuthContext } from "../../../../hooks/useAuthContext";
+import * as recipesService from '../../../../services/recipesService';
+import RecipesTemplate from "../RecipesTemplate/RecipesTemplate";
+
 export default function MyRecipes() {
-    return(
-        <h1>My Recipes</h1>
-    )
+    const { username } = useAuthContext();
+    const { recipes } = recipesService.getRecipesFromUser(username);
+
+    return (
+        <RecipesTemplate heading="Създадени Рецепти" recipes={recipes ? recipes : []} />
+    );
 }

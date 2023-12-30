@@ -1,0 +1,45 @@
+.recipes-section {
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        width: 0;
+        display: none;
+    }
+
+    form {
+        width: 83%;
+    }
+}
+
+.find-img {
+    width: 3%;
+    position: absolute;
+    margin-top: 2px;
+    cursor: pointer;
+}
+
+.input {
+    border: 1px solid #ddd;
+    padding: 12px 20px 12px 40px;
+    width: 120%;
+    -webkit-appearance: none;
+    -webkit-border-radius: 0;
+
+    &:focus {
+        outline: none;
+        border-bottom-color: #c9995c;
+        box-shadow: inset 0px -3px 6px 0px #c9995c;
+
+    }
+}
+
+.recipes-heading {
+    text-align: center;
+}
+
+.recipe-card-list {
+    width: 60vw;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}

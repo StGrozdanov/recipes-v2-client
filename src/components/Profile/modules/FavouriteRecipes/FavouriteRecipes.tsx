@@ -1,5 +1,12 @@
+import RecipesTemplate from "../RecipesTemplate/RecipesTemplate";
+import * as recipeService from '../../../../services/recipesService';
+import { useAuthContext } from "../../../../hooks/useAuthContext";
+
 export default function FavouriteRecipes() {
-    return(
-        <h1>Favourite Recipes</h1>
+    const { username } = useAuthContext();
+    const { recipes } = recipeService.getUserFavouriteRecipes(username);
+
+    return (
+        <RecipesTemplate heading="Любими Рецепти" recipes={recipes ? recipes : []} />
     )
 }
