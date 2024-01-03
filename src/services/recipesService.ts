@@ -139,23 +139,6 @@ export const getRecipesFromUser = (username: string) => {
     }
 }
 
-/**
- * Gets all the recipes that the target user favourited
- */
-export const getUserFavouriteRecipes = (username: string) => {
-    const {
-        data: recipes,
-        error: recipesFetchError,
-        isFetching: recipesAreLoading
-    } = useQuery(['favouriteRecipes', username], () => getUserFavouriteRecipesRequest(username));
-
-    return {
-        recipes,
-        recipesFetchError,
-        recipesAreLoading
-    }
-}
-
 const getLatestRecipes = async (): Promise<RecipeSummary[]> => {
     const response = await fetch(`${BASE_URL}/recipes/latest`);
     const data = await response.json();
@@ -222,15 +205,6 @@ const getASingleRecipeFunc = async (recipeName: string): Promise<RecipeDetails> 
 
 const getRecipesFromUserRequest = async (username: string): Promise<RecipeSummary[]> => {
     const response = await fetch(`${BASE_URL}/recipes/user/${username}`);
-    const data = await response.json();
-    if (!response.ok) {
-        throw new Error(`status: ${response.status}, message: ${data.error}`);
-    }
-    return data;
-}
-
-const getUserFavouriteRecipesRequest = async (username: string): Promise<RecipeSummary[]> => {
-    const response = await fetch(`${BASE_URL}/recipes/favourites/${username}`);
     const data = await response.json();
     if (!response.ok) {
         throw new Error(`status: ${response.status}, message: ${data.error}`);

@@ -41,3 +41,9 @@
         border-radius: 50%;
     }
 }
+
+.favourites {
+    &:hover {
+        cursor: pointer;
+    }
+}

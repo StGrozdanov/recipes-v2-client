@@ -98,3 +98,9 @@ export type UserEditRequest = ProfileData & {
     token: string,
     oldUsername: string,
 }
+
+export type RecipeFavouritesProps = {
+    recipeName: string,
+    userId: number,
+    token?: string,
+}

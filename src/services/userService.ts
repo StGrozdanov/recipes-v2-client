@@ -127,15 +127,13 @@ const getUserRequest = async (username: string): Promise<UserProfileData> => {
 }
 
 const editUserRequest = async ({ email, username, oldUsername, token }: UserEditRequest): Promise<UserProfileData> => {
-    const someObject = { email, username }
-
     const response = await fetch(`${BASE_URL}/users/${oldUsername}`, {
         method: 'PATCH',
         headers: {
             'X-Authorization': token,
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(someObject),
+        body: JSON.stringify({ email, username }),
     });
     const data = await response.json();
     if (!response.ok) {
