@@ -1,4 +1,4 @@
-import { mountedStyleModal, unmountedStyleModal } from './utils/modalUnmountAndMountStyle';
+import { mountedStyleModal, unmountedStyleModal } from '../utils/modalUnmountAndMountStyle';
 import styles from './InputModal.module.scss';
 
 interface InputModalProps {

@@ -1,0 +1,35 @@
+@use 'src/scss/common/buttons' as *;
+@use 'src/scss/common/colors' as *;
+
+.container {
+    position: fixed;
+    z-index: 2;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    height: 250px;
+    width: 350px;
+    background-color: $orange-accent-color;
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0px 2px 20px 0px #bdbdbd;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.button-container {
+    display: flex;
+    align-content: center;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.cancel-btn {
+    @include cancel-btn()
+}
+
+.confirm-btn {
+    @include confirm-btn()
+}

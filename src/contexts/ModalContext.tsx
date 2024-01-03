@@ -1,24 +1,21 @@
 import { createContext, useRef, useState } from "react";
 import { ContainerProps } from "./types";
-import InputModal from "../components/common/Modals/InputModal/InputModal";
+import ConfirmModal from "../components/common/Modals/ConfirmModal/ConfirmModal";
 
 interface Options {
     title: string,
-    updateStateHandler: (...args: any[]) => void,
 }
 
-interface InputModalContextType {
-    openModal: (options: Options) => Promise<void>,
+interface ModalContextType {
+    openModal: (options: { title: string }) => Promise<void>,
 }
 
-export const InputModalContext = createContext<InputModalContextType>({
+export const ModalContext = createContext<ModalContextType>({
     openModal: () => Promise.reject('modal context is not initialized'),
 });
 
-export const InputModalProvider = ({ children }: ContainerProps) => {
+export const ModalProvider = ({ children }: ContainerProps) => {
     const [options, setOptions] = useState<Options | null>(null);
-    const [data, setData] = useState('');
-
     const awaitingPromiseRef = useRef<{ resolve: () => void, reject: () => void } | null>(null);
 
     const openModal = (options: Options): Promise<void> => {
@@ -26,37 +23,30 @@ export const InputModalProvider = ({ children }: ContainerProps) => {
         return new Promise<void>((resolve: () => void, reject: () => void) => {
             awaitingPromiseRef.current = { resolve, reject };
         });
-    };
+    }; 
 
     const handleClose = () => {
         if (awaitingPromiseRef.current) {
             awaitingPromiseRef.current.reject();
         }
         setOptions(null);
-        setData('');
     };
 
     const handleConfirm = () => {
         if (awaitingPromiseRef.current) {
-            if (data !== '') {
-                options?.updateStateHandler(data);
-            }
             awaitingPromiseRef.current.resolve();
         }
         setOptions(null);
-        setData('');
     };
 
     return (
-        <InputModalContext.Provider value={{ openModal }}>
+        <ModalContext.Provider value={{ openModal }}>
             {children}
-            <InputModal
-                data={data}
-                content={options ? options.title : ''}
-                onCancel={handleClose}
+            <ConfirmModal
                 onConfirm={handleConfirm}
-                setData={setData}
+                onCancel={handleClose}
+                content={options && options.title ? options.title : ""}
             />
-        </InputModalContext.Provider>
+        </ModalContext.Provider>
     );
 }

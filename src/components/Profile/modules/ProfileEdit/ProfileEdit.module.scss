@@ -57,7 +57,10 @@
             outline: none;
             border-bottom-color: #c9995c;
             box-shadow: inset 0px -3px 6px 0px #c9995c;
+        }
 
+        &:hover {
+            border: 1.5px solid black;
         }
     }
 }
@@ -94,7 +97,10 @@
                 outline: none;
                 border-bottom-color: #c9995c;
                 box-shadow: inset 0px -3px 6px 0px #c9995c;
+            }
 
+            &:hover {
+                border: 1.5px solid black;
             }
         }
 
@@ -114,15 +120,18 @@
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-.edit-icon {
+.edit-icon,
+.settings-icon {
     @include icon();
+
+    &:hover {
+        color: #4b4a4f;
+    }
 }
 
 .settings-icon {
-    @include icon();
     right: 4%;
 }
-
 
 .warning-icon-email,
 .warning-icon {
@@ -186,6 +195,7 @@
     display: inline-block;
     align-self: flex-end;
     margin: 20px 16%;
+    z-index: 1;
 }
 
 .continue-icon {

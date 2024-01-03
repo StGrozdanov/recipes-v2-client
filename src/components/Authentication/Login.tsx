@@ -28,7 +28,7 @@ export default function Login() {
     const [showSuccessNotification, setShowSuccessNotification] = useState(false);
     const [authError, setAuthError] = useState(false);
 
-    const updateEmailHandler = async (emailInput: string) => {
+    const updatePasswordHandler = async (emailInput: string) => {
         verificationEmailError && setVerificationEmailError(false);
 
         try {
@@ -131,7 +131,7 @@ export default function Login() {
                         onClick={() => {
                             inputModal({
                                 title: 'Забравена парола',
-                                updateStateHandler: updateEmailHandler as (...args: any[]) => void,
+                                updateStateHandler: updatePasswordHandler as (...args: any[]) => void,
                             })
                                 .then(() => console.info('confirmed'))
                                 .catch(() => console.info('canceled'))

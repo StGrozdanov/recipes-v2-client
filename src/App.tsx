@@ -20,6 +20,7 @@ import Notifications from "./components/Profile/modules/Notifications/Notificati
 import FavouriteRecipes from "./components/Profile/modules/FavouriteRecipes/FavouriteRecipes";
 import MyRecipes from "./components/Profile/modules/MyRecipes/MyRecipes";
 import ProfileEdit from "./components/Profile/modules/ProfileEdit/ProfileEdit";
+import { ModalProvider } from "./contexts/ModalContext";
 
 const queryClient = new QueryClient(queryConfig);
 // If the mutation has been paused because the device is for example offline,
@@ -74,7 +75,9 @@ function App() {
           } />
           <Route path='/profile/edit' element={
             <ProfileRoot>
-              <ProfileEdit />
+              <ModalProvider >
+                <ProfileEdit />
+              </ModalProvider>
             </ProfileRoot>
           } />
         </Routes>

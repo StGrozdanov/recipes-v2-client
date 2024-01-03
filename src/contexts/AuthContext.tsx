@@ -14,6 +14,7 @@ type AuthContextType = {
     avatar: string,
     username: string,
     updateUserData: (email: string, username: string) => void,
+    email: string,
 }
 
 const defaultUserValues: User = {
@@ -40,6 +41,7 @@ export const AuthContext = createContext<AuthContextType>({
     avatar: '',
     username: '',
     updateUserData: (_email: string, _username: string) => console.info('nothing here yet.'),
+    email: '',
 });
 
 export const AuthProvider = ({ children }: ContainerProps) => {
@@ -76,6 +78,8 @@ export const AuthProvider = ({ children }: ContainerProps) => {
 
     const username = user.username;
 
+    const email = user.email;
+
     return (
         <AuthContext.Provider value={{
             userLogin,
@@ -88,6 +92,7 @@ export const AuthProvider = ({ children }: ContainerProps) => {
             avatar,
             username,
             updateUserData,
+            email,
         }}>
             {children}
         </AuthContext.Provider>
