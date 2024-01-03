@@ -1,4 +1,5 @@
 import { InfiniteData } from "react-query"
+import { ProfileData } from "../components/Profile/modules/ProfileEdit/ProfileEdit"
 
 export type RecipeSummary = {
     imageURL: string,
@@ -91,4 +92,9 @@ export type UploadImageProps = {
     username: string,
     token: string,
     formData: FormData,
+}
+
+export type UserEditRequest = ProfileData & {
+    token: string,
+    oldUsername: string,
 }

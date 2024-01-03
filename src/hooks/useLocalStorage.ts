@@ -24,11 +24,22 @@ export function useUserLocalStorage({ key, defaultValue }: UserLocalStorageProps
         }
     }
 
-    const clearLocalStorage = () => localStorage.removeItem(key)
+    const clearLocalStorage = () => localStorage.removeItem(key);
+
+    const updateLocalStorageValues = (username: string, email: string) => {
+        const oldData = localStorage.getItem(key);
+
+        if (oldData) {
+            const parsedData = JSON.parse(oldData);
+            const updatedData = { ...parsedData, username, email }
+            localStorage.setItem(key, JSON.stringify(updatedData));
+        }
+    }
 
     return {
         user: value,
         setUserLocalStorageValue,
         clearLocalStorage,
+        updateLocalStorageValues,
     }
 }

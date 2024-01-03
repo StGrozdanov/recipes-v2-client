@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "react-query";
 import { BASE_URL } from "./recipesService";
-import { UploadImageProps, UserProfileData } from "./types";
+import { UploadImageProps, UserEditRequest, UserProfileData } from "./types";
 import { useCallback } from "react";
 
 /**
@@ -65,6 +65,28 @@ export const useUploadAvatarImage = () => {
     return { uploadAvatar, isLoading, isError };
 };
 
+/**
+ * edits user email and username
+ */
+export const useUserDataEdit = () => {
+    const {
+        mutateAsync: editMutation,
+        isLoading,
+        isError
+    } = useMutation((data: UserEditRequest) => editUserRequest(data), { retry: 3 });
+
+    const editProfile = useCallback(async (data: UserEditRequest) => {
+        try {
+            const editResponse = await editMutation(data);
+            return { editResponse };
+        } catch (error) {
+            return { error };
+        }
+    }, [editMutation]);
+
+    return { editProfile, isLoading, isError };
+};
+
 const uploadCoverImageRequest = async ({ formData, token }: UploadImageProps): Promise<{ coverImageURL: string }> => {
     const response = await fetch(`${BASE_URL}/upload/image/users/cover-image`, {
         method: 'POST',
@@ -100,6 +122,24 @@ const getUserRequest = async (username: string): Promise<UserProfileData> => {
     const data = await response.json();
     if (!response.ok) {
         throw new Error(`status: ${response.status}, message: ${data}`);
+    }
+    return data;
+}
+
+const editUserRequest = async ({ email, username, oldUsername, token }: UserEditRequest): Promise<UserProfileData> => {
+    const someObject = { email, username }
+
+    const response = await fetch(`${BASE_URL}/users/${oldUsername}`, {
+        method: 'PATCH',
+        headers: {
+            'X-Authorization': token,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(someObject),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+        throw new Error(`status: ${response.status}, message: ${JSON.stringify(data)}`);
     }
     return data;
 }

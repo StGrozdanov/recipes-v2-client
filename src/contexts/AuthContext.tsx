@@ -13,6 +13,7 @@ type AuthContextType = {
     userLogout: () => void,
     avatar: string,
     username: string,
+    updateUserData: (email: string, username: string) => void,
 }
 
 const defaultUserValues: User = {
@@ -38,15 +39,23 @@ export const AuthContext = createContext<AuthContextType>({
     userLogout: () => console.info('nothing here yet.'),
     avatar: '',
     username: '',
+    updateUserData: (_email: string, _username: string) => console.info('nothing here yet.'),
 });
 
 export const AuthProvider = ({ children }: ContainerProps) => {
-    const { user, setUserLocalStorageValue, clearLocalStorage } = useUserLocalStorage({
+    const {
+        user,
+        setUserLocalStorageValue,
+        clearLocalStorage,
+        updateLocalStorageValues
+    } = useUserLocalStorage({
         key: 'user',
         defaultValue: defaultUserValues
     });
 
     const userLogin = (userData: User) => setUserLocalStorageValue(userData);
+
+    const updateUserData = (email: string, username: string) => updateLocalStorageValues(username, email);
 
     const userLogout = () => {
         clearLocalStorage();
@@ -78,6 +87,7 @@ export const AuthProvider = ({ children }: ContainerProps) => {
             token,
             avatar,
             username,
+            updateUserData,
         }}>
             {children}
         </AuthContext.Provider>
