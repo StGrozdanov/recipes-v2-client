@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import * as authService from '../services/authService';
+import * as recipesService from '../services/recipesService';
 import { debounce } from 'lodash';
 
 const emailValidationFunction = async (
@@ -36,8 +37,21 @@ const usernameValidationFunction = async (
     }
 };
 
-const debouncedEmailValidation = debounce(emailValidationFunction, 500);
-const debouncedUsernameValidation = debounce(usernameValidationFunction, 500);
+const recipeNameValidationFunction = async (
+    value: string,
+    resolve: (result: boolean) => void,
+) => {
+    try {
+        const isAvailable = await recipesService.recipeIsAvailableRequest(value.toLowerCase());
+        resolve(!isAvailable);
+    } catch (error) {
+        resolve(false);
+    }
+};
+
+const debouncedEmailValidation = debounce(emailValidationFunction, 700);
+const debouncedUsernameValidation = debounce(usernameValidationFunction, 700);
+const debouncedRecipeNameValidation = debounce(recipeNameValidationFunction, 700);
 
 const loginValidationSchema = Yup.object({
     username: Yup.string().required('Username is required'),
@@ -92,9 +106,75 @@ const resetPasswordValidationSchema = Yup.object({
     }),
 });
 
+const recipeValidationSchema = Yup.object({
+    recipeName: Yup
+        .string()
+        .required('Дължина от минимум 4 символа')
+        .min(4, 'Дължина от минимум 4 символа')
+        .matches(/^[а-яА-Я\s]+$/, 'Името трябва да е на български и да не съдържа символи')
+        .test(
+            'is-recipe-name-available',
+            'Името е заето',
+            value => new Promise(resolve => debouncedRecipeNameValidation(value, resolve))
+        ),
+    preparationTime: Yup
+        .number()
+        .required('Времето за приготвяне е число, изразено в минути')
+        .min(2, 'Минималното време за приготвяне е 2 минути'),
+    products: Yup
+        .string()
+        .required('Минимум 2 продукта')
+        .test(
+            'is-in-expected-format-and-length',
+            'Продуктите трябва да са минимум 2, всеки на нов ред',
+            value => value
+                .split('\n')
+                .map(content => content.trim())
+                .filter(content => content.trim() !== '')
+                .length >= 2
+        ),
+    steps: Yup
+        .string()
+        .required('Минимум 2 стъпки')
+        .test(
+            'is-in-expected-format-and-length',
+            'Стъпките трябва да са минимум 2, всяка на нов ред',
+            value => value
+                .split('\n')
+                .map(content => content.trim())
+                .filter(content => content.trim() !== '')
+                .length >= 2
+        ),
+    imageURL: Yup
+        .mixed()
+        .required('Картинката е задължителна')
+        .test('recipe-name-should-be-populated', 'Името на рецептата трябва да е попълнено', function (value) {
+            const imgURL = value ? value as string : '';
+            const recipeName = imgURL.split('recipe-image-')[1];
+            return recipeName !== ''
+        }),
+    category: Yup
+        .string()
+        .required('Моля изберете категория'),
+    difficulty: Yup
+        .string()
+        .required('Моля изберете трудност'),
+    protein: Yup
+        .number()
+        .nullable()
+        .notRequired()
+        .min(10, 'Протейна не може да е по-малко от 10'),
+    calories: Yup
+        .number()
+        .nullable()
+        .notRequired()
+        .min(10, 'Калориите не могат да са по-малко от 10'),
+});
+
 export const validationSchemas = {
     loginValidationSchema,
     registrationValidationSchema,
     resetPasswordValidationSchema,
     profileValidationSchema,
+    recipeValidationSchema,
 }

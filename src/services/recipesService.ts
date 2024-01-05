@@ -1,10 +1,7 @@
-import { CommentsProps } from '../components/Landing/modules/LandingComments/LandingComments';
-import { useInfiniteQuery, useQueries, useQuery } from 'react-query';
-import latestSixCommentsFallback from '../components/Landing/data/latestSixCommentsFallback.json';
-import latestThreeRecipesFallback from '../components/Landing/data/latestThreeRecipesFallback.json';
-import mostViewedRecipesFallback from '../components/Landing/data/mostViewedRecipesFallback.json';
+import { useInfiniteQuery, useMutation, useQuery } from 'react-query';
 import recipesFallback from '../components/Catalogue/recipesFallback.json';
-import { RecipeDetails, RecipeSummary, RecipesPlaceholderData, ResponsePages } from './types';
+import { RecipeDetails, RecipeSummary, RecipesPlaceholderData, ResponsePages, UploadRecipeImageProps } from './types';
+import { useCallback } from 'react';
 
 export const BASE_URL = process.env.REACT_APP_DEV_BACKEND_URL || process.env.REACT_APP_BACKEND_URL;
 
@@ -12,47 +9,6 @@ const recipesPlaceHolderData: RecipesPlaceholderData = {
     pages: [recipesFallback],
     pageParams: [1],
 };
-
-/**
- * Used to fetch the latest recipes, the most viewed recipes and the latest comments data. It is an abstraction
- * over the useQueries hook of ReactQuery - returning the data, error for each request and a isFetching boolean
- * that will resolve to false when all 3 requests are passed with success
- */
-export const getLandingPageData = () => {
-    const [
-        { data: latestRecipesData, error: recipesFetchError, isFetching: recipesAreLoading },
-        { data: latestCommentsData, error: commentsFetchError, isFetching: commentsAreLoading },
-        { data: mostViewedRecipesData, error: mostViewedFetchError, isFetching: mostViewedAreLoading },
-    ] = useQueries([
-        {
-            queryKey: 'latestThreeRecipes',
-            queryFn: getLatestRecipes,
-            placeholderData: latestThreeRecipesFallback
-        },
-        {
-            queryKey: 'latestSixComments',
-            queryFn: getLatestComments,
-            placeholderData: latestSixCommentsFallback
-        },
-        {
-            queryKey: 'mostViewedRecipes',
-            queryFn: getMostViewedRecipes,
-            placeholderData: mostViewedRecipesFallback
-        },
-    ]);
-
-    const isFetching = recipesAreLoading || commentsAreLoading || mostViewedAreLoading;
-
-    return {
-        latestRecipesData,
-        latestCommentsData,
-        mostViewedRecipesData,
-        recipesFetchError,
-        commentsFetchError,
-        mostViewedFetchError,
-        isFetching,
-    }
-}
 
 /**
  * Used to fetch all recipes, utilising pagination with a default limit of 3 recipes per page.
@@ -139,33 +95,6 @@ export const getRecipesFromUser = (username: string) => {
     }
 }
 
-const getLatestRecipes = async (): Promise<RecipeSummary[]> => {
-    const response = await fetch(`${BASE_URL}/recipes/latest`);
-    const data = await response.json();
-    if (!response.ok) {
-        throw new Error(`status: ${response.status}, message: ${data.error}`);
-    }
-    return data;
-}
-
-const getLatestComments = async (): Promise<CommentsProps[]> => {
-    const response = await fetch(`${BASE_URL}/comments/latest`);
-    const data = await response.json();
-    if (!response.ok) {
-        throw new Error(`status: ${response.status}, message: ${data}`);
-    }
-    return data;
-}
-
-const getMostViewedRecipes = async (): Promise<RecipeSummary[]> => {
-    const response = await fetch(`${BASE_URL}/recipes/most-popular`);
-    const data = await response.json();
-    if (!response.ok) {
-        throw new Error(`status: ${response.status}, message: ${data}`);
-    }
-    return data;
-}
-
 const getRecipesRequest = async (page: number): Promise<ResponsePages> => {
     const RECIPES_PER_PAGE = 3;
     const response = await fetch(`${BASE_URL}/recipes?limit=${RECIPES_PER_PAGE}&cursor=${page - 1}`);
@@ -211,3 +140,96 @@ const getRecipesFromUserRequest = async (username: string): Promise<RecipeSummar
     }
     return data;
 }
+
+/**
+ * Checks if the provided recipeName already exists in the database
+ */
+export const recipeIsAvailableRequest = async (recipeName: string): Promise<boolean> => {
+    const response = await fetch(`${BASE_URL}/recipes/check-name`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ recipeName }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+        throw new Error(`status: ${response.status}, message: ${data.error}`);
+    }
+    return data;
+}
+
+/**
+ * Used to send register request to the server
+ */
+export const useAddRecipe = (token: string) => {
+    const {
+        mutateAsync: addRecipeMutation,
+        isLoading,
+        isError
+    } = useMutation((data: RecipeDetails) => addRecipeRequest(data, token), { retry: 3 });
+
+    const create = useCallback(async (data: RecipeDetails) => {
+        try {
+            const recipeCreateResponse = addRecipeMutation(data);
+            return { recipeCreateResponse };
+        } catch (error) {
+            return { error };
+        }
+    }, [addRecipeMutation]);
+
+    return { create, isLoading, isError };
+};
+
+const addRecipeRequest = async (recipeData: RecipeDetails, token: string): Promise<RecipeDetails> => {
+    const response = await fetch(`${BASE_URL}/recipes`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Authorization': token,
+        },
+        body: JSON.stringify(recipeData),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+        throw new Error(`status: ${response.status}, message: ${JSON.stringify(data)}`);
+    }
+    return data;
+}
+
+const uploadRecipeImageRequest = async ({ formData, token }: UploadRecipeImageProps): Promise<{ imageURL: string }> => {
+    const response = await fetch(`${BASE_URL}/recipes/upload-image`, {
+        method: 'POST',
+        headers: {
+            'X-Authorization': token,
+        },
+        body: formData,
+    });
+    const data = await response.json();
+    if (!response.ok) {
+        throw new Error(`status: ${response.status}, message: ${JSON.stringify(data)}`);
+    }
+    return data;
+}
+
+/**
+ * uploads new recipe image for the selected recipe
+ */
+export const useUploadRecipeImage = () => {
+    const {
+        mutateAsync: uploadMutation,
+        isLoading,
+        isError
+    } = useMutation((data: UploadRecipeImageProps) => uploadRecipeImageRequest(data), { retry: 3 });
+
+    const uploadImage = useCallback(async (data: UploadRecipeImageProps) => {
+        try {
+            const uploadResponse = await uploadMutation(data);
+            return { uploadResponse };
+        } catch (error) {
+            return { error };
+        }
+    }, [uploadMutation]);
+
+    return { uploadImage, isLoading, isError };
+};

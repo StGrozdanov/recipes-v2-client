@@ -65,9 +65,9 @@ export default function RecipeDetails() {
                     <section className={styles['top-section']}>
                         <RecipeDetailsHeader
                             category={recipe?.category}
-                            name={recipe ? capitalizatorUtil(recipe.recipeName) : ''}
+                            name={recipe?.recipeName ? capitalizatorUtil(recipe.recipeName) : ''}
                             image={recipe?.imageURL}
-                            ownerName={recipe?.owner.username}
+                            ownerName={recipe?.owner?.username}
                             isFavourite={recipeIsFavourite}
                             isAuthenticated={isAuthenticated}
                             addToFavouritesHandler={favouriteRecipeHandler}
@@ -75,10 +75,10 @@ export default function RecipeDetails() {
                         />
                         <article className={styles['panel-container']}>
                             <RecipePanel
-                                calories={recipe?.calories}
-                                preparationTime={recipe?.preparationTime}
+                                calories={recipe?.calories || 0}
+                                preparationTime={recipe?.preparationTime || 0}
                                 products={recipe?.products}
-                                protein={recipe?.protein}
+                                protein={recipe?.protein || 0}
                             />
                             <RecipePanelNavigation recipeName={recipe?.recipeName} />
                         </article>

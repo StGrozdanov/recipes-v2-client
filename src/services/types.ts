@@ -67,7 +67,7 @@ export type RecipeDetails = {
     protein: number,
     owner: {
         username: string,
-        id: string,
+        id: number,
     }
 }
 
@@ -103,4 +103,9 @@ export type RecipeFavouritesProps = {
     recipeName: string,
     userId: number,
     token?: string,
+}
+
+export type UploadRecipeImageProps = {
+    token: string,
+    formData: FormData,
 }

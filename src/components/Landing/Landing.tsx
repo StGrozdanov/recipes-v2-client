@@ -11,7 +11,7 @@ import mostViewedRecipesFallback from './data/mostViewedRecipesFallback.json';
 import RecipeCard from "../RecipeCard/RecipeCard";
 import { capitalizatorUtil } from "../utils/capitalizatorUtil";
 import Animate from "../common/Animate/Animate";
-import * as recipesAPI from '../../services/recipesService';
+import { getLandingPageData } from "../../services/landingPageService";
 
 export default function Landing() {
     const {
@@ -21,7 +21,7 @@ export default function Landing() {
         recipesFetchError,
         commentsFetchError,
         mostViewedFetchError,
-    } = recipesAPI.getLandingPageData();
+    } = getLandingPageData();
 
     const latestRecipes = recipesFetchError ? latestThreeRecipesFallback : latestRecipesData;
     const latestComments = commentsFetchError ? latestSixCommentsFallback : latestCommentsData;
