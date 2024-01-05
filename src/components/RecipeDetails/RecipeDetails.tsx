@@ -80,7 +80,10 @@ export default function RecipeDetails() {
                                 products={recipe?.products}
                                 protein={recipe?.protein || 0}
                             />
-                            <RecipePanelNavigation recipeName={recipe?.recipeName} />
+                            <RecipePanelNavigation
+                                recipeName={recipe?.recipeName}
+                                ownerId={recipe?.owner.id}
+                            />
                         </article>
                     </section>
                     <section className={styles['methods-section']}>

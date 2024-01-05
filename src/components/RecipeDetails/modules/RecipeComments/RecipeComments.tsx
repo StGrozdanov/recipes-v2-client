@@ -8,7 +8,7 @@ import LoadingPan from "../../../common/LoadingPan/LoadingPan";
 
 export default function RecipeComments() {
     const { name } = useParams();
-    const { avatar } = useAuthContext();
+    const { avatar, isAuthenticated } = useAuthContext();
 
     const { comments, commentsAreLoading } = commentService.getRecipeComments(name as string);
 
@@ -47,7 +47,10 @@ export default function RecipeComments() {
                             :
                             <h3 className={styles['no-comments']}>Все още няма коментари за тази рецепта.</h3>
                     }
-                    <section className={styles['add-comment-section']}>
+                    <section
+                        className={styles['add-comment-section']}
+                        style={isAuthenticated ? {} : { display: 'none' }}
+                    >
                         <div className={styles['image-container']}>
                             <FallbackImage src={avatar} alt={"/images/avatar.png"} />
                         </div>

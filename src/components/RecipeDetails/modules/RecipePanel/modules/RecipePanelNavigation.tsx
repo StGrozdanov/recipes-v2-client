@@ -3,14 +3,17 @@ import { faCartShopping, faComment, faPenToSquare, faShareNodes, faTrashCan } fr
 import styles from './RecipePanelNavigation.module.scss';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useAuthContext } from '../../../../../hooks/useAuthContext';
 
 type RecipePanelNavigationProps = {
     recipeName?: string,
+    ownerId?: number,
 }
 
 const selectedStyle = { backgroundSize: '100% 0.15em', color: '#57595fc9' };
 
-export default function RecipePanelNavigation({ recipeName }: RecipePanelNavigationProps) {
+export default function RecipePanelNavigation({ recipeName, ownerId }: RecipePanelNavigationProps) {
+    const { isAdministrator, isModerator, isResourceOwner } = useAuthContext();
     const [selected, setSelected] = useState('products');
     const navigate = useNavigate();
     const { pathname } = useLocation();
@@ -35,10 +38,13 @@ export default function RecipePanelNavigation({ recipeName }: RecipePanelNavigat
                     onClick={() => navigate(`/details/${recipeName}/comments`)}
                 />
                 <FontAwesomeIcon
+                    style={isAdministrator || isModerator || ownerId && isResourceOwner(ownerId) ? {} : { display: 'none' }}
                     icon={faPenToSquare}
                     className={styles['nav-icon']}
+                    onClick={() => navigate(`/edit/${recipeName}`)}
                 />
                 <FontAwesomeIcon
+                    style={isAdministrator || ownerId && isResourceOwner(ownerId) ? {} : { display: 'none' }}
                     icon={faTrashCan}
                     className={styles['nav-icon']}
                 />
