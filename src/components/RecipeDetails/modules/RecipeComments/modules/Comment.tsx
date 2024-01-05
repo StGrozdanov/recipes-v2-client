@@ -5,10 +5,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck, faPenToSquare, faTrashCan, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { CommentsProps } from '../../../../Landing/modules/LandingComments/LandingComments';
+import { useAuthContext } from '../../../../../hooks/useAuthContext';
 
 export default function Comment({ content, createdAt, owner }: CommentsProps) {
     const [editComment, setEditComment] = useState(false);
     const [commentContent, setCommentContent] = useState(content);
+    const { isAdministrator, isModerator, username } = useAuthContext();
     // const [showModal, setShowModal] = useState(false);
     // const [showComment, setShowComment] = useState(true);
 
@@ -64,11 +66,21 @@ export default function Comment({ content, createdAt, owner }: CommentsProps) {
                                 :
                                 <>
                                     <FontAwesomeIcon
+                                        style={
+                                            isAdministrator || isModerator || username === owner.username
+                                                ? {}
+                                                : { display: 'none' }
+                                        }
                                         icon={faPenToSquare}
                                         className={styles.icon}
                                         onClick={() => setEditComment(true)}
                                     />
                                     <FontAwesomeIcon
+                                        style={
+                                            isAdministrator || isModerator || username === owner.username
+                                                ? {}
+                                                : { display: 'none' }
+                                        }
                                         icon={faTrashCan}
                                         className={styles.icon}
                                         onClick={() => console.log('showing modal ...')}
