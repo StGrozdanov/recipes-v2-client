@@ -1,3 +1,4 @@
+/* eslint max-lines: 0 */
 import { useInfiniteQuery, useMutation, useQuery } from 'react-query';
 import recipesFallback from '../components/Catalogue/recipesFallback.json';
 import { RecipeDetails, RecipeSummary, RecipesPlaceholderData, ResponsePages, UploadRecipeImageProps } from './types';
@@ -272,3 +273,40 @@ export const useUploadRecipeImage = () => {
 
     return { uploadImage, isLoading, isError };
 };
+
+/**
+ * Used to delete recipe
+ */
+export const useDeleteRecipe = (token: string) => {
+    const {
+        mutateAsync: deleteRecipeMutation,
+        isLoading,
+        isError
+    } = useMutation(({ recipeName }: { recipeName: string }) => deleteRecipeRequest(token, recipeName), { retry: 3 });
+
+    const deleteRecipe = useCallback(async (recipeName: string) => {
+        try {
+            const recipeDeleteResponse = deleteRecipeMutation({ recipeName });
+            return { recipeDeleteResponse };
+        } catch (error) {
+            return { error };
+        }
+    }, [deleteRecipeMutation]);
+
+    return { deleteRecipe, isLoading, isError };
+};
+
+const deleteRecipeRequest = async (token: string, recipeName: string): Promise<{ status: string }> => {
+    const response = await fetch(`${BASE_URL}/recipes/${recipeName}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Authorization': token,
+        },
+    });
+    const data = await response.json();
+    if (!response.ok) {
+        throw new Error(`status: ${response.status}, message: ${JSON.stringify(data)}`);
+    }
+    return data;
+}
