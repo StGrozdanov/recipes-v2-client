@@ -40,10 +40,15 @@ const usernameValidationFunction = async (
 const recipeNameValidationFunction = async (
     value: string,
     resolve: (result: boolean) => void,
+    recipeName: string,
 ) => {
     try {
         const isAvailable = await recipesService.recipeIsAvailableRequest(value.toLowerCase());
-        resolve(!isAvailable);
+        if (isAvailable && value.toLowerCase() === recipeName) {
+            resolve(true);
+        } else {
+            resolve(!isAvailable);
+        }
     } catch (error) {
         resolve(false);
     }
@@ -106,7 +111,7 @@ const resetPasswordValidationSchema = Yup.object({
     }),
 });
 
-const recipeValidationSchema = Yup.object({
+const recipeValidationSchema = (currentRecipeRecipeName: string) => Yup.object({
     recipeName: Yup
         .string()
         .required('Дължина от минимум 4 символа')
@@ -115,7 +120,7 @@ const recipeValidationSchema = Yup.object({
         .test(
             'is-recipe-name-available',
             'Името е заето',
-            value => new Promise(resolve => debouncedRecipeNameValidation(value, resolve))
+            value => new Promise(resolve => debouncedRecipeNameValidation(value, resolve, currentRecipeRecipeName))
         ),
     preparationTime: Yup
         .number()

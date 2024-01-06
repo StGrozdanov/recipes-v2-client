@@ -22,6 +22,7 @@ import MyRecipes from "./components/Profile/modules/MyRecipes/MyRecipes";
 import ProfileEdit from "./components/Profile/modules/ProfileEdit/ProfileEdit";
 import { ModalProvider } from "./contexts/ModalContext";
 import CreateRecipe from "./components/CreateRecipe/CreateRecipe";
+import EditRecipe from "./components/EditRecipe/EditRecipe";
 
 const queryClient = new QueryClient(queryConfig);
 // If the mutation has been paused because the device is for example offline,
@@ -82,6 +83,7 @@ function App() {
             </ProfileRoot>
           } />
           <Route path='/create' element={<CreateRecipe />} />
+          <Route path='/edit/:name' element={<EditRecipe />} />
         </Routes>
         <Footer />
       </AuthProvider>

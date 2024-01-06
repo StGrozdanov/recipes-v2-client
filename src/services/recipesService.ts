@@ -160,7 +160,7 @@ export const recipeIsAvailableRequest = async (recipeName: string): Promise<bool
 }
 
 /**
- * Used to send register request to the server
+ * Used to send new recipe to the server
  */
 export const useAddRecipe = (token: string) => {
     const {
@@ -181,9 +181,48 @@ export const useAddRecipe = (token: string) => {
     return { create, isLoading, isError };
 };
 
+/**
+ * Used to edit recipe
+ */
+export const useEditRecipeRequest = (token: string) => {
+    const {
+        mutateAsync: editRecipeMutation,
+        isLoading,
+        isError
+    } = useMutation(({ data, recipeName }: { data: RecipeDetails, recipeName: string }) =>
+        editRecipeRequest(data, token, recipeName), { retry: 3 });
+
+    const edit = useCallback(async (data: RecipeDetails, recipeName: string) => {
+        try {
+            const recipeEditResponse = editRecipeMutation({ data, recipeName });
+            return { recipeEditResponse };
+        } catch (error) {
+            return { error };
+        }
+    }, [editRecipeMutation]);
+
+    return { edit, isLoading, isError };
+};
+
 const addRecipeRequest = async (recipeData: RecipeDetails, token: string): Promise<RecipeDetails> => {
     const response = await fetch(`${BASE_URL}/recipes`, {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Authorization': token,
+        },
+        body: JSON.stringify(recipeData),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+        throw new Error(`status: ${response.status}, message: ${JSON.stringify(data)}`);
+    }
+    return data;
+}
+
+const editRecipeRequest = async (recipeData: RecipeDetails, token: string, recipeName: string): Promise<RecipeDetails> => {
+    const response = await fetch(`${BASE_URL}/recipes/${recipeName}`, {
+        method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             'X-Authorization': token,
