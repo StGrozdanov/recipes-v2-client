@@ -177,10 +177,15 @@ const recipeValidationSchema = (currentRecipeRecipeName: string) => Yup.object({
         .min(10, 'Калориите не могат да са по-малко от 10'),
 });
 
+const commentValidationSchema = Yup.object({
+    comment: Yup.string().required('Коментарът не може да е празен').min(1, 'Дължина от минимум 1 символ'),
+});
+
 export const validationSchemas = {
     loginValidationSchema,
     registrationValidationSchema,
     resetPasswordValidationSchema,
     profileValidationSchema,
     recipeValidationSchema,
+    commentValidationSchema,
 }

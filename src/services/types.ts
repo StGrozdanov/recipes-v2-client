@@ -109,3 +109,12 @@ export type UploadRecipeImageProps = {
     token: string,
     formData: FormData,
 }
+
+export type BaseCommentData = {
+    content: string,
+    recipeName: string,
+    owner: {
+        username: string,
+        id: number,
+    }
+}

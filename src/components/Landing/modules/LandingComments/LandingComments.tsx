@@ -8,6 +8,7 @@ export type Owner = {
 }
 
 export type CommentsProps = {
+    id?: number,
     content: string,
     createdAt: string,
     recipeName: string,
