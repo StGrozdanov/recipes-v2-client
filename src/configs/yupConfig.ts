@@ -1,3 +1,4 @@
+/* eslint react-func/max-lines-per-function: 0 */
 import * as Yup from 'yup';
 import * as authService from '../services/authService';
 import * as recipesService from '../services/recipesService';
