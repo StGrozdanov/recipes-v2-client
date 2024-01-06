@@ -19,13 +19,13 @@ export default function ConfirmModal({ content, onConfirm, onCancel }: ConfirmMo
                     className={styles['confirm-btn']}
                     onClick={onConfirm}
                 >
-                    Confirm
+                    Потвърди
                 </button>
                 <button
                     className={styles['cancel-btn']}
                     onClick={onCancel}
                 >
-                    Cancel
+                    Откажи
                 </button>
             </section>
         </article>

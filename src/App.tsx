@@ -52,7 +52,11 @@ function App() {
           } />
           <Route path='/register' element={<Register />} />
           <Route path='/reset-password/:id' element={<PasswordReset />} />
-          <Route path='/details/:name' element={<RecipeDetails />} />
+          <Route path='/details/:name' element={
+            <ModalProvider >
+              <RecipeDetails />
+            </ModalProvider>
+          } />
           <Route path='/details/:name/comments' element={<RecipeDetails />} />
           <Route path='/user/:username' element={<UserProfile />} />
           <Route path='/profile' element={

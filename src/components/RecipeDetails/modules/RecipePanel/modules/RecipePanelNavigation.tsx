@@ -7,6 +7,7 @@ import { useAuthContext } from '../../../../../hooks/useAuthContext';
 import { useQueryClient } from 'react-query';
 import Notification from '../../../../common/Notification/Notification';
 import * as recipeService from '../../../../../services/recipesService';
+import { useModalContext } from '../../../../../hooks/useModalContext';
 
 type RecipePanelNavigationProps = {
     recipeName?: string,
@@ -23,6 +24,7 @@ export default function RecipePanelNavigation({ recipeName, ownerId }: RecipePan
     const { pathname } = useLocation();
     const [deleteFailed, setDeleteFailed] = useState(false);
     const queryClient = useQueryClient();
+    const confirmModal = useModalContext();
 
     useEffect(() => {
         pathname.endsWith('comments') ? setSelected('comments') : setSelected('products');
@@ -73,7 +75,13 @@ export default function RecipePanelNavigation({ recipeName, ownerId }: RecipePan
                         style={isAdministrator || ownerId && isResourceOwner(ownerId) ? {} : { display: 'none' }}
                         icon={faTrashCan}
                         className={styles['nav-icon']}
-                        onClick={() => recipeDeleteHandler()}
+                        onClick={() => {
+                            confirmModal({ title: 'Сигурни ли сте, че искате да изтриете рецептата?' })
+                                .then(() => {
+                                    recipeDeleteHandler();
+                                })
+                                .catch(() => console.info('action canceled.'))
+                        }}
                     />
                     <FontAwesomeIcon
                         icon={faShareNodes}
