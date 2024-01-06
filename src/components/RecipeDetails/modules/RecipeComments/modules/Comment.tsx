@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import FallbackImage from '../../../../common/FallbackImage/FallbackImage';
 import styles from './Comment.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,29 +6,48 @@ import { faCircleCheck, faPenToSquare, faTrashCan, faXmarkCircle } from '@fortaw
 import { useState } from 'react';
 import { CommentsProps } from '../../../../Landing/modules/LandingComments/LandingComments';
 import { useAuthContext } from '../../../../../hooks/useAuthContext';
+import { useModalContext } from '../../../../../hooks/useModalContext';
+import Notification from '../../../../common/Notification/Notification';
+import * as commentService from '../../../../../services/commentService';
+import { useQueryClient } from 'react-query';
 
-export default function Comment({ content, createdAt, owner }: CommentsProps) {
+export default function Comment({ content, createdAt, owner, id }: CommentsProps) {
     const [editComment, setEditComment] = useState(false);
     const [commentContent, setCommentContent] = useState(content);
-    const { isAdministrator, isModerator, username } = useAuthContext();
-    // const [showModal, setShowModal] = useState(false);
-    // const [showComment, setShowComment] = useState(true);
+    const { isAdministrator, isModerator, username, token } = useAuthContext();
+    const confirmModal = useModalContext();
+    const [fail, setFail] = useState(false);
+    const { deleteComment } = commentService.useDeleteComment(token);
+    const { editComment: edit } = commentService.useEditComment(token);
+    const queryClient = useQueryClient();
+    const { name } = useParams();
 
-    // async function editCommentHandler() {
-    //     if (commentContent.trim() != '') {
-    //         await commentService.editComment(commentContent, id);
-    //         setEditComment(false);
-    //     }
-    // }
+    const editCommentHandler = async () => {
+        setFail(false);
+        try {
+            if (commentContent.trim() != '') {
+                const { editCommentResponse } = await edit(id!, commentContent);
+                await editCommentResponse;
+                await queryClient.invalidateQueries(['recipeComments', name!.toLowerCase()]);
+                setEditComment(false);
+            }
+        } catch (err) {
+            setFail(true);
+            console.error(err);
+        }
+    }
 
-    // async function deleteCommentHandler(choice) {
-    //     setShowModal(true);
-    //     if (choice) {
-    //         await commentService.removeComment(id);
-    //         setShowComment(false);
-    //     }
-    //     setShowModal(false);
-    // }
+    const deleteCommentHandler = async () => {
+        setFail(false);
+        try {
+            const { deleteCommentResponse } = await deleteComment(id!);
+            await deleteCommentResponse;
+            await queryClient.invalidateQueries(['recipeComments', name!.toLowerCase()]);
+        } catch (err) {
+            setFail(true);
+            console.error(err);
+        }
+    }
 
     return (
         <>
@@ -54,13 +73,13 @@ export default function Comment({ content, createdAt, owner }: CommentsProps) {
                                         icon={faCircleCheck}
                                         className={styles.icon}
                                         style={{ color: 'green' }}
-                                        onClick={() => console.log('hi')}
+                                        onClick={editCommentHandler}
                                     />
                                     <FontAwesomeIcon
                                         icon={faXmarkCircle}
                                         className={styles.icon}
                                         style={{ color: 'darkred' }}
-                                        onClick={() => setEditComment(false)}
+                                        onClick={() => { setEditComment(false); setCommentContent(content) } }
                                     />
                                 </>
                                 :
@@ -83,7 +102,13 @@ export default function Comment({ content, createdAt, owner }: CommentsProps) {
                                         }
                                         icon={faTrashCan}
                                         className={styles.icon}
-                                        onClick={() => console.log('showing modal ...')}
+                                        onClick={() => {
+                                            confirmModal({ title: 'Сигурни ли сте, че искате да изтриете този коментар?' })
+                                                .then(() => {
+                                                    deleteCommentHandler();
+                                                })
+                                                .catch(() => console.info('action canceled.'))
+                                        }}
                                     />
                                 </>
                         }
@@ -101,11 +126,11 @@ export default function Comment({ content, createdAt, owner }: CommentsProps) {
                     }
                 </main>
             </article>
-            {/* <ModalDialogue
-                visibility={showModal}
-                content={'Сигурни ли сте, че искате да изтриете този коментар?'}
-                handler={deleteCommentHandler}
-            /> */}
+            <Notification
+                type={'fail'}
+                isVisible={fail}
+                message={'Не успяхме да редактираме коментара. Моля опитайте по-късно.'}
+            />
         </>
     );
 }

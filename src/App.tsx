@@ -57,7 +57,11 @@ function App() {
               <RecipeDetails />
             </ModalProvider>
           } />
-          <Route path='/details/:name/comments' element={<RecipeDetails />} />
+          <Route path='/details/:name/comments' element={
+            <ModalProvider >
+              <RecipeDetails />
+            </ModalProvider>
+          } />
           <Route path='/user/:username' element={<UserProfile />} />
           <Route path='/profile' element={
             <ProfileRoot>

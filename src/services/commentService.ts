@@ -54,12 +54,13 @@ export const useDeleteComment = (token: string) => {
 };
 
 const deleteCommentRequest = async (token: string, commentId: number): Promise<{ status: string }> => {
-    const response = await fetch(`${BASE_URL}/comments/${commentId}`, {
+    const response = await fetch(`${BASE_URL}/comments`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
             'X-Authorization': token,
         },
+        body: JSON.stringify({ id: commentId })
     });
     const data = await response.json();
     if (!response.ok) {
