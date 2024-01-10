@@ -28,6 +28,14 @@ export function useCreateRecipe() {
     const { useCreatePushNotification } = useMobilePushNotification();
     const { createPushNotification } = useCreatePushNotification();
 
+    const createMobilePushNotificationHandler = async () => {
+        const { pushNotificationResponse } = await createPushNotification({
+            subject: NotificationActions.NEW_RECIPE,
+            content: `${username} ${NotificationActions.POSTED_NEW_RECIPE}`,
+        });
+        await pushNotificationResponse;
+    }
+
     const submitHandler = async (values: CreateRecipeProps) => {
         try {
             const newRecipe: RecipeDetails = {
@@ -62,13 +70,7 @@ export function useCreateRecipe() {
             }
 
             await queryClient.invalidateQueries(['recipes']);
-
-            const { pushNotificationResponse } = await createPushNotification({
-                subject: NotificationActions.NEW_RECIPE,
-                content: `${username} ${NotificationActions.POSTED_NEW_RECIPE}`,
-            });
-
-            await pushNotificationResponse;
+            await createMobilePushNotificationHandler();
         } catch (err) {
             console.error(err);
         }
