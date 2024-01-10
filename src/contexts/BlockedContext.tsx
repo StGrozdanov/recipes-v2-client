@@ -9,7 +9,7 @@ type BlockedContextType = {
 
 export const BlockedContext = createContext<BlockedContextType>({
     reason: '',
-    addReason: (blockedFor: string) => console.log(blockedFor),
+    addReason: (blockedFor: string) => console.info(blockedFor),
 });
 
 export const BlockedContextProvider = ({ children }: ContainerProps) => {

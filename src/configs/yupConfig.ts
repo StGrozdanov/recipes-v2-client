@@ -45,7 +45,6 @@ const recipeNameValidationFunction = async (
 ) => {    
     try {
         const isAvailable = await recipeIsAvailableRequest(value.toLowerCase());
-        console.log(isAvailable)
         if (isAvailable && value.toLowerCase() === recipeName) {
             resolve(true);
         } else {
