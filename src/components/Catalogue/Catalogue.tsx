@@ -3,16 +3,16 @@ import styles from './Catalogue.module.scss';
 import RecipeCard from '../RecipeCard/RecipeCard';
 import BackToTopButton from '../common/BackToTopButton/BackToTopButton';
 import { useEndlessScroll } from '../../hooks/useEndlessScroll';
-import { capitalizatorUtil } from '../utils/capitalizatorUtil';
-import * as recipesAPI from '../../services/recipesService';
+import { capitalizatorUtil } from '../../utils/capitalizatorUtil';
 import Notification from '../common/Notification/Notification';
 import recipesFallback from './recipesFallback.json';
+import { useRecipesService } from '../../services/recipesService';
 
 export default function Catalogue() {
     const loader = useRef(null);
     const isInViewport = useEndlessScroll({ loadingRef: loader });
-
-    const { fetchNextPage, hasNextPage, isLoading, data, isError } = recipesAPI.getRecipes();
+    const { getRecipes } = useRecipesService()
+    const { fetchNextPage, hasNextPage, isLoading, data, isError } = getRecipes();
 
     useEffect(() => {
         if (hasNextPage) {

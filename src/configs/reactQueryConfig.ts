@@ -20,5 +20,5 @@ export const queryConfig: QueryClientConfig = {
             staleTime: 1000 * 60 * 15, // 15 minutes
             cacheTime: 1000 * 60 * 15, // 15 minutes
         }
-    }
+    },
 }

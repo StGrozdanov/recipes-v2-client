@@ -1,5 +1,4 @@
 import styles from './RecipeComments.module.scss';
-import * as commentService from '../../../../services/commentService';
 import { useParams } from "react-router-dom";
 import { useAuthContext } from '../../../../hooks/useAuthContext';
 import FallbackImage from "../../../common/FallbackImage/FallbackImage";
@@ -12,12 +11,14 @@ import { BaseCommentData } from '../../../../services/types';
 import { useQueryClient } from 'react-query';
 import { useState } from 'react';
 import Notification from '../../../common/Notification/Notification';
+import { useCommentService } from '../../../../services/commentService';
 
 export default function RecipeComments() {
     const { name } = useParams();
-    const { avatar, isAuthenticated, userId, username, token } = useAuthContext();
-    const { createComment } = commentService.useCreateComment(token)
-    const { comments, commentsAreLoading } = commentService.getRecipeComments(name as string);
+    const { avatar, isAuthenticated, userId, username } = useAuthContext();
+    const { useCreateComment, getRecipeComments } = useCommentService();
+    const { createComment } = useCreateComment();
+    const { comments, commentsAreLoading } = getRecipeComments(name as string);
     const queryClient = useQueryClient();
     const [failedComment, setFailedComment] = useState(false);
 

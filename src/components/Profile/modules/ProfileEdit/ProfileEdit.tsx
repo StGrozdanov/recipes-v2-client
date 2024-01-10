@@ -1,7 +1,5 @@
 import { useAuthContext } from '../../../../hooks/useAuthContext';
 import FallbackImage from '../../../common/FallbackImage/FallbackImage';
-import * as userService from '../../../../services/userService';
-import * as authService from '../../../../services/authService';
 import styles from './ProfileEdit.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBowlRice, faEnvelope, faExclamationTriangle, faGears, faKey, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
@@ -13,6 +11,8 @@ import { useModalContext } from '../../../../hooks/useModalContext';
 import { useSendEmail } from '../../../Authentication/hooks/useSendEmail';
 import { useState } from 'react';
 import Notification from '../../../common/Notification/Notification';
+import { useAuthService } from '../../../../services/authService';
+import { useUserService } from '../../../../services/userService';
 
 export type ProfileData = {
     username: string,
@@ -20,12 +20,14 @@ export type ProfileData = {
 }
 
 export default function ProfileEdit() {
-    const { token, username, updateUserData, email } = useAuthContext();
-    const { uploadCover, isLoading: coverIsLoading } = userService.useUploadCoverImage();
-    const { uploadAvatar, isLoading: avatarIsLoading } = userService.useUploadAvatarImage();
-    const { userIsLoading, user } = userService.getUser(username);
-    const { editProfile, isLoading } = userService.useUserDataEdit();
-    const { requestVerificationCode } = authService.useRequestVerificationCode();
+    const { username, updateUserData, email } = useAuthContext();
+    const { useUploadAvatarImage, useUploadCoverImage, getUser, useUserDataEdit } = useUserService();
+    const { uploadCover, isLoading: coverIsLoading } = useUploadCoverImage();
+    const { uploadAvatar, isLoading: avatarIsLoading } = useUploadAvatarImage();
+    const { userIsLoading, user } = getUser(username);
+    const { editProfile, isLoading } = useUserDataEdit();
+    const { useRequestVerificationCode } = useAuthService();
+    const { requestVerificationCode } = useRequestVerificationCode();
     const queryClient = useQueryClient();
     const confirmModal = useModalContext();
     const { sendEmailHandler } = useSendEmail();
@@ -46,8 +48,8 @@ export default function ProfileEdit() {
 
             try {
                 uploadType === 'cover'
-                    ? await uploadCover({ formData, token, username })
-                    : await uploadAvatar({ formData, token, username });
+                    ? await uploadCover({ formData, username })
+                    : await uploadAvatar({ formData, username });
 
                 await queryClient.invalidateQueries(['user', username]);
             } catch (err) {
@@ -59,7 +61,7 @@ export default function ProfileEdit() {
 
     const submitHandler = async (values: ProfileData) => {
         try {
-            const { editResponse } = await editProfile({ ...values, token, oldUsername: username });
+            const { editResponse } = await editProfile({ ...values, oldUsername: username });
 
             if (editResponse) {
                 updateUserData(editResponse.email, editResponse.username);

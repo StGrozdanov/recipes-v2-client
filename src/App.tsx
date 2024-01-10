@@ -2,7 +2,6 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import Landing from "./components/Landing/Landing";
 import Footer from "./components/Footer/Footer";
 import { QueryClient, QueryClientProvider, dehydrate, hydrate } from "react-query";
-import { queryConfig } from "./configs/reactQueryConfig";
 import Navigation from "./components/Navigation/Navigation";
 import Catalogue from "./components/Catalogue/Catalogue";
 import Search from "./components/Search/Search";
@@ -23,6 +22,8 @@ import ProfileEdit from "./components/Profile/modules/ProfileEdit/ProfileEdit";
 import { ModalProvider } from "./contexts/ModalContext";
 import CreateRecipe from "./components/CreateRecipe/CreateRecipe";
 import EditRecipe from "./components/EditRecipe/EditRecipe";
+import { BlockedContextProvider } from "./contexts/BlockedContext";
+import { queryConfig } from "./configs/reactQueryConfig";
 
 const queryClient = new QueryClient(queryConfig);
 // If the mutation has been paused because the device is for example offline,
@@ -37,65 +38,67 @@ function App() {
   const location = useLocation();
   const currentPage = location.pathname;
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        {currentPage !== '/' && <Navigation />}
-        <Routes>
-          <Route path='/' element={<Landing />} />
-          <Route path='/catalogue' element={<Catalogue />} />
-          <Route path='/search' element={<Search />} />
-          <Route path='/category' element={<Category />} />
-          <Route path='/login' element={
-            <InputModalProvider>
-              <Login />
-            </InputModalProvider>
-          } />
-          <Route path='/register' element={<Register />} />
-          <Route path='/reset-password/:id' element={<PasswordReset />} />
-          <Route path='/details/:name' element={
-            <ModalProvider >
-              <RecipeDetails />
-            </ModalProvider>
-          } />
-          <Route path='/details/:name/comments' element={
-            <ModalProvider >
-              <RecipeDetails />
-            </ModalProvider>
-          } />
-          <Route path='/user/:username' element={<UserProfile />} />
-          <Route path='/profile' element={
-            <ProfileRoot>
-              <Profile />
-            </ProfileRoot>
-          } />
-          <Route path='/profile/notifications' element={
-            <ProfileRoot>
-              <Notifications />
-            </ProfileRoot>
-          } />
-          <Route path='/profile/favourite-recipes' element={
-            <ProfileRoot>
-              <FavouriteRecipes />
-            </ProfileRoot>
-          } />
-          <Route path='/profile/my-recipes' element={
-            <ProfileRoot>
-              <MyRecipes />
-            </ProfileRoot>
-          } />
-          <Route path='/profile/edit' element={
-            <ProfileRoot>
+    <BlockedContextProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          {currentPage !== '/' && <Navigation />}
+          <Routes>
+            <Route path='/' element={<Landing />} />
+            <Route path='/catalogue' element={<Catalogue />} />
+            <Route path='/search' element={<Search />} />
+            <Route path='/category' element={<Category />} />
+            <Route path='/login' element={
+              <InputModalProvider>
+                <Login />
+              </InputModalProvider>
+            } />
+            <Route path='/register' element={<Register />} />
+            <Route path='/reset-password/:id' element={<PasswordReset />} />
+            <Route path='/details/:name' element={
               <ModalProvider >
-                <ProfileEdit />
+                <RecipeDetails />
               </ModalProvider>
-            </ProfileRoot>
-          } />
-          <Route path='/create' element={<CreateRecipe />} />
-          <Route path='/edit/:name' element={<EditRecipe />} />
-        </Routes>
-        <Footer />
-      </AuthProvider>
-    </QueryClientProvider>
+            } />
+            <Route path='/details/:name/comments' element={
+              <ModalProvider >
+                <RecipeDetails />
+              </ModalProvider>
+            } />
+            <Route path='/user/:username' element={<UserProfile />} />
+            <Route path='/profile' element={
+              <ProfileRoot>
+                <Profile />
+              </ProfileRoot>
+            } />
+            <Route path='/profile/notifications' element={
+              <ProfileRoot>
+                <Notifications />
+              </ProfileRoot>
+            } />
+            <Route path='/profile/favourite-recipes' element={
+              <ProfileRoot>
+                <FavouriteRecipes />
+              </ProfileRoot>
+            } />
+            <Route path='/profile/my-recipes' element={
+              <ProfileRoot>
+                <MyRecipes />
+              </ProfileRoot>
+            } />
+            <Route path='/profile/edit' element={
+              <ProfileRoot>
+                <ModalProvider >
+                  <ProfileEdit />
+                </ModalProvider>
+              </ProfileRoot>
+            } />
+            <Route path='/create' element={<CreateRecipe />} />
+            <Route path='/edit/:name' element={<EditRecipe />} />
+          </Routes>
+          <Footer />
+        </AuthProvider>
+      </QueryClientProvider>
+    </BlockedContextProvider>
   );
 }
 

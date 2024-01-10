@@ -1,17 +1,19 @@
 import { useParams } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext"
-import * as recipesService from "../../services/recipesService";
-import * as userService from "../../services/userService";
 import RecipeCard from "../RecipeCard/RecipeCard";
-import { capitalizatorUtil } from "../utils/capitalizatorUtil";
+import { capitalizatorUtil } from "../../utils/capitalizatorUtil";
 import styles from './UserProfile.module.scss';
 import ProfileCard from "./modules/ProfileCard";
+import { useRecipesService } from "../../services/recipesService";
+import { useUserService } from "../../services/userService";
 
 export default function UserProfile() {
     const { username } = useParams();
     const { isAuthenticated } = useAuthContext();
-    const { recipes } = recipesService.getRecipesFromUser(username as string);
-    const { user } = userService.getUser(username as string);
+    const { getRecipesFromUser } = useRecipesService();
+    const { getUser } = useUserService();
+    const { recipes } = getRecipesFromUser(username as string);
+    const { user } = getUser(username as string);
 
     return (
         <section className={styles["user-section"]}>

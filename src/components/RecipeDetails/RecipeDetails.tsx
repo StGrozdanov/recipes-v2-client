@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import * as recipeService from '../../services/recipesService';
-import * as favouritesService from '../../services/favouritesService';
-import { capitalizatorUtil } from "../utils/capitalizatorUtil";
+import { capitalizatorUtil } from "../../utils/capitalizatorUtil";
 import RecipeStep from "./modules/RecipeSteps/RecipeStep";
 import styles from './RecipeDetails.module.scss';
 import RecipeDetailsHeader from "./modules/RecipeDetailsHeader/RecipeDetailsHeader";
@@ -12,23 +10,27 @@ import LoadingPan from "../common/LoadingPan/LoadingPan";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useQueryClient } from "react-query";
 import Notification from "../common/Notification/Notification";
+import { useRecipesService } from "../../services/recipesService";
+import { useFavouritesService } from "../../services/favouritesService";
 
 export default function RecipeDetails() {
     const [viewportStep, setViewportStep] = useState(0);
     const { name } = useParams();
     const { isAuthenticated, userId, token, username } = useAuthContext();
-    const { addToFavourites, isError } = favouritesService.useAddToFavourites();
-    const { removeFromFavourites, isError: RemoveError } = favouritesService.useRemoveFromFavourites();
+    const { getASingleRecipe } = useRecipesService();
+    const { useAddToFavourites, useRemoveFromFavourites, recipeIsInFavourites } = useFavouritesService();
+    const { addToFavourites, isError } = useAddToFavourites();
+    const { removeFromFavourites, isError: RemoveError } = useRemoveFromFavourites();
     const queryClient = useQueryClient();
     const [addToFavouritesSuccess, setAddToFavouritesSuccess] = useState(false);
     const [removeFromFavouritesSuccess, setRemoveFromFavouritesSuccess] = useState(false);
 
-    const { recipe, recipeIsLoading } = recipeService.getASingleRecipe(name as string);
+    const { recipe, recipeIsLoading } = getASingleRecipe(name as string);
 
     let recipeIsFavourite = false;
 
     if (isAuthenticated) {
-        const { isInFavourites } = favouritesService.recipeIsInFavourites(userId, name?.toLowerCase() as string);
+        const { isInFavourites } = recipeIsInFavourites(userId, name?.toLowerCase() as string);
         recipeIsFavourite = isInFavourites as boolean;
     }
 
@@ -38,7 +40,10 @@ export default function RecipeDetails() {
         const recipeName = name?.toLowerCase() as string;
         try {
             await addToFavourites({ recipeName, userId, token });
-            await queryClient.invalidateQueries(['checkFavouriteRecipes', userId, recipeName]);
+            await Promise.all([
+                queryClient.invalidateQueries(['checkFavouriteRecipes', userId, recipeName]),
+                queryClient.invalidateQueries(['favouriteRecipes', username]),
+            ]);
             setAddToFavouritesSuccess(true);
         } catch (err) {
             console.error(err);

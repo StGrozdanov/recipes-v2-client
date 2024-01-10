@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import FallbackImage from '../common/FallbackImage/FallbackImage';
 import styles from './RecipeCard.module.scss';
-import { capitalizatorUtil } from '../utils/capitalizatorUtil';
+import { capitalizatorUtil } from '../../utils/capitalizatorUtil';
 
 export type RecipeProps = {
     imageURL: string,

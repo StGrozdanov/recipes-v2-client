@@ -2,12 +2,12 @@ import styles from './Search.module.scss';
 import { Link, useLocation } from 'react-router-dom';
 import RecipeCard from '../RecipeCard/RecipeCard';
 import BackToTopButton from '../common/BackToTopButton/BackToTopButton';
-import * as recipesAPI from '../../services/recipesService'
-import { capitalizatorUtil } from '../utils/capitalizatorUtil';
+import { capitalizatorUtil } from '../../utils/capitalizatorUtil';
 import Notification from '../common/Notification/Notification';
 import { RecipeSummary } from '../../services/types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShare } from '@fortawesome/free-solid-svg-icons';
+import { useRecipesService } from '../../services/recipesService';
 
 type SearchResults = {
     recipes: RecipeSummary[] | undefined,
@@ -17,6 +17,7 @@ type SearchResults = {
 
 export default function Search() {
     const location = useLocation();
+    const { searchRecipes } = useRecipesService();
     const query = decodeURI(location.search.split('=')[1]);
 
     const searchResults: SearchResults = { recipes: [], isLoading: false, fetchError: undefined }
@@ -26,7 +27,7 @@ export default function Search() {
             recipesData,
             recipesAreLoading,
             recipesFetchError
-        } = recipesAPI.searchRecipes(query.toLowerCase())
+        } = searchRecipes(query.toLowerCase())
 
         searchResults.recipes = recipesData;
         searchResults.isLoading = recipesAreLoading;

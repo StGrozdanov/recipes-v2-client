@@ -9,11 +9,12 @@ import latestSixCommentsFallback from './data/latestSixCommentsFallback.json';
 import latestThreeRecipesFallback from './data/latestThreeRecipesFallback.json';
 import mostViewedRecipesFallback from './data/mostViewedRecipesFallback.json';
 import RecipeCard from "../RecipeCard/RecipeCard";
-import { capitalizatorUtil } from "../utils/capitalizatorUtil";
+import { capitalizatorUtil } from "../../utils/capitalizatorUtil";
 import Animate from "../common/Animate/Animate";
-import { getLandingPageData } from "../../services/landingPageService";
+import { useGetLandingPageData } from "../../services/landingPageService";
 
 export default function Landing() {
+    const { getLandingPageData } = useGetLandingPageData();
     const {
         latestRecipesData,
         latestCommentsData,

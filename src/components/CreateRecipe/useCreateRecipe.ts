@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { validationSchemas } from "../../configs/yupConfig";
-import * as recipeService from '../../services/recipesService';
 import { initialValues } from "./constants";
 import { CreateRecipeProps } from "./types";
 import { RecipeDetails } from "../../services/types";
 import { useQueryClient } from "react-query";
+import { useRecipesService } from "../../services/recipesService";
 
 /**
  * Extracted all of the upload image, submit form and handle errors and states in this hook because the main
@@ -16,8 +16,9 @@ import { useQueryClient } from "react-query";
  */
 export function useCreateRecipe() {
     const { token, username, userId, isAdministrator, isModerator } = useAuthContext();
-    const { create, isLoading, isError } = recipeService.useAddRecipe(token);
-    const { uploadImage } = recipeService.useUploadRecipeImage();
+    const { useAddRecipe, useUploadRecipeImage } = useRecipesService();
+    const { create, isLoading, isError } = useAddRecipe();
+    const { uploadImage } = useUploadRecipeImage();
     const navigate = useNavigate();
     const [isSuccess, setIsSuccess] = useState(false);
     const [uploadImageError, setUploadImageError] = useState(false);

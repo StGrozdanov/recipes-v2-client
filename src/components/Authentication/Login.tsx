@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRightToBracket, faUser, faKey, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import style from './Authenticate.module.scss';
 import { useFormik } from 'formik';
-import * as authService from '../../services/authService';
 import { LoginData } from '../../services/types';
 import { validationSchemas } from '../../configs/yupConfig';
 import { useAuthContext } from '../../hooks/useAuthContext';
@@ -11,6 +10,7 @@ import { useInputModalContext } from '../../hooks/useInputModalContext';
 import { useSendEmail } from './hooks/useSendEmail';
 import Notification from '../common/Notification/Notification';
 import { useState } from 'react';
+import { useAuthService } from '../../services/authService';
 
 const initialLoginValues: LoginData = {
     username: '',
@@ -20,10 +20,11 @@ const initialLoginValues: LoginData = {
 export default function Login() {
     const { userLogin } = useAuthContext();
     const navigate = useNavigate();
-    const { login, isLoading } = authService.useLogin();
+    const { useLogin, useRequestVerificationCode } = useAuthService();
+    const { login, isLoading } = useLogin();
     const inputModal = useInputModalContext();
     const { sendEmailHandler } = useSendEmail();
-    const { requestVerificationCode } = authService.useRequestVerificationCode();
+    const { requestVerificationCode } = useRequestVerificationCode();
     const [verificationEmailError, setVerificationEmailError] = useState(false);
     const [showSuccessNotification, setShowSuccessNotification] = useState(false);
     const [authError, setAuthError] = useState(false);

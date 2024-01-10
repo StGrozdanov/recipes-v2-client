@@ -3,13 +3,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from './EditRecipe.module.scss';
 import FailedValidationMessage from "../Authentication/FailedValidationMessage";
 import Notification from "../common/Notification/Notification";
-import * as recipeService from '../../services/recipesService';
 import { useParams } from "react-router-dom";
 import { useEditRecipe } from "./useEditRecipe";
+import { useRecipesService } from "../../services/recipesService";
 
 export default function EditRecipe() {
     const { name } = useParams();
-    const { recipe } = recipeService.getASingleRecipe(name as string);
+    const { getASingleRecipe } = useRecipesService();
+    const { recipe } = getASingleRecipe(name as string);
     const { formik, isError, isLoading, uploadImageError, uploadImageHandler } = useEditRecipe(recipe!)
     return (
         <>

@@ -3,12 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRepeat, faKey, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
 import style from './Authenticate.module.scss';
 import FailedValidationMessage from './FailedValidationMessage';
-import * as authService from '../../services/authService';
 import { useFormik } from 'formik';
 import { validationSchemas } from '../../configs/yupConfig';
 import Notification from '../common/Notification/Notification';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useAuthService } from '../../services/authService';
 
 const initialResetPasswordValues = {
     password: '',
@@ -18,8 +18,9 @@ const initialResetPasswordValues = {
 export default function PasswordReset() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { requestVerificationCode } = authService.useVerifyResetPasswordCode();
-    const { resetPassword } = authService.useResetPassword();
+    const { useVerifyResetPasswordCode, useResetPassword } = useAuthService();
+    const { requestVerificationCode } = useVerifyResetPasswordCode();
+    const { resetPassword } = useResetPassword();
     const [codeIsValid, setCodeIsValid] = useState(true);
     const [success, setSuccess] = useState(false);
 

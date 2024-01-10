@@ -4,10 +4,10 @@ import { faUser, faRepeat, faKey, faEnvelope, faRightToBracket, faExclamationTri
 import style from './Authenticate.module.scss';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import FailedValidationMessage from './FailedValidationMessage';
-import * as authService from '../../services/authService';
 import { RegistrationData } from '../../services/types';
 import { useFormik } from 'formik';
 import { validationSchemas } from '../../configs/yupConfig';
+import { useAuthService } from '../../services/authService';
 
 const initialRegistrationValues: RegistrationData = {
     username: '',
@@ -19,7 +19,8 @@ const initialRegistrationValues: RegistrationData = {
 export default function Register() {
     const { userLogin } = useAuthContext();
     const navigate = useNavigate();
-    const { register, isLoading, isError } = authService.useRegistration();
+    const { useRegistration } = useAuthService();
+    const { register, isLoading, isError } = useRegistration();
 
     const submitHandler = async (values: RegistrationData) => {
         const { registrationResponse } = await register(values);

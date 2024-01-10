@@ -8,17 +8,18 @@ import { CommentsProps } from '../../../../Landing/modules/LandingComments/Landi
 import { useAuthContext } from '../../../../../hooks/useAuthContext';
 import { useModalContext } from '../../../../../hooks/useModalContext';
 import Notification from '../../../../common/Notification/Notification';
-import * as commentService from '../../../../../services/commentService';
 import { useQueryClient } from 'react-query';
+import { useCommentService } from '../../../../../services/commentService';
 
 export default function Comment({ content, createdAt, owner, id }: CommentsProps) {
     const [editComment, setEditComment] = useState(false);
     const [commentContent, setCommentContent] = useState(content);
-    const { isAdministrator, isModerator, username, token } = useAuthContext();
+    const { isAdministrator, isModerator, username } = useAuthContext();
+    const { useDeleteComment, useEditComment } = useCommentService();
     const confirmModal = useModalContext();
     const [fail, setFail] = useState(false);
-    const { deleteComment } = commentService.useDeleteComment(token);
-    const { editComment: edit } = commentService.useEditComment(token);
+    const { deleteComment } = useDeleteComment();
+    const { editComment: edit } = useEditComment();
     const queryClient = useQueryClient();
     const { name } = useParams();
 
@@ -79,7 +80,7 @@ export default function Comment({ content, createdAt, owner, id }: CommentsProps
                                         icon={faXmarkCircle}
                                         className={styles.icon}
                                         style={{ color: 'darkred' }}
-                                        onClick={() => { setEditComment(false); setCommentContent(content) } }
+                                        onClick={() => { setEditComment(false); setCommentContent(content) }}
                                     />
                                 </>
                                 :

@@ -90,12 +90,10 @@ export type Notifications = {
 
 export type UploadImageProps = {
     username: string,
-    token: string,
     formData: FormData,
 }
 
 export type UserEditRequest = ProfileData & {
-    token: string,
     oldUsername: string,
 }
 

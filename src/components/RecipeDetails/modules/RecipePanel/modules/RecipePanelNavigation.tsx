@@ -6,8 +6,8 @@ import { useEffect, useState } from 'react';
 import { useAuthContext } from '../../../../../hooks/useAuthContext';
 import { useQueryClient } from 'react-query';
 import Notification from '../../../../common/Notification/Notification';
-import * as recipeService from '../../../../../services/recipesService';
 import { useModalContext } from '../../../../../hooks/useModalContext';
+import { useRecipesService } from '../../../../../services/recipesService';
 
 type RecipePanelNavigationProps = {
     recipeName?: string,
@@ -17,8 +17,9 @@ type RecipePanelNavigationProps = {
 const selectedStyle = { backgroundSize: '100% 0.15em', color: '#57595fc9' };
 
 export default function RecipePanelNavigation({ recipeName, ownerId }: RecipePanelNavigationProps) {
-    const { isAdministrator, isModerator, isResourceOwner, token, username } = useAuthContext();
-    const { deleteRecipe } = recipeService.useDeleteRecipe(token);
+    const { isAdministrator, isModerator, isResourceOwner, username } = useAuthContext();
+    const { useDeleteRecipe } = useRecipesService();
+    const { deleteRecipe } = useDeleteRecipe();
     const [selected, setSelected] = useState('products');
     const navigate = useNavigate();
     const { pathname } = useLocation();

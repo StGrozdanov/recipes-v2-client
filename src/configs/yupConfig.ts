@@ -1,8 +1,8 @@
 /* eslint react-func/max-lines-per-function: 0 */
 import * as Yup from 'yup';
 import * as authService from '../services/authService';
-import * as recipesService from '../services/recipesService';
 import { debounce } from 'lodash';
+import { recipeIsAvailableRequest } from '../services/recipesService';
 
 const emailValidationFunction = async (
     value: string,
@@ -42,9 +42,10 @@ const recipeNameValidationFunction = async (
     value: string,
     resolve: (result: boolean) => void,
     recipeName: string,
-) => {
+) => {    
     try {
-        const isAvailable = await recipesService.recipeIsAvailableRequest(value.toLowerCase());
+        const isAvailable = await recipeIsAvailableRequest(value.toLowerCase());
+        console.log(isAvailable)
         if (isAvailable && value.toLowerCase() === recipeName) {
             resolve(true);
         } else {
