@@ -8,6 +8,8 @@ import { CreateRecipeProps } from "./types";
 import { RecipeDetails } from "../../services/types";
 import { useQueryClient } from "react-query";
 import { useRecipesService } from "../../services/recipesService";
+import { useMobilePushNotification } from "../../services/mobilePushNotificationService";
+import { NotificationActions } from "../../constants/notificationActions";
 
 /**
  * Extracted all of the upload image, submit form and handle errors and states in this hook because the main
@@ -23,6 +25,8 @@ export function useCreateRecipe() {
     const [isSuccess, setIsSuccess] = useState(false);
     const [uploadImageError, setUploadImageError] = useState(false);
     const queryClient = useQueryClient();
+    const { useCreatePushNotification } = useMobilePushNotification();
+    const { createPushNotification } = useCreatePushNotification();
 
     const submitHandler = async (values: CreateRecipeProps) => {
         try {
@@ -59,6 +63,12 @@ export function useCreateRecipe() {
 
             await queryClient.invalidateQueries(['recipes']);
 
+            const { pushNotificationResponse } = await createPushNotification({
+                subject: NotificationActions.NEW_RECIPE,
+                content: `${username} ${NotificationActions.POSTED_NEW_RECIPE}`,
+            });
+
+            await pushNotificationResponse;
         } catch (err) {
             console.error(err);
         }
