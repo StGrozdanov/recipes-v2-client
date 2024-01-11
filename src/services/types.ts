@@ -88,6 +88,14 @@ export type Notifications = {
     createdAt: string
 }
 
+export type CreateNotificationData = {
+    senderAvatar: string,
+    senderUsername: string,
+    senderId: number,
+    action: string,
+    locationName: string,
+}
+
 export type UploadImageProps = {
     username: string,
     formData: FormData,

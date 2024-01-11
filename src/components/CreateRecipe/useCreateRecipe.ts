@@ -1,3 +1,4 @@
+/* eslint react-func/max-lines-per-function:0 */
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
@@ -10,6 +11,7 @@ import { useQueryClient } from "react-query";
 import { useRecipesService } from "../../services/recipesService";
 import { useMobilePushNotification } from "../../services/mobilePushNotificationService";
 import { NotificationActions } from "../../constants/notificationActions";
+import { useNotificationsService } from "../../services/notificationsService";
 
 /**
  * Extracted all of the upload image, submit form and handle errors and states in this hook because the main
@@ -17,7 +19,7 @@ import { NotificationActions } from "../../constants/notificationActions";
  * @returns everything that the create recipe component needs
  */
 export function useCreateRecipe() {
-    const { token, username, userId, isAdministrator, isModerator } = useAuthContext();
+    const { token, username, userId, isAdministrator, isModerator, avatar } = useAuthContext();
     const { useAddRecipe, useUploadRecipeImage } = useRecipesService();
     const { create, isLoading, isError } = useAddRecipe();
     const { uploadImage } = useUploadRecipeImage();
@@ -27,6 +29,8 @@ export function useCreateRecipe() {
     const queryClient = useQueryClient();
     const { useCreatePushNotification } = useMobilePushNotification();
     const { createPushNotification } = useCreatePushNotification();
+    const { useCreateWebNotification } = useNotificationsService();
+    const { createWebNotification } = useCreateWebNotification();
 
     const createMobilePushNotificationHandler = async () => {
         const { pushNotificationResponse } = await createPushNotification({
@@ -70,7 +74,16 @@ export function useCreateRecipe() {
             }
 
             await queryClient.invalidateQueries(['recipes']);
-            await createMobilePushNotificationHandler();
+            await Promise.all([
+                createMobilePushNotificationHandler(),
+                createWebNotification({
+                    action: 'CREATED_RECIPE',
+                    locationName: recipe ? recipe.recipeName : '',
+                    senderAvatar: avatar,
+                    senderId: userId,
+                    senderUsername: username,
+                })
+            ]);
         } catch (err) {
             console.error(err);
         }
