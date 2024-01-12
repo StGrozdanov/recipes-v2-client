@@ -209,7 +209,7 @@ export default function EditRecipe() {
                         <input
                             className={styles.button}
                             type="submit"
-                            value="Създай рецепта"
+                            value="Редактирай"
                             onSubmit={formik.handleReset}
                             disabled={isLoading}
                             style={isLoading ? { marginTop: 5, backgroundColor: 'gray' } : { marginTop: 5 }}
