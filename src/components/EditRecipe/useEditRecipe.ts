@@ -1,3 +1,4 @@
+/* eslint react-func/max-lines-per-function:0 */
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
@@ -7,6 +8,9 @@ import { RecipeDetails } from "../../services/types";
 import { useQueryClient } from "react-query";
 import { CreateRecipeProps } from "../CreateRecipe/types";
 import { useRecipesService } from "../../services/recipesService";
+import { useMobilePushNotification } from "../../services/mobilePushNotificationService";
+import { useNotificationsService } from "../../services/notificationsService";
+import { NotificationActions } from "../../constants/notificationActions";
 
 /**
  * Extracted all of the upload image, submit form and handle errors and states in this hook because the main
@@ -14,13 +18,25 @@ import { useRecipesService } from "../../services/recipesService";
  * @returns everything that the edit recipe component needs
  */
 export function useEditRecipe(initialRecipe: RecipeDetails) {
-    const { token, username, userId } = useAuthContext();
+    const { token, username, userId, avatar } = useAuthContext();
     const { useEditRecipeRequest, useUploadRecipeImage } = useRecipesService();
     const { edit, isLoading, isError } = useEditRecipeRequest();
     const { uploadImage } = useUploadRecipeImage();
     const navigate = useNavigate();
     const [uploadImageError, setUploadImageError] = useState(false);
     const queryClient = useQueryClient();
+    const { useCreatePushNotification } = useMobilePushNotification();
+    const { createPushNotification } = useCreatePushNotification();
+    const { useCreateWebNotification } = useNotificationsService();
+    const { createWebNotification } = useCreateWebNotification();
+
+    const createMobilePushNotificationHandler = async () => {
+        const { pushNotificationResponse } = await createPushNotification({
+            subject: NotificationActions.NEW_RECIPE,
+            content: `${username} ${NotificationActions.EDITED_RECIPE}`,
+        });
+        await pushNotificationResponse;
+    }
 
     const submitHandler = async (values: CreateRecipeProps) => {
         try {
@@ -49,6 +65,16 @@ export function useEditRecipe(initialRecipe: RecipeDetails) {
                 queryClient.invalidateQueries(['recipes']),
                 queryClient.invalidateQueries(['favouriteRecipes', username]),
                 queryClient.invalidateQueries(['recipesByUser', username]),
+            ]);
+            await Promise.all([
+                createMobilePushNotificationHandler(),
+                createWebNotification({
+                    action: 'EDITED_RECIPE',
+                    locationName: recipe ? recipe.recipeName : '',
+                    senderAvatar: avatar,
+                    senderId: userId,
+                    senderUsername: username,
+                })
             ]);
         } catch (err) {
             console.error(err);
