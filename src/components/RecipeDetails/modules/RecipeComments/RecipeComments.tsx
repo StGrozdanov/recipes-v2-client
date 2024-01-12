@@ -12,6 +12,9 @@ import { useQueryClient } from 'react-query';
 import { useState } from 'react';
 import Notification from '../../../common/Notification/Notification';
 import { useCommentService } from '../../../../services/commentService';
+import { useMobilePushNotification } from '../../../../services/mobilePushNotificationService';
+import { useNotificationsService } from '../../../../services/notificationsService';
+import { NotificationActions } from '../../../../constants/notificationActions';
 
 export default function RecipeComments() {
     const { name } = useParams();
@@ -21,6 +24,22 @@ export default function RecipeComments() {
     const { comments, commentsAreLoading } = getRecipeComments(name as string);
     const queryClient = useQueryClient();
     const [failedComment, setFailedComment] = useState(false);
+    const { useCreatePushNotification } = useMobilePushNotification();
+    const { createPushNotification } = useCreatePushNotification();
+    const { useCreateWebNotification } = useNotificationsService();
+    const { createWebNotification } = useCreateWebNotification();
+
+    const createMobilePushNotificationHandler = async () => {
+        try {
+            const { pushNotificationResponse } = await createPushNotification({
+                subject: NotificationActions.NEW_COMMENT,
+                content: `${username} ${NotificationActions.POSTED_NEW_COMMENT}`,
+            });
+            await pushNotificationResponse;
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
     const submitHandler = async (values: { comment: string }) => {
         setFailedComment(false);
@@ -38,6 +57,16 @@ export default function RecipeComments() {
             console.info(response);
             await queryClient.invalidateQueries(['recipeComments', name!.toLowerCase()]);
             formik.resetForm();
+            await Promise.all([
+                createMobilePushNotificationHandler(),
+                createWebNotification({
+                    action: 'CREATED_COMMENT',
+                    locationName: name!,
+                    senderAvatar: avatar,
+                    senderId: userId,
+                    senderUsername: username,
+                })
+            ]);
         } catch (err) {
             console.error(err);
             setFailedComment(true);

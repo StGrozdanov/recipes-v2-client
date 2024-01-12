@@ -94,6 +94,7 @@ export type CreateNotificationData = {
     senderId: number,
     action: string,
     locationName: string,
+    ownerName?: string,
 }
 
 export type UploadImageProps = {

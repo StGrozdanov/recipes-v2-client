@@ -10,11 +10,14 @@ import { useModalContext } from '../../../../../hooks/useModalContext';
 import Notification from '../../../../common/Notification/Notification';
 import { useQueryClient } from 'react-query';
 import { useCommentService } from '../../../../../services/commentService';
+import { useMobilePushNotification } from '../../../../../services/mobilePushNotificationService';
+import { useNotificationsService } from '../../../../../services/notificationsService';
+import { NotificationActions } from '../../../../../constants/notificationActions';
 
 export default function Comment({ content, createdAt, owner, id }: CommentsProps) {
     const [editComment, setEditComment] = useState(false);
     const [commentContent, setCommentContent] = useState(content);
-    const { isAdministrator, isModerator, username } = useAuthContext();
+    const { isAdministrator, isModerator, username, avatar, userId } = useAuthContext();
     const { useDeleteComment, useEditComment } = useCommentService();
     const confirmModal = useModalContext();
     const [fail, setFail] = useState(false);
@@ -22,6 +25,34 @@ export default function Comment({ content, createdAt, owner, id }: CommentsProps
     const { editComment: edit } = useEditComment();
     const queryClient = useQueryClient();
     const { name } = useParams();
+    const { useCreatePushNotification } = useMobilePushNotification();
+    const { createPushNotification } = useCreatePushNotification();
+    const { useCreateWebNotification } = useNotificationsService();
+    const { createWebNotification } = useCreateWebNotification();
+
+    const createEditMobilePushNotificationHandler = async () => {
+        try {
+            const { pushNotificationResponse } = await createPushNotification({
+                subject: NotificationActions.NEW_COMMENT,
+                content: `${username} ${NotificationActions.EDITED_COMMENT}`,
+            });
+            await pushNotificationResponse;
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const createDeleteMobilePushNotificationHandler = async () => {
+        try {
+            const { pushNotificationResponse } = await createPushNotification({
+                subject: NotificationActions.NEW_COMMENT,
+                content: `${username} ${NotificationActions.DELETED_COMMENT}`,
+            });
+            await pushNotificationResponse;
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
     const editCommentHandler = async () => {
         setFail(false);
@@ -31,6 +62,17 @@ export default function Comment({ content, createdAt, owner, id }: CommentsProps
                 await editCommentResponse;
                 await queryClient.invalidateQueries(['recipeComments', name!.toLowerCase()]);
                 setEditComment(false);
+                await Promise.all([
+                    createEditMobilePushNotificationHandler(),
+                    createWebNotification({
+                        action: 'EDITED_COMMENT',
+                        locationName: name!,
+                        senderAvatar: avatar,
+                        senderId: userId,
+                        senderUsername: username,
+                        ownerName: owner.username,
+                    })
+                ]);
             }
         } catch (err) {
             setFail(true);
@@ -41,9 +83,18 @@ export default function Comment({ content, createdAt, owner, id }: CommentsProps
     const deleteCommentHandler = async () => {
         setFail(false);
         try {
+            await createWebNotification({
+                action: 'DELETED_COMMENT',
+                locationName: name!,
+                senderAvatar: avatar,
+                senderId: userId,
+                senderUsername: username,
+                ownerName: owner.username,
+            });
             const { deleteCommentResponse } = await deleteComment(id!);
             await deleteCommentResponse;
             await queryClient.invalidateQueries(['recipeComments', name!.toLowerCase()]);
+            await createDeleteMobilePushNotificationHandler();
         } catch (err) {
             setFail(true);
             console.error(err);

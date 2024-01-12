@@ -73,7 +73,6 @@ export const useRequestHandler = () => {
                 }
 
                 if (response.status === 403 && isAuthenticated) {
-                    console.log('here, ', errorDetails)
                     if (errorDetails.cause === 'Auth token') {
                         userLogout();
                         navigate('/login');
