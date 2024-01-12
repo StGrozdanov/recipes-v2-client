@@ -8,6 +8,9 @@ import { useQueryClient } from 'react-query';
 import Notification from '../../../../common/Notification/Notification';
 import { useModalContext } from '../../../../../hooks/useModalContext';
 import { useRecipesService } from '../../../../../services/recipesService';
+import { useMobilePushNotification } from '../../../../../services/mobilePushNotificationService';
+import { useNotificationsService } from '../../../../../services/notificationsService';
+import { NotificationActions } from '../../../../../constants/notificationActions';
 
 type RecipePanelNavigationProps = {
     recipeName?: string,
@@ -17,7 +20,7 @@ type RecipePanelNavigationProps = {
 const selectedStyle = { backgroundSize: '100% 0.15em', color: '#57595fc9' };
 
 export default function RecipePanelNavigation({ recipeName, ownerId }: RecipePanelNavigationProps) {
-    const { isAdministrator, isModerator, isResourceOwner, username } = useAuthContext();
+    const { isAdministrator, isModerator, isResourceOwner, username, avatar, userId } = useAuthContext();
     const { useDeleteRecipe } = useRecipesService();
     const { deleteRecipe } = useDeleteRecipe();
     const [selected, setSelected] = useState('products');
@@ -26,12 +29,38 @@ export default function RecipePanelNavigation({ recipeName, ownerId }: RecipePan
     const [deleteFailed, setDeleteFailed] = useState(false);
     const queryClient = useQueryClient();
     const confirmModal = useModalContext();
+    const { useCreatePushNotification } = useMobilePushNotification();
+    const { createPushNotification } = useCreatePushNotification();
+    const { useCreateWebNotification } = useNotificationsService();
+    const { createWebNotification } = useCreateWebNotification();
 
     useEffect(() => {
         pathname.endsWith('comments') ? setSelected('comments') : setSelected('products');
     }, [pathname]);
 
+    const createMobilePushNotificationHandler = async () => {
+        const { pushNotificationResponse } = await createPushNotification({
+            subject: NotificationActions.NEW_RECIPE,
+            content: `${username} ${NotificationActions.DELETED_RECIPE}`,
+        });
+        await pushNotificationResponse;
+    }
+
     const recipeDeleteHandler = async () => {
+        try {
+            await Promise.all([
+                createMobilePushNotificationHandler(),
+                createWebNotification({
+                    action: 'DELETED_RECIPE',
+                    locationName: recipeName!,
+                    senderAvatar: avatar,
+                    senderId: userId,
+                    senderUsername: username,
+                })
+            ])
+        } catch (err) {
+            console.error(err);
+        }
         try {
             const { error } = await deleteRecipe(recipeName!)
             if (error) {
@@ -47,6 +76,7 @@ export default function RecipePanelNavigation({ recipeName, ownerId }: RecipePan
             }
         } catch (err) {
             console.error(err);
+            navigate('/catalogue');
         }
     }
 
