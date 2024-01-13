@@ -2,41 +2,33 @@ import styles from './Notifications.module.scss';
 import { useAuthContext } from '../../../../hooks/useAuthContext';
 import Notification from './Notification';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import { useNotificationsService } from '../../../../services/notificationsService';
+import { useQueryClient } from 'react-query';
 
 export default function Notifications() {
     const { username } = useAuthContext();
     const { getUserNotifications, useMarkAsRead } = useNotificationsService();
     const { notifications } = getUserNotifications(username);
     const { markAsRead } = useMarkAsRead();
-    const [notificationsData, setNotificationsData] = useState(notifications);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        setNotificationsData(notifications);
-    }, [notifications]);
+    const queryClient = useQueryClient();
 
     const markAsReadHandler = async (id: number, e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
         e.stopPropagation();
-
         await markAsRead(id);
-
-        setNotificationsData((oldState) => {
-            return oldState ? oldState?.filter(notification => notification.id !== id) : oldState;
-        });
+        await queryClient.invalidateQueries(['userNotifications', username]);
     };
     const readHandler = async (id: number, location: string, action: string) => {
         await markAsRead(id);
-
+        await queryClient.invalidateQueries(['userNotifications', username]);
         action.includes('COMMENT') ? navigate(`/details/${location}/comments`) : navigate(`/details/${location}`);
     };
 
     return (
-        notificationsData && notificationsData.length > 0
+        notifications && notifications.length > 0
             ? <section className={styles['notifications-container']}>
                 {
-                    notificationsData.map(notification =>
+                    notifications.map(notification =>
                         <Notification
                             key={notification.createdAt}
                             {...notification}

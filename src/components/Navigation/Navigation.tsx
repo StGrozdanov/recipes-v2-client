@@ -1,16 +1,23 @@
 import styles from './Navigation.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { faLeftLong, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import Search from './modules/Search/Search';
 import MainMenu from './modules/Menus/MainMenu';
 import CategoriesMenu from './modules/Menus/CategoriesMenu';
+import { faBell } from '@fortawesome/free-solid-svg-icons';
+import { useAuthContext } from '../../hooks/useAuthContext';
+import { useNotificationsService } from '../../services/notificationsService';
 
 export default function Navigation() {
     const [isExpanded, setIsExpanded] = useState(false);
     const [showSearch, setShowSearch] = useState(false);
     const [menu, setMenu] = useState('main');
+    const { pathname } = useLocation();
+    const { username } = useAuthContext();
+    const { getUserNotifications } = useNotificationsService();
+    const { notifications } = getUserNotifications(username);
 
     const expandHandler = () => setIsExpanded(!isExpanded);
 
@@ -87,6 +94,15 @@ export default function Navigation() {
                     <span className={styles.bar}></span>
                     <span className={styles.bar}></span>
                     <span className={styles.bar}></span>
+                    <FontAwesomeIcon
+                        className={isExpanded ? styles['expanded-notification'] : styles.notification}
+                        icon={faBell}
+                        style={
+                            notifications && notifications.length > 0 && !pathname.includes('profile')
+                                ? {}
+                                : { display: 'none' }
+                        }
+                    />
                 </div>
             </section>
             <Search

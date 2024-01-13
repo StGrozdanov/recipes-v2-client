@@ -243,3 +243,20 @@
     align-items: center;
     justify-content: space-evenly;
 }
+
+.notification {
+    color: $dark-orange-accent-color;
+    position: absolute;
+    top: 20px;
+    right: 85px;
+    font-size: 0.9rem;
+}
+
+.expanded-notification {
+    color: #2f4f4f;
+    position: absolute;
+    top: 260px;
+    right: 470px;
+    font-size: 1.1rem;
+    transform: translateY(0px) rotate(-45deg)
+}

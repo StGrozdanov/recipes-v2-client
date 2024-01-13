@@ -17,10 +17,7 @@ export const useNotificationsService = () => {
             error: notificationsFetchError,
             isFetching: notificationsAreLoading
         } = useQuery(['userNotifications', username],
-            (): Promise<Notifications[]> => authGET(`${BASE_URL}/notifications/${username}`, { username }), {
-            cacheTime: 0,
-            staleTime: 0,
-        });
+            (): Promise<Notifications[]> => authGET(`${BASE_URL}/notifications/${username}`, { username }));
 
         return {
             notifications,
