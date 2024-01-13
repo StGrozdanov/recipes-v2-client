@@ -25,6 +25,8 @@ import EditRecipe from "./components/EditRecipe/EditRecipe";
 import { BlockedContextProvider } from "./contexts/BlockedContext";
 import { queryConfig } from "./configs/reactQueryConfig";
 import useWebSocket from "react-use-websocket";
+import AuthRoute from "./components/common/AuthRoute/AuthRoute";
+import RecipeOwnerRoute from "./components/common/OwnerRoute/OwnerRoute";
 
 const queryClient = new QueryClient(queryConfig);
 // If the mutation has been paused because the device is for example offline,
@@ -110,8 +112,16 @@ function App() {
                 </ModalProvider>
               </ProfileRoot>
             } />
-            <Route path='/create' element={<CreateRecipe />} />
-            <Route path='/edit/:name' element={<EditRecipe />} />
+            <Route path='/create' element={
+              <AuthRoute>
+                <CreateRecipe />
+              </AuthRoute>
+            } />
+            <Route path='/edit/:name' element={
+              <RecipeOwnerRoute>
+                <EditRecipe />
+              </RecipeOwnerRoute>
+            } />
           </Routes>
           <Footer />
         </AuthProvider>
