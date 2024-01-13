@@ -6,27 +6,30 @@ import Navigation from "./components/Navigation/Navigation";
 import Catalogue from "./components/Catalogue/Catalogue";
 import Search from "./components/Search/Search";
 import Category from "./components/Category/Category";
-import Login from "./components/Authentication/Login";
 import { AuthProvider } from "./contexts/AuthContext";
 import Register from "./components/Authentication/Register";
 import { InputModalProvider } from "./contexts/InputModalContext";
-import PasswordReset from "./components/Authentication/PasswordReset";
 import RecipeDetails from "./components/RecipeDetails/RecipeDetails";
-import UserProfile from "./components/UserProfile/UserProfile";
-import ProfileRoot from "./components/Profile/ProfileRoot";
-import Profile from "./components/Profile/modules/Profile/Profile";
-import Notifications from "./components/Profile/modules/Notifications/Notifications";
-import FavouriteRecipes from "./components/Profile/modules/FavouriteRecipes/FavouriteRecipes";
-import MyRecipes from "./components/Profile/modules/MyRecipes/MyRecipes";
-import ProfileEdit from "./components/Profile/modules/ProfileEdit/ProfileEdit";
 import { ModalProvider } from "./contexts/ModalContext";
-import CreateRecipe from "./components/CreateRecipe/CreateRecipe";
-import EditRecipe from "./components/EditRecipe/EditRecipe";
 import { BlockedContextProvider } from "./contexts/BlockedContext";
 import { queryConfig } from "./configs/reactQueryConfig";
 import useWebSocket from "react-use-websocket";
 import AuthRoute from "./components/common/AuthRoute/AuthRoute";
 import RecipeOwnerRoute from "./components/common/OwnerRoute/OwnerRoute";
+import { Suspense, lazy } from 'react';
+import LoadingPan from "./components/common/LoadingPan/LoadingPan";
+
+const PasswordReset = lazy(() => import('./components/Authentication/PasswordReset'));
+const UserProfile = lazy(() => import('./components/UserProfile/UserProfile'));
+const Profile = lazy(() => import('./components/Profile/modules/Profile/Profile'));
+const Notifications = lazy(() => import('./components/Profile/modules/Notifications/Notifications'));
+const FavouriteRecipes = lazy(() => import('./components/Profile/modules/FavouriteRecipes/FavouriteRecipes'));
+const MyRecipes = lazy(() => import('./components/Profile/modules/MyRecipes/MyRecipes'));
+const ProfileEdit = lazy(() => import('./components/Profile/modules/ProfileEdit/ProfileEdit'));
+const CreateRecipe = lazy(() => import('./components/CreateRecipe/CreateRecipe'));
+const EditRecipe = lazy(() => import('./components/EditRecipe/EditRecipe'));
+const ProfileRoot = lazy(() => import('./components/Profile/ProfileRoot'));
+const Login = lazy(() => import('./components/Authentication/Login'));
 
 const queryClient = new QueryClient(queryConfig);
 // If the mutation has been paused because the device is for example offline,
@@ -50,7 +53,7 @@ function App() {
       } catch (err) {
         console.info(event.data)
       }
-      usernames.forEach(username => queryClient.invalidateQueries(['userNotifications', username]))
+      usernames.forEach(username => queryClient.invalidateQueries(['userNotifications', username]));
     },
     reconnectInterval: (attemptNumber) => Math.min(Math.pow(2, attemptNumber) * 2000, 10000),
     reconnectAttempts: 10,
@@ -68,12 +71,18 @@ function App() {
             <Route path='/search' element={<Search />} />
             <Route path='/category' element={<Category />} />
             <Route path='/login' element={
-              <InputModalProvider>
-                <Login />
-              </InputModalProvider>
+              <Suspense fallback={<LoadingPan />}>
+                <InputModalProvider>
+                  <Login />
+                </InputModalProvider>
+              </Suspense>
             } />
             <Route path='/register' element={<Register />} />
-            <Route path='/reset-password/:id' element={<PasswordReset />} />
+            <Route path='/reset-password/:id' element={
+              <Suspense fallback={<LoadingPan />}>
+                <PasswordReset />
+              </Suspense>
+            } />
             <Route path='/details/:name' element={
               <ModalProvider >
                 <RecipeDetails />
@@ -84,43 +93,61 @@ function App() {
                 <RecipeDetails />
               </ModalProvider>
             } />
-            <Route path='/user/:username' element={<UserProfile />} />
+            <Route path='/user/:username' element={
+              <Suspense fallback={<LoadingPan />}>
+                <UserProfile />
+              </Suspense>
+            } />
             <Route path='/profile' element={
-              <ProfileRoot>
-                <Profile />
-              </ProfileRoot>
+              <Suspense fallback={<LoadingPan />}>
+                <ProfileRoot>
+                  <Profile />
+                </ProfileRoot>
+              </Suspense>
             } />
             <Route path='/profile/notifications' element={
-              <ProfileRoot>
-                <Notifications />
-              </ProfileRoot>
+              <Suspense fallback={<LoadingPan />}>
+                <ProfileRoot>
+                  <Notifications />
+                </ProfileRoot>
+              </Suspense>
             } />
             <Route path='/profile/favourite-recipes' element={
-              <ProfileRoot>
-                <FavouriteRecipes />
-              </ProfileRoot>
+              <Suspense fallback={<LoadingPan />}>
+                <ProfileRoot>
+                  <FavouriteRecipes />
+                </ProfileRoot>
+              </Suspense>
             } />
             <Route path='/profile/my-recipes' element={
-              <ProfileRoot>
-                <MyRecipes />
-              </ProfileRoot>
+              <Suspense fallback={<LoadingPan />}>
+                <ProfileRoot>
+                  <MyRecipes />
+                </ProfileRoot>
+              </Suspense>
             } />
             <Route path='/profile/edit' element={
-              <ProfileRoot>
-                <ModalProvider >
-                  <ProfileEdit />
-                </ModalProvider>
-              </ProfileRoot>
+              <Suspense fallback={<LoadingPan />}>
+                <ProfileRoot>
+                  <ModalProvider >
+                    <ProfileEdit />
+                  </ModalProvider>
+                </ProfileRoot>
+              </Suspense>
             } />
             <Route path='/create' element={
-              <AuthRoute>
-                <CreateRecipe />
-              </AuthRoute>
+              <Suspense fallback={<LoadingPan />}>
+                <AuthRoute>
+                  <CreateRecipe />
+                </AuthRoute>
+              </Suspense>
             } />
             <Route path='/edit/:name' element={
-              <RecipeOwnerRoute>
-                <EditRecipe />
-              </RecipeOwnerRoute>
+              <Suspense fallback={<LoadingPan />}>
+                <RecipeOwnerRoute>
+                  <EditRecipe />
+                </RecipeOwnerRoute>
+              </Suspense>
             } />
           </Routes>
           <Footer />
