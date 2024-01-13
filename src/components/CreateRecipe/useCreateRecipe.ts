@@ -11,7 +11,7 @@ import { useQueryClient } from "react-query";
 import { useRecipesService } from "../../services/recipesService";
 import { useMobilePushNotification } from "../../services/mobilePushNotificationService";
 import { NotificationActions } from "../../constants/notificationActions";
-import { useNotificationsService } from "../../services/notificationsService";
+import { useNotificationsWebsocket } from "../../hooks/useNotificationsWebsocket";
 
 /**
  * Extracted all of the upload image, submit form and handle errors and states in this hook because the main
@@ -29,8 +29,7 @@ export function useCreateRecipe() {
     const queryClient = useQueryClient();
     const { useCreatePushNotification } = useMobilePushNotification();
     const { createPushNotification } = useCreatePushNotification();
-    const { useCreateWebNotification } = useNotificationsService();
-    const { createWebNotification } = useCreateWebNotification();
+    const { sendJsonMessage } = useNotificationsWebsocket();
 
     const createMobilePushNotificationHandler = async () => {
         const { pushNotificationResponse } = await createPushNotification({
@@ -41,6 +40,7 @@ export function useCreateRecipe() {
     }
 
     const submitHandler = async (values: CreateRecipeProps) => {
+        formik.handleReset(values);
         try {
             const newRecipe: RecipeDetails = {
                 recipeName: values.recipeName.toLowerCase(),
@@ -76,7 +76,7 @@ export function useCreateRecipe() {
             await queryClient.invalidateQueries(['recipes']);
             await Promise.all([
                 createMobilePushNotificationHandler(),
-                createWebNotification({
+                sendJsonMessage({
                     action: 'CREATED_RECIPE',
                     locationName: recipe ? recipe.recipeName : '',
                     senderAvatar: avatar,

@@ -13,8 +13,8 @@ import { useState } from 'react';
 import Notification from '../../../common/Notification/Notification';
 import { useCommentService } from '../../../../services/commentService';
 import { useMobilePushNotification } from '../../../../services/mobilePushNotificationService';
-import { useNotificationsService } from '../../../../services/notificationsService';
 import { NotificationActions } from '../../../../constants/notificationActions';
+import { useNotificationsWebsocket } from '../../../../hooks/useNotificationsWebsocket';
 
 export default function RecipeComments() {
     const { name } = useParams();
@@ -26,8 +26,7 @@ export default function RecipeComments() {
     const [failedComment, setFailedComment] = useState(false);
     const { useCreatePushNotification } = useMobilePushNotification();
     const { createPushNotification } = useCreatePushNotification();
-    const { useCreateWebNotification } = useNotificationsService();
-    const { createWebNotification } = useCreateWebNotification();
+    const { sendJsonMessage } = useNotificationsWebsocket();
 
     const createMobilePushNotificationHandler = async () => {
         try {
@@ -59,7 +58,7 @@ export default function RecipeComments() {
             formik.resetForm();
             await Promise.all([
                 createMobilePushNotificationHandler(),
-                createWebNotification({
+                sendJsonMessage({
                     action: 'CREATED_COMMENT',
                     locationName: name!,
                     senderAvatar: avatar,

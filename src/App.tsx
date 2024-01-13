@@ -24,24 +24,42 @@ import CreateRecipe from "./components/CreateRecipe/CreateRecipe";
 import EditRecipe from "./components/EditRecipe/EditRecipe";
 import { BlockedContextProvider } from "./contexts/BlockedContext";
 import { queryConfig } from "./configs/reactQueryConfig";
+import useWebSocket from "react-use-websocket";
 
 const queryClient = new QueryClient(queryConfig);
 // If the mutation has been paused because the device is for example offline,
 // Then the paused mutation can be dehydrated when the application quits:
-const state = dehydrate(queryClient)
+const state = dehydrate(queryClient);
 // The mutation can then be hydrated again when the application is started:
-hydrate(queryClient, state)
+hydrate(queryClient, state);
 // Resume the paused mutations:
-queryClient.resumePausedMutations()
+queryClient.resumePausedMutations();
+const NOTIFICATIONS_WEBSOCKET_URL = process.env.REACT_APP_DEV_WEBSOCKET_URL || process.env.REACT_APP_WEBSOCKET_URL;
 
 function App() {
-  const location = useLocation();
-  const currentPage = location.pathname;
+  const { pathname } = useLocation();
+
+  useWebSocket(NOTIFICATIONS_WEBSOCKET_URL!, {
+    shouldReconnect: (_closeEvent) => true,
+    onMessage: (event: WebSocketEventMap['message']) => {
+      let usernames: string[] = [];
+      try {
+        usernames = JSON.parse(event.data);
+      } catch (err) {
+        console.info(event.data)
+      }
+      usernames.forEach(username => queryClient.invalidateQueries(['userNotifications', username]))
+    },
+    reconnectInterval: (attemptNumber) => Math.min(Math.pow(2, attemptNumber) * 2000, 10000),
+    reconnectAttempts: 10,
+    share: true,
+  });
+
   return (
     <BlockedContextProvider>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          {currentPage !== '/' && <Navigation />}
+          {pathname !== '/' && <Navigation />}
           <Routes>
             <Route path='/' element={<Landing />} />
             <Route path='/catalogue' element={<Catalogue />} />

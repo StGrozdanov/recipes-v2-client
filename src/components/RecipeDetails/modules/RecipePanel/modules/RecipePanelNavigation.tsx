@@ -9,8 +9,8 @@ import Notification from '../../../../common/Notification/Notification';
 import { useModalContext } from '../../../../../hooks/useModalContext';
 import { useRecipesService } from '../../../../../services/recipesService';
 import { useMobilePushNotification } from '../../../../../services/mobilePushNotificationService';
-import { useNotificationsService } from '../../../../../services/notificationsService';
 import { NotificationActions } from '../../../../../constants/notificationActions';
+import { useNotificationsWebsocket } from '../../../../../hooks/useNotificationsWebsocket';
 
 type RecipePanelNavigationProps = {
     recipeName?: string,
@@ -31,8 +31,7 @@ export default function RecipePanelNavigation({ recipeName, ownerId }: RecipePan
     const confirmModal = useModalContext();
     const { useCreatePushNotification } = useMobilePushNotification();
     const { createPushNotification } = useCreatePushNotification();
-    const { useCreateWebNotification } = useNotificationsService();
-    const { createWebNotification } = useCreateWebNotification();
+    const { sendJsonMessage } = useNotificationsWebsocket();
 
     useEffect(() => {
         pathname.endsWith('comments') ? setSelected('comments') : setSelected('products');
@@ -50,7 +49,7 @@ export default function RecipePanelNavigation({ recipeName, ownerId }: RecipePan
         try {
             await Promise.all([
                 createMobilePushNotificationHandler(),
-                createWebNotification({
+                sendJsonMessage({
                     action: 'DELETED_RECIPE',
                     locationName: recipeName!,
                     senderAvatar: avatar,

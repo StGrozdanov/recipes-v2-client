@@ -9,8 +9,8 @@ import { useQueryClient } from "react-query";
 import { CreateRecipeProps } from "../CreateRecipe/types";
 import { useRecipesService } from "../../services/recipesService";
 import { useMobilePushNotification } from "../../services/mobilePushNotificationService";
-import { useNotificationsService } from "../../services/notificationsService";
 import { NotificationActions } from "../../constants/notificationActions";
+import { useNotificationsWebsocket } from "../../hooks/useNotificationsWebsocket";
 
 /**
  * Extracted all of the upload image, submit form and handle errors and states in this hook because the main
@@ -27,8 +27,7 @@ export function useEditRecipe(initialRecipe: RecipeDetails) {
     const queryClient = useQueryClient();
     const { useCreatePushNotification } = useMobilePushNotification();
     const { createPushNotification } = useCreatePushNotification();
-    const { useCreateWebNotification } = useNotificationsService();
-    const { createWebNotification } = useCreateWebNotification();
+    const { sendJsonMessage } = useNotificationsWebsocket();
 
     const createMobilePushNotificationHandler = async () => {
         const { pushNotificationResponse } = await createPushNotification({
@@ -68,7 +67,7 @@ export function useEditRecipe(initialRecipe: RecipeDetails) {
             ]);
             await Promise.all([
                 createMobilePushNotificationHandler(),
-                createWebNotification({
+                sendJsonMessage({
                     action: 'EDITED_RECIPE',
                     locationName: recipe ? recipe.recipeName : '',
                     senderAvatar: avatar,

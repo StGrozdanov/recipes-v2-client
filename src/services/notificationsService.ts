@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "react-query";
 import { BASE_URL } from "./recipesService";
-import { CreateNotificationData, Notifications } from "./types";
+import { Notifications } from "./types";
 import { useCallback } from "react";
 import { useRequestHandler } from "../hooks/useRequestHandler";
 
@@ -9,7 +9,7 @@ import { useRequestHandler } from "../hooks/useRequestHandler";
  * @returns handler functions
  */
 export const useNotificationsService = () => {
-    const { authGET, authPUT, authPOST } = useRequestHandler();
+    const { authGET, authPUT } = useRequestHandler();
 
     const getUserNotifications = (username: string) => {
         const {
@@ -46,29 +46,8 @@ export const useNotificationsService = () => {
         return { markAsRead, isLoading, isError };
     };
 
-    const useCreateWebNotification = () => {
-        const {
-            mutateAsync: createNotificationsMutation,
-            isLoading,
-            isError
-        } = useMutation((data: CreateNotificationData): Promise<{ status: string }> =>
-            authPOST(`${BASE_URL}/notifications`, data));
-
-        const createWebNotification = useCallback(async (data: CreateNotificationData) => {
-            try {
-                const createNotificationResponse = await createNotificationsMutation(data);
-                return { createNotificationResponse };
-            } catch (error) {
-                return { error };
-            }
-        }, [createNotificationsMutation]);
-
-        return { createWebNotification, isLoading, isError };
-    };
-
     return {
         getUserNotifications,
         useMarkAsRead,
-        useCreateWebNotification,
     }
 }

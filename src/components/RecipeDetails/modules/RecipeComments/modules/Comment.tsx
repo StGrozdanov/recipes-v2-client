@@ -11,8 +11,8 @@ import Notification from '../../../../common/Notification/Notification';
 import { useQueryClient } from 'react-query';
 import { useCommentService } from '../../../../../services/commentService';
 import { useMobilePushNotification } from '../../../../../services/mobilePushNotificationService';
-import { useNotificationsService } from '../../../../../services/notificationsService';
 import { NotificationActions } from '../../../../../constants/notificationActions';
+import { useNotificationsWebsocket } from '../../../../../hooks/useNotificationsWebsocket';
 
 export default function Comment({ content, createdAt, owner, id }: CommentsProps) {
     const [editComment, setEditComment] = useState(false);
@@ -27,8 +27,7 @@ export default function Comment({ content, createdAt, owner, id }: CommentsProps
     const { name } = useParams();
     const { useCreatePushNotification } = useMobilePushNotification();
     const { createPushNotification } = useCreatePushNotification();
-    const { useCreateWebNotification } = useNotificationsService();
-    const { createWebNotification } = useCreateWebNotification();
+    const { sendJsonMessage } = useNotificationsWebsocket();
 
     const createEditMobilePushNotificationHandler = async () => {
         try {
@@ -64,7 +63,7 @@ export default function Comment({ content, createdAt, owner, id }: CommentsProps
                 setEditComment(false);
                 await Promise.all([
                     createEditMobilePushNotificationHandler(),
-                    createWebNotification({
+                    sendJsonMessage({
                         action: 'EDITED_COMMENT',
                         locationName: name!,
                         senderAvatar: avatar,
@@ -83,7 +82,7 @@ export default function Comment({ content, createdAt, owner, id }: CommentsProps
     const deleteCommentHandler = async () => {
         setFail(false);
         try {
-            await createWebNotification({
+            await sendJsonMessage({
                 action: 'DELETED_COMMENT',
                 locationName: name!,
                 senderAvatar: avatar,
