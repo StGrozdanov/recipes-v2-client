@@ -18,6 +18,7 @@ import AuthRoute from "./components/common/AuthRoute/AuthRoute";
 import RecipeOwnerRoute from "./components/common/OwnerRoute/OwnerRoute";
 import { Suspense, lazy } from 'react';
 import LoadingPan from "./components/common/LoadingPan/LoadingPan";
+import Page404 from "./components/common/404/404";
 
 const PasswordReset = lazy(() => import('./components/Authentication/PasswordReset'));
 const UserProfile = lazy(() => import('./components/UserProfile/UserProfile'));
@@ -149,6 +150,7 @@ function App() {
                 </RecipeOwnerRoute>
               </Suspense>
             } />
+            <Route path='*' element={<Page404 />} />
           </Routes>
           <Footer />
         </AuthProvider>

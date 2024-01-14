@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { capitalizatorUtil } from "../../utils/capitalizatorUtil";
 import RecipeStep from "./modules/RecipeSteps/RecipeStep";
 import styles from './RecipeDetails.module.scss';
@@ -65,71 +65,73 @@ export default function RecipeDetails() {
     return (
         recipeIsLoading
             ? <LoadingPan />
-            : <>
-                <article className={styles.container}>
-                    <section className={styles['top-section']}>
-                        <RecipeDetailsHeader
-                            category={recipe?.category}
-                            name={recipe?.recipeName ? capitalizatorUtil(recipe.recipeName) : ''}
-                            image={recipe?.imageURL}
-                            ownerName={recipe?.owner?.username}
-                            isFavourite={recipeIsFavourite}
-                            isAuthenticated={isAuthenticated}
-                            addToFavouritesHandler={favouriteRecipeHandler}
-                            removeFromFavouritesHandler={removeFromFavouritesRecipeHandler}
-                        />
-                        <article className={styles['panel-container']}>
-                            <RecipePanel
-                                calories={recipe?.calories || 0}
-                                preparationTime={recipe?.preparationTime || 0}
-                                products={recipe?.products}
-                                protein={recipe?.protein || 0}
+            : !recipe?.recipeName
+                ? <Navigate to="/not-found" replace />
+                : <>
+                    <article className={styles.container}>
+                        <section className={styles['top-section']}>
+                            <RecipeDetailsHeader
+                                category={recipe?.category}
+                                name={recipe?.recipeName ? capitalizatorUtil(recipe.recipeName) : ''}
+                                image={recipe?.imageURL}
+                                ownerName={recipe?.owner?.username}
+                                isFavourite={recipeIsFavourite}
+                                isAuthenticated={isAuthenticated}
+                                addToFavouritesHandler={favouriteRecipeHandler}
+                                removeFromFavouritesHandler={removeFromFavouritesRecipeHandler}
                             />
-                            <RecipePanelNavigation
-                                recipeName={recipe?.recipeName}
-                                ownerId={recipe?.owner.id}
-                            />
-                        </article>
-                    </section>
-                    <section className={styles['methods-section']}>
-                        <section className={styles.methods}>
-                            {
-                                recipe?.steps && recipe.steps.length > 0 && recipe.steps.map(
-                                    (step, index) =>
-                                        <RecipeStep
-                                            step={step}
-                                            index={index}
-                                            key={index}
-                                            isInViewportHandler={viewportStepHandler}
-                                        />
-                                )
-                            }
+                            <article className={styles['panel-container']}>
+                                <RecipePanel
+                                    calories={recipe?.calories || 0}
+                                    preparationTime={recipe?.preparationTime || 0}
+                                    products={recipe?.products}
+                                    protein={recipe?.protein || 0}
+                                />
+                                <RecipePanelNavigation
+                                    recipeName={recipe?.recipeName}
+                                    ownerId={recipe?.owner?.id}
+                                />
+                            </article>
                         </section>
-                        <span className={styles['current-method-step']}>
-                            {viewportStep + 1} от {recipe?.steps && recipe.steps.length}
-                        </span>
-                    </section>
-                </article>
-                <Notification
-                    type={'fail'}
-                    isVisible={isError}
-                    message={'Не успяхме да добавим рецептата към любими. Моля опитайте по-късно.'}
-                />
-                <Notification
-                    type={'success'}
-                    isVisible={addToFavouritesSuccess}
-                    message={'Успешно добавихте рецептата към любими!'}
-                />
-                <Notification
-                    type={'fail'}
-                    isVisible={RemoveError}
-                    message={'Не успяхме да премахнем рецептата от любими. Моля опитайте по-късно.'}
-                />
-                <Notification
-                    type={'info'}
-                    isVisible={removeFromFavouritesSuccess}
-                    message={'Успешно премахнахте рецептата от любими.'}
-                />
-            </>
+                        <section className={styles['methods-section']}>
+                            <section className={styles.methods}>
+                                {
+                                    recipe?.steps && recipe.steps.length > 0 && recipe.steps.map(
+                                        (step, index) =>
+                                            <RecipeStep
+                                                step={step}
+                                                index={index}
+                                                key={index}
+                                                isInViewportHandler={viewportStepHandler}
+                                            />
+                                    )
+                                }
+                            </section>
+                            <span className={styles['current-method-step']}>
+                                {viewportStep + 1} от {recipe?.steps && recipe.steps.length}
+                            </span>
+                        </section>
+                    </article>
+                    <Notification
+                        type={'fail'}
+                        isVisible={isError}
+                        message={'Не успяхме да добавим рецептата към любими. Моля опитайте по-късно.'}
+                    />
+                    <Notification
+                        type={'success'}
+                        isVisible={addToFavouritesSuccess}
+                        message={'Успешно добавихте рецептата към любими!'}
+                    />
+                    <Notification
+                        type={'fail'}
+                        isVisible={RemoveError}
+                        message={'Не успяхме да премахнем рецептата от любими. Моля опитайте по-късно.'}
+                    />
+                    <Notification
+                        type={'info'}
+                        isVisible={removeFromFavouritesSuccess}
+                        message={'Успешно премахнахте рецептата от любими.'}
+                    />
+                </>
     );
 }
