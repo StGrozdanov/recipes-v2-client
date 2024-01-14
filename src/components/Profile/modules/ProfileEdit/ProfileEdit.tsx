@@ -47,10 +47,13 @@ export default function ProfileEdit() {
             formData.append('username', username);
 
             try {
-                uploadType === 'cover'
-                    ? await uploadCover({ formData, username })
-                    : await uploadAvatar({ formData, username });
-
+                if (uploadType === 'cover') {
+                    const { uploadResponse } = await uploadCover({ formData, username });
+                    await uploadResponse;
+                } else {
+                    const { uploadResponse } = await uploadAvatar({ formData, username });
+                    await uploadResponse;
+                }
                 await queryClient.invalidateQueries(['user', username]);
             } catch (err) {
                 console.error(err);
@@ -62,10 +65,8 @@ export default function ProfileEdit() {
     const submitHandler = async (values: ProfileData) => {
         try {
             const { editResponse } = await editProfile({ ...values, oldUsername: username });
-
-            if (editResponse) {
-                updateUserData(editResponse.email, editResponse.username);
-            }
+            const response = await editResponse;
+            updateUserData(response.email, response.username);
             setShowSuccessNotification(true);
         } catch (err) {
             console.error(err);

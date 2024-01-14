@@ -1,6 +1,7 @@
 import styles from './Notifications.module.scss';
 import { useAuthContext } from '../../../../hooks/useAuthContext';
 import Notification from './Notification';
+import Notify from '../../../common/Notification/Notification';
 import { useNavigate } from 'react-router-dom';
 import { useNotificationsService } from '../../../../services/notificationsService';
 import { useQueryClient } from 'react-query';
@@ -8,8 +9,8 @@ import { useQueryClient } from 'react-query';
 export default function Notifications() {
     const { username } = useAuthContext();
     const { getUserNotifications, useMarkAsRead } = useNotificationsService();
-    const { notifications } = getUserNotifications(username);
-    const { markAsRead } = useMarkAsRead();
+    const { notifications, notificationsFetchError } = getUserNotifications(username);
+    const { markAsRead, isError } = useMarkAsRead();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
@@ -25,20 +26,28 @@ export default function Notifications() {
     };
 
     return (
-        notifications && notifications.length > 0
-            ? <section className={styles['notifications-container']}>
-                {
-                    notifications.map(notification =>
-                        <Notification
-                            key={notification.createdAt}
-                            {...notification}
-                            markAsReadHandler={markAsReadHandler}
-                            readHandler={readHandler}
-                        />
-                    )
-                }
-            </section>
-            : <h2 className={styles['no-new-notifications']}>Нямате нови известия</h2>
-
+        <>
+            {
+                notifications && notifications.length > 0
+                    ? <section className={styles['notifications-container']}>
+                        {
+                            notifications.map(notification =>
+                                <Notification
+                                    key={notification.createdAt}
+                                    {...notification}
+                                    markAsReadHandler={markAsReadHandler}
+                                    readHandler={readHandler}
+                                />
+                            )
+                        }
+                    </section>
+                    : <h2 className={styles['no-new-notifications']}>Нямате нови известия</h2>
+            }
+            <Notify
+                type={'fail'}
+                isVisible={notificationsFetchError as boolean || isError}
+                message={'Здравейте, имаме проблем с нотификациите и работим по отстраняването му.'}
+            />
+        </>
     )
 }

@@ -220,7 +220,7 @@ export default function EditRecipe() {
             <Notification
                 type={'fail'}
                 isVisible={isError}
-                message={'Нещо се обърка при създаването на рецептата. Моля опитайте по-късно.'}
+                message={'Нещо се обърка при редактирането на рецептата. Моля опитайте по-късно.'}
             />
             <Notification
                 type={'fail'}

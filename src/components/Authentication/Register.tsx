@@ -39,15 +39,18 @@ export default function Register() {
     }
 
     const submitHandler = async (values: RegistrationData) => {
-        const { registrationResponse } = await register(values);
-        const user = await registrationResponse;
+        try {
+            const { registrationResponse } = await register(values);
+            const user = await registrationResponse;
 
-        if (user) {
-            userLogin(user);
-            await createMobilePushNotificationHandler(user.username);
-            navigate('/profile');
+            if (user) {
+                userLogin(user);
+                await createMobilePushNotificationHandler(user.username);
+                navigate('/profile');
+            }
+        } catch (err) {
+            console.error(err);
         }
-
         formik.setTouched({ username: false, password: false, email: false, repeatPassword: false });
     }
 

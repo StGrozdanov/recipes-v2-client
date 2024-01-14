@@ -61,21 +61,18 @@ export default function RecipePanelNavigation({ recipeName, ownerId }: RecipePan
             console.error(err);
         }
         try {
-            const { error } = await deleteRecipe(recipeName!)
-            if (error) {
-                setDeleteFailed(true);
-            } else {
-                await Promise.all([
-                    queryClient.invalidateQueries(['recipe', recipeName!.toLowerCase()]),
-                    queryClient.invalidateQueries(['recipes']),
-                    queryClient.invalidateQueries(['favouriteRecipes', username]),
-                    queryClient.invalidateQueries(['recipesByUser', username]),
-                ]);
-                navigate('/catalogue');
-            }
-        } catch (err) {
-            console.error(err);
+            const { recipeDeleteResponse } = await deleteRecipe(recipeName!);
+            await recipeDeleteResponse;
+            await Promise.all([
+                queryClient.invalidateQueries(['recipe', recipeName!.toLowerCase()]),
+                queryClient.invalidateQueries(['recipes']),
+                queryClient.invalidateQueries(['favouriteRecipes', username]),
+                queryClient.invalidateQueries(['recipesByUser', username]),
+            ]);
             navigate('/catalogue');
+        } catch (err) {
+            setDeleteFailed(true);
+            console.error(err);
         }
     }
 

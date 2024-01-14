@@ -17,7 +17,7 @@ const emailValidationFunction = async (
             resolve(isAvailable);
         }
     } catch (error) {
-        resolve(false);
+        resolve(true);
     }
 };
 
@@ -34,7 +34,7 @@ const usernameValidationFunction = async (
             resolve(isAvailable);
         }
     } catch (error) {
-        resolve(false);
+        resolve(true);
     }
 };
 
@@ -51,7 +51,7 @@ const recipeNameValidationFunction = async (
             resolve(!isAvailable);
         }
     } catch (error) {
-        resolve(false);
+        resolve(true);
     }
 };
 
