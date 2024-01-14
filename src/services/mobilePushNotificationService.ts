@@ -4,7 +4,7 @@ import { useRequestHandler } from "../hooks/useRequestHandler";
 import { useCallback } from "react";
 
 type mobileNotificationProps = {
-    subject: NotificationActions.NEW_COMMENT | NotificationActions.NEW_RECIPE,
+    subject: NotificationActions.NEW_COMMENT | NotificationActions.NEW_RECIPE | NotificationActions.NEW_USER,
     content: string,
 }
 

@@ -8,6 +8,8 @@ import { RegistrationData } from '../../services/types';
 import { useFormik } from 'formik';
 import { validationSchemas } from '../../configs/yupConfig';
 import { useAuthService } from '../../services/authService';
+import { NotificationActions } from '../../constants/notificationActions';
+import { useMobilePushNotification } from '../../services/mobilePushNotificationService';
 
 const initialRegistrationValues: RegistrationData = {
     username: '',
@@ -21,6 +23,20 @@ export default function Register() {
     const navigate = useNavigate();
     const { useRegistration } = useAuthService();
     const { register, isLoading, isError } = useRegistration();
+    const { useCreatePushNotification } = useMobilePushNotification();
+    const { createPushNotification } = useCreatePushNotification();
+
+    const createMobilePushNotificationHandler = async (username: string) => {
+        try {
+            const { pushNotificationResponse } = await createPushNotification({
+                subject: NotificationActions.NEW_USER,
+                content: `${username} ${NotificationActions.REGISTERED}`,
+            });
+            await pushNotificationResponse;
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
     const submitHandler = async (values: RegistrationData) => {
         const { registrationResponse } = await register(values);
@@ -28,6 +44,7 @@ export default function Register() {
 
         if (user) {
             userLogin(user);
+            await createMobilePushNotificationHandler(user.username);
             navigate('/profile');
         }
 
