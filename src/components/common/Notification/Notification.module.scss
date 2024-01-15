@@ -36,14 +36,10 @@
     border-radius: 15px;
     min-width: 40px;
 
-    @include maxWidthMediaQuery(460px) {
-        min-width: 40px;
-    }
-
     .icon {
         font-size: 200%;
         color: white;
-        width: 100%;
+        width: 50px;
     }
 }
 
