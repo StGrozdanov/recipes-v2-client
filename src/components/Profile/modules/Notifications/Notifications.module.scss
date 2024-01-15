@@ -1,3 +1,5 @@
+@use 'src/scss/common/media' as *;
+
 .no-new-notifications {
     text-align: center;
 }
@@ -20,6 +22,14 @@
     box-shadow: 2px 2px 18px 0px #00000061;
     position: relative;
     color: white;
+
+    @include maxWidthMediaQuery(1000px) {
+        width: 70vw;
+    }
+
+    @include maxWidthMediaQuery(500px) {
+        width: 95vw;
+    }
 
     main {
         margin-left: 20px;

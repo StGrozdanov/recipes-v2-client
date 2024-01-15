@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping, faComment, faPenToSquare, faShareNodes, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faCartShopping, faComment, faExclamationTriangle, faPenToSquare, faShareNodes, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import styles from './RecipePanelNavigation.module.scss';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -10,7 +10,12 @@ import { useModalContext } from '../../../../../hooks/useModalContext';
 import { useRecipesService } from '../../../../../services/recipesService';
 import { useMobilePushNotification } from '../../../../../services/mobilePushNotificationService';
 import { NotificationActions } from '../../../../../constants/notificationActions';
+import FallbackImage from "../../../../common/FallbackImage/FallbackImage";
 import { useNotificationsWebsocket } from '../../../../../hooks/useNotificationsWebsocket';
+import { BaseCommentData } from '../../../../../services/types';
+import { validationSchemas } from "../../../../../configs/yupConfig";
+import { useFormik } from "formik";
+import { useCommentService } from '../../../../../services/commentService';
 
 type RecipePanelNavigationProps = {
     recipeName?: string,
@@ -20,7 +25,7 @@ type RecipePanelNavigationProps = {
 const selectedStyle = { backgroundSize: '100% 0.15em', color: '#57595fc9' };
 
 export default function RecipePanelNavigation({ recipeName, ownerId }: RecipePanelNavigationProps) {
-    const { isAdministrator, isModerator, isResourceOwner, username, avatar, userId } = useAuthContext();
+    const { isAdministrator, isModerator, isResourceOwner, username, avatar, userId, isAuthenticated } = useAuthContext();
     const { useDeleteRecipe } = useRecipesService();
     const { deleteRecipe } = useDeleteRecipe();
     const [selected, setSelected] = useState('products');
@@ -32,12 +37,66 @@ export default function RecipePanelNavigation({ recipeName, ownerId }: RecipePan
     const { useCreatePushNotification } = useMobilePushNotification();
     const { createPushNotification } = useCreatePushNotification();
     const { sendJsonMessage } = useNotificationsWebsocket();
+    const { useCreateComment } = useCommentService();
+    const [failedComment, setFailedComment] = useState(false);
+    const { createComment } = useCreateComment();
 
     useEffect(() => {
         pathname.endsWith('comments') ? setSelected('comments') : setSelected('products');
     }, [pathname]);
 
     const createMobilePushNotificationHandler = async () => {
+        try {
+            const { pushNotificationResponse } = await createPushNotification({
+                subject: NotificationActions.NEW_COMMENT,
+                content: `${username} ${NotificationActions.POSTED_NEW_COMMENT}`,
+            });
+            await pushNotificationResponse;
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const submitHandler = async (values: { comment: string }) => {
+        setFailedComment(false);
+        try {
+            const newComment: BaseCommentData = {
+                content: values.comment,
+                recipeName: recipeName!,
+                owner: {
+                    username: username,
+                    id: userId,
+                }
+            }
+            const { createCommentResponse } = await createComment(newComment);
+            const response = await createCommentResponse;
+            console.info(response);
+            await queryClient.invalidateQueries(['recipeComments', recipeName!.toLowerCase()]);
+            formik.resetForm();
+            await Promise.all([
+                createMobilePushNotificationHandler(),
+                sendJsonMessage({
+                    action: 'CREATED_COMMENT',
+                    locationName: recipeName!,
+                    senderAvatar: avatar,
+                    senderId: userId,
+                    senderUsername: username,
+                })
+            ]);
+        } catch (err) {
+            console.error(err);
+            setFailedComment(true);
+        }
+        formik.setTouched({ comment: false });
+    }
+
+    const formik = useFormik({
+        initialValues: { comment: "" },
+        validationSchema: validationSchemas.commentValidationSchema,
+        onSubmit: submitHandler,
+    });
+
+    const createCommentMobilePushNotificationHandler = async () => {
         const { pushNotificationResponse } = await createPushNotification({
             subject: NotificationActions.NEW_RECIPE,
             content: `${username} ${NotificationActions.DELETED_RECIPE}`,
@@ -48,7 +107,7 @@ export default function RecipePanelNavigation({ recipeName, ownerId }: RecipePan
     const recipeDeleteHandler = async () => {
         try {
             await Promise.all([
-                createMobilePushNotificationHandler(),
+                createCommentMobilePushNotificationHandler(),
                 sendJsonMessage({
                     action: 'DELETED_RECIPE',
                     locationName: recipeName!,
@@ -79,6 +138,35 @@ export default function RecipePanelNavigation({ recipeName, ownerId }: RecipePan
     return (
         <>
             <nav className={styles.navigation}>
+                <section
+                    className={styles['add-comment-section']}
+                    style={isAuthenticated && pathname.endsWith('comments') ? {} : { display: 'none' }}
+                >
+                    <div className={styles['image-container']}>
+                        <FallbackImage src={avatar} alt={"/images/avatar.png"} />
+                    </div>
+                    <form onSubmit={formik.handleSubmit}>
+                        <input
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values.comment}
+                            style={formik.touched.comment && formik.errors.comment ? { borderBottomColor: 'red' } : {}}
+                            type="text"
+                            name="comment"
+                            placeholder="Добави коментар ..."
+                            autoComplete="off"
+                            onSubmit={formik.handleReset}
+                        />
+                        {
+                            formik.touched.comment && formik.errors.comment
+                                ? <>
+                                    <FontAwesomeIcon icon={faExclamationTriangle} className={styles['warning-icon']} />
+                                    <span className={styles['fail-validation-msg']}>{formik.errors.comment}</span>
+                                </>
+                                : null
+                        }
+                    </form>
+                </section>
                 <ul>
                     <FontAwesomeIcon
                         style={selected == 'products' ? selectedStyle : {}}
@@ -120,6 +208,11 @@ export default function RecipePanelNavigation({ recipeName, ownerId }: RecipePan
                 type={'fail'}
                 isVisible={deleteFailed}
                 message={'Не успяхме да изтрием рецептата. Моля опитайте по-късно.'}
+            />
+            <Notification
+                type={'fail'}
+                isVisible={failedComment}
+                message={'Нещо се обърка при създаването на коментар. Моля опитайте по-късно.'}
             />
         </>
     );

@@ -21,7 +21,7 @@ export default function EditRecipe() {
                     onSubmit={formik.handleSubmit}
                 >
                     <fieldset>
-                        <legend>Нова рецепта</legend>
+                        <legend>Промяна рецепта</legend>
                         <div className={styles['input-container']} style={{ marginTop: 50 }}>
                             <FontAwesomeIcon className={styles.icon} icon={faBowlRice} />
                             <input

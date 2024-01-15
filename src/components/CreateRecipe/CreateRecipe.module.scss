@@ -110,6 +110,7 @@
     width: 100%;
     margin-top: 20px;
     margin-bottom: 20px;
+    color: white;
 
     .custom-file-input::-webkit-file-upload-button {
         visibility: hidden;
@@ -195,6 +196,15 @@
     padding: 1em 2em 2em 2em;
     position: relative;
     width: 35vw;
+
+    @include maxWidthMediaQuery(1000px) {
+        width: 60vw;
+    }
+
+    @include maxWidthMediaQuery(550px) {
+        width: 90vw;
+        margin: 0 auto;
+    }
 }
 
 .fail-validation-msg {

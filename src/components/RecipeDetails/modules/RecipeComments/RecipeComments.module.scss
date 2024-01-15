@@ -4,9 +4,14 @@
 
 .container {
     overflow-y: scroll;
-    height: 86.5vh;
+    max-height: 60vh;
     width: 100%;
     padding: 0 0 60px 80px;
+    overflow-x: hidden;
+
+    @include maxWidthMediaQuery(520px) {
+        padding: 0;
+    }
 
     &::-webkit-scrollbar {
         width: 7px;
@@ -41,45 +46,8 @@
 .no-comments {
     text-align: center;
     margin: 100px 80px 0 0;
-}
 
-.add-comment-section {
-    position: absolute;
-    bottom: 103px;
-    right: 4%;
-    width: 401px;
-    padding: 13px 13px 10px 13px;
-    display: flex;
-    background: rgba(184, 188, 202, 0.5);
-    border-radius: 35px 0px 0px 0px;
-    align-content: center;
-    align-items: center;
-    justify-content: center;
-
-    .image-container {
-        width: 35px;
-        height: 35px;
-        box-shadow: 0px 1px 7px 0px #afb6ba;
-        overflow: hidden;
-        border-radius: 50%;
-
-        img {
-            width: 100%;
-            height: 100%;
-        }
-    }
-
-    input {
-        border-radius: 6px;
-        height: 35px;
-        width: 305px;
-        margin-left: 8px;
-        border-width: 0;
-        box-shadow: 0px 1px 7px 0px #afb6ba;
-        padding-left: 10px;
-
-        &:focus {
-            outline: none
-        }
+    @include maxWidthMediaQuery(1000px) {
+        margin: 0;
     }
 }

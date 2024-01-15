@@ -1,3 +1,5 @@
+@use 'src/scss/common/media' as *;
+
 .recipes-section {
     overflow-y: auto;
 
@@ -16,6 +18,18 @@
     position: absolute;
     margin-top: 2px;
     cursor: pointer;
+
+    @include maxWidthMediaQuery(1000px) {
+        width: 5%;
+    }
+
+    @include maxWidthMediaQuery(550px) {
+        width: 10%;
+    }
+
+    @include minWidthMediaQuery(1600px) {
+        width: 2%;
+    }
 }
 
 .input {
@@ -29,7 +43,6 @@
         outline: none;
         border-bottom-color: #c9995c;
         box-shadow: inset 0px -3px 6px 0px #c9995c;
-
     }
 }
 
@@ -42,4 +55,9 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
+
+    @include maxWidthMediaQuery(1000px) {
+        padding: 0;
+        width: 95vw;
+    }
 }

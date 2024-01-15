@@ -30,7 +30,12 @@ export default function RecipeDetailsHeader({
         <>
             <section>
                 <h4 className={styles['recipe-category']}>{category}</h4>
-                <h2 className={styles['recipe-name']}>{name}</h2>
+                <h2
+                    className={styles['recipe-name']}
+                    style={isAuthenticated ? { minHeight: '50px' } : { minHeight: '114px' }}
+                >
+                    {name}
+                </h2>
                 {
                     isAuthenticated
                         ? isFavourite

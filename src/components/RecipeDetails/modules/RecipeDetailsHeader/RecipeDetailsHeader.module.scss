@@ -17,7 +17,6 @@
 .recipe-name {
     display: inline-block;
     width: 300px;
-    min-height: 114px;
 
     @include maxWidthMediaQuery(1000px) {
         min-height: 0;
@@ -49,6 +48,8 @@
 }
 
 .favourites {
+    margin-bottom: 50px;
+
     &:hover {
         cursor: pointer;
     }

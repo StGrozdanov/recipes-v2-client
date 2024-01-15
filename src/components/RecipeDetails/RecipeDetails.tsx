@@ -12,6 +12,8 @@ import { useQueryClient } from "react-query";
 import Notification from "../common/Notification/Notification";
 import { useRecipesService } from "../../services/recipesService";
 import { useFavouritesService } from "../../services/favouritesService";
+import { useMediaQuery } from "react-responsive";
+import BackToTopButton from "../common/BackToTopButton/BackToTopButton";
 
 export default function RecipeDetails() {
     const [viewportStep, setViewportStep] = useState(0);
@@ -24,6 +26,7 @@ export default function RecipeDetails() {
     const queryClient = useQueryClient();
     const [addToFavouritesSuccess, setAddToFavouritesSuccess] = useState(false);
     const [removeFromFavouritesSuccess, setRemoveFromFavouritesSuccess] = useState(false);
+    const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1000px)' });
 
     const { recipe, recipeIsLoading } = getASingleRecipe(name as string);
 
@@ -113,6 +116,7 @@ export default function RecipeDetails() {
                                 ownerId={recipe?.owner?.id}
                             />
                         </article>
+                        {isTabletOrMobile && <BackToTopButton scrollVisibility={0} />}
                     </article>
                     <Notification
                         type={'fail'}

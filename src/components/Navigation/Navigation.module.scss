@@ -116,6 +116,7 @@
 .burger {
     cursor: pointer;
     z-index: 2;
+    position: relative;
 
     &:hover {
         .bar {
@@ -202,6 +203,7 @@
         background-repeat: no-repeat;
         transition: background-size 0.4s ease-out;
         background-color: transparent;
+        position: relative;
 
         &:hover {
             background-size: 100% 0.2em;
@@ -253,9 +255,14 @@
 .notification {
     color: $dark-orange-accent-color;
     position: absolute;
-    top: 20px;
-    right: 85px;
+    top: -5px;
+    right: -20px;
     font-size: 0.9rem;
+
+    @include maxWidthMediaQuery(500px) {
+        right: initial;
+        left: -20px;
+    }
 }
 
 .expanded-notification {
@@ -264,5 +271,9 @@
     top: 260px;
     right: 470px;
     font-size: 1.1rem;
-    transform: translateY(0px) rotate(-45deg)
+    transform: translateY(0px) rotate(-45deg);
+
+    @include maxWidthMediaQuery(500px) {
+        right: 50px;
+    }
 }

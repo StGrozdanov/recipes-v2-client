@@ -34,7 +34,12 @@
     margin-left: 2.5vw;
     @include customHeadingFont('regular');
 
+    @include maxWidthMediaQuery(1000px) {
+        margin-left: 70px;
+    }
+
     @include maxWidthMediaQuery(520px) {
+        margin-left: 40px;
         margin-bottom: 35px;
     }
 }
@@ -83,8 +88,9 @@
     }
 
     @include maxWidthMediaQuery(520px) {
-        top: 8vh;
-        right: 37vw;
+        top: 9%;
+        left: 45vw;
+        width: 100%;
     }
 }
 
@@ -100,7 +106,8 @@
     @include elegantCormorantFont('semi-bold');
 
     @include maxWidthMediaQuery(520px) {
-        width: 90%;
+        width: 100%;
+        margin: 0;
     }
 }
 

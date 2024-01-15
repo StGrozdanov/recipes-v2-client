@@ -1,3 +1,5 @@
+@use 'src/scss/common/media' as *;
+
 .my-profile-section {
     display: flex;
     flex-direction: column;
@@ -6,6 +8,14 @@
 
 .user-profile {
     margin: 50px auto;
+
+    @include maxWidthMediaQuery(1000px) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 50px 0 10px 0;
+        
+    }
 }
 
 .profile-navigation-button {
@@ -17,6 +27,12 @@
     background: #4b4a4f;
     color: white;
     cursor: pointer;
+
+    @include maxWidthMediaQuery(1000px) {
+        margin: 0;
+        margin-bottom: 15px;
+        width: fit-content;
+    }
 
     &:hover {
         background: #c28a44;
