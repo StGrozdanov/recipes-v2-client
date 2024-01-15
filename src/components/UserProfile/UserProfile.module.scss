@@ -1,3 +1,5 @@
+@use 'src/scss/common/media' as *;
+
 .user-section {
     display: flex;
     flex-wrap: wrap;
@@ -13,6 +15,11 @@
     box-shadow: 2px 2px 20px -3px #c8c8c8;
     background: #dcdcdcb8;
     position: relative;
+
+    @include maxWidthMediaQuery(620px) {
+        width: 360px;
+        order: 2;
+    }
 
     &::-webkit-scrollbar {
         width: 7px;
@@ -49,4 +56,9 @@
     display: flex;
     align-items: center;
     width: 290px;
+
+    @include maxWidthMediaQuery(620px) {
+        margin-top: 50px;
+        margin-bottom: -20px;
+    }
 }
