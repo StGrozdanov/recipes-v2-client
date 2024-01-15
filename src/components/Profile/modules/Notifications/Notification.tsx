@@ -29,7 +29,7 @@ export default function Notification({
             <header className={styles["notification-article-header"]}>
                 <FallbackImage
                     className={styles["notification-avatar-image"]}
-                    src={senderAvatar}
+                    src={senderAvatar && senderAvatar !== '' ? senderAvatar : null}
                     alt={"/images/Avatar.png"}
                 />
             </header>
