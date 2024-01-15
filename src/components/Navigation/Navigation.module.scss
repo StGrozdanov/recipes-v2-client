@@ -60,6 +60,7 @@
     z-index: 2;
     overflow-y: scroll;
     direction: rtl;
+    overflow-x: hidden;
 
     &::-webkit-scrollbar {
         width: 0;
@@ -98,8 +99,13 @@
     width: 60px;
     position: absolute;
     bottom: -500px;
-    left: 47%;
+    left: 49%;
     z-index: 3;
+    transform: translate(-50%, -50%);
+    
+    @include maxWidthMediaQuery(1200px) {
+        left: 48%
+    }
 
     img {
         width: 100%;
