@@ -57,7 +57,7 @@ export default function Landing() {
                     </h3>
                     {
                         mostViewedRecipes?.map(recipe =>
-                            <Animate key={recipe.recipeName + 'animate'} animationName="fadeInDown">
+                            <Animate key={recipe.recipeName + 'animate'} animationName="slideInLeft">
                                 <RecipeCard key={recipe.recipeName} {...recipe} />
                             </Animate>
                         )
