@@ -1,5 +1,6 @@
 @use 'src/scss/common/buttons' as *;
 @use 'src/scss/common/colors' as *;
+@use 'src/scss/common/media' as *;
 
 .container {
     position: fixed;
@@ -17,6 +18,30 @@
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+
+    @include maxWidthMediaQuery(1280px) {
+        transform: initial;
+        top: 200px;
+        left: 23%;
+    }
+
+    @include maxWidthMediaQuery(850px) {
+        transform: initial;
+        top: 120px;
+        left: 15%;
+    }
+
+    @include maxWidthMediaQuery(500px) {
+        transform: initial;
+        width: 90vw;
+        top: 120px;
+        left: 3%;
+    }
+
+    @include minWidthMediaQuery(1400px) {
+        top: 400px;
+        left: 50vw;
+    }
 
     h1 {
         font-size: 1rem;
