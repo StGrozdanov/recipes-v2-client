@@ -27,6 +27,22 @@
     height: 75vh;
     position: relative;
     background-color: white;
+
+    @include maxWidthMediaQuery(1100px) {
+        width: 40vw;
+        height: 90vh;
+    }
+
+    @include maxWidthMediaQuery(500px) {
+        width: 80vw;
+        height: 90vh;
+    }
+
+    @include minWidthMediaQuery(1600px) {
+        width: 20vw;
+        height: 50vh;
+    }
+
 }
 
 .form-header {
@@ -171,6 +187,17 @@ a {
     text-align: center;
     width: 100%;
     font-size: 1.3rem;
+
+    @include minWidthMediaQuery(1600px) {
+        top: 15%;
+        z-index: 1;
+    }
+
+    @include maxWidthMediaQuery(1300px) {
+        z-index: 1;
+        top: 14%;
+    }
+
 }
 
 .form-validation-msg {
@@ -179,6 +206,17 @@ a {
     text-align: center;
     width: 100%;
     color: $dark-orange-accent-color;
+
+    @include minWidthMediaQuery(1600px) {
+        top: 17%;
+        z-index: 1;
+    }
+
+    @include maxWidthMediaQuery(1300px) {
+        z-index: 1;
+        top: 15%;
+    }
+
 }
 
 .fail-validation-msg {
