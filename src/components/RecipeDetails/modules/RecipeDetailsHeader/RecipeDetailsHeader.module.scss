@@ -1,5 +1,6 @@
 @use 'src/scss/common/colors' as *;
 @use 'src/scss/common/fonts' as *;
+@use 'src/scss/common/media' as *;
 
 .recipe-name,
 .recipe-owner,
@@ -17,6 +18,11 @@
     display: inline-block;
     width: 300px;
     min-height: 114px;
+
+    @include maxWidthMediaQuery(1000px) {
+        min-height: 0;
+        width: initial;
+    }
 }
 
 .recipe-category {
@@ -31,9 +37,9 @@
     width: 335px;
     height: 335px;
     border-radius: 50%;
-    margin-left: 125px;
     z-index: 1;
     box-shadow: 1px 1px 9px 0px #00000082;
+    order: 1;
 
     img {
         width: 100%;

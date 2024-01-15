@@ -69,48 +69,50 @@ export default function RecipeDetails() {
                 ? <Navigate to="/not-found" replace />
                 : <>
                     <article className={styles.container}>
-                        <section className={styles['top-section']}>
-                            <RecipeDetailsHeader
-                                category={recipe?.category}
-                                name={recipe?.recipeName ? capitalizatorUtil(recipe.recipeName) : ''}
-                                image={recipe?.imageURL}
-                                ownerName={recipe?.owner?.username}
-                                isFavourite={recipeIsFavourite}
-                                isAuthenticated={isAuthenticated}
-                                addToFavouritesHandler={favouriteRecipeHandler}
-                                removeFromFavouritesHandler={removeFromFavouritesRecipeHandler}
-                            />
-                            <article className={styles['panel-container']}>
-                                <RecipePanel
-                                    calories={recipe?.calories || 0}
-                                    preparationTime={recipe?.preparationTime || 0}
-                                    products={recipe?.products}
-                                    protein={recipe?.protein || 0}
+                        <section className={styles['left-section']}>
+                            <section className={styles['top-section']}>
+                                <RecipeDetailsHeader
+                                    category={recipe?.category}
+                                    name={recipe?.recipeName ? capitalizatorUtil(recipe.recipeName) : ''}
+                                    image={recipe?.imageURL}
+                                    ownerName={recipe?.owner?.username}
+                                    isFavourite={recipeIsFavourite}
+                                    isAuthenticated={isAuthenticated}
+                                    addToFavouritesHandler={favouriteRecipeHandler}
+                                    removeFromFavouritesHandler={removeFromFavouritesRecipeHandler}
                                 />
-                                <RecipePanelNavigation
-                                    recipeName={recipe?.recipeName}
-                                    ownerId={recipe?.owner?.id}
-                                />
-                            </article>
-                        </section>
-                        <section className={styles['methods-section']}>
-                            <section className={styles.methods}>
-                                {
-                                    recipe?.steps && recipe.steps.length > 0 && recipe.steps.map(
-                                        (step, index) =>
-                                            <RecipeStep
-                                                step={step}
-                                                index={index}
-                                                key={index}
-                                                isInViewportHandler={viewportStepHandler}
-                                            />
-                                    )
-                                }
                             </section>
-                            <span className={styles['current-method-step']}>
-                                {viewportStep + 1} от {recipe?.steps && recipe.steps.length}
-                            </span>
+                            <section className={styles['methods-section']}>
+                                <section className={styles.methods}>
+                                    {
+                                        recipe?.steps && recipe.steps.length > 0 && recipe.steps.map(
+                                            (step, index) =>
+                                                <RecipeStep
+                                                    step={step}
+                                                    index={index}
+                                                    key={index}
+                                                    isInViewportHandler={viewportStepHandler}
+                                                />
+                                        )
+                                    }
+                                </section>
+                                <span className={styles['current-method-step']}>
+                                    {viewportStep + 1} от {recipe?.steps && recipe.steps.length}
+                                </span>
+                            </section>
                         </section>
+                        <article className={styles['panel-container']}>
+                            <RecipePanel
+                                calories={recipe?.calories || 0}
+                                preparationTime={recipe?.preparationTime || 0}
+                                products={recipe?.products}
+                                protein={recipe?.protein || 0}
+                            />
+                            <RecipePanelNavigation
+                                recipeName={recipe?.recipeName}
+                                ownerId={recipe?.owner?.id}
+                            />
+                        </article>
                     </article>
                     <Notification
                         type={'fail'}

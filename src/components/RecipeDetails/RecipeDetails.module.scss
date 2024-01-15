@@ -1,32 +1,44 @@
 @use 'src/scss/common/colors' as *;
 @use 'src/scss/common/fonts' as *;
+@use 'src/scss/common/media' as *;
 
 .container {
     background: linear-gradient(130deg, rgba(53, 61, 81, 0.7008928571428572) 0%, rgba(53, 61, 81, 1) 20%);
     color: white;
-    padding-left: 100px;
     padding-top: 40px;
     font-size: 1.25rem;
     padding-bottom: 50px;
     margin-bottom: -30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+
+    @include maxWidthMediaQuery(1000px) {
+        flex-direction: column;
+    }
 }
 
-.panel-container {
-    position: absolute;
-    right: 10px;
-    top: 90px;
-    background: whitesmoke;
-    border-radius: 35px;
-    color: black;
-    padding: 50px 0 0 0;
-    font-size: 1rem;
-    width: 425px;
-    height: 118vh;
-    padding-right: 10px;
+.left-section {
+    flex: 0.5;
 }
 
 .top-section {
     display: flex;
+
+    @include maxWidthMediaQuery(1000px) {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    section {
+        @include maxWidthMediaQuery(1000px) {
+            order: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+    }
 }
 
 .method {
@@ -35,16 +47,26 @@
 
 .methods-section {
     display: flex;
+    padding: 0 30px;
+
+    @include maxWidthMediaQuery(450px) {
+        padding: 0 20px;
+    }
 }
 
 .methods {
     -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
     mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
-    width: 600px;
-    height: 320px;
+    width: 75%;
+    max-height: 50vh;
     overflow-y: scroll;
     position: relative;
     padding-bottom: 70px;
+
+    @include maxWidthMediaQuery(1000px) {
+        width: 100%;
+        max-height: 70vh;
+    }
 
     &::-webkit-scrollbar {
         width: 7px;
@@ -75,4 +97,30 @@
     padding-top: 75px;
     color: $white-orange-accent-color;
     font-size: 1rem;
+
+    @include maxWidthMediaQuery(1000px) {
+        min-width: 70px;
+    }
+
+    @include maxWidthMediaQuery(450px) {
+        display: none;
+    }
+}
+
+.panel-container {
+    background: whitesmoke;
+    border-radius: 35px;
+    color: black;
+    padding: 50px 0 0 0;
+    font-size: 1rem;
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    @include maxWidthMediaQuery(1000px) {
+        width: 90%;
+        margin: 0 30px;
+        padding: 0;
+    }
 }

@@ -1,16 +1,15 @@
-.nav-icon {
-    font-size: 1.25rem;
-    margin-right: 10px;
-    color: #57595f;
-}
+@use 'src/scss/common/media' as *;
 
 .navigation {
     background: #a2a8babd;
-    position: absolute;
-    left: 6px;
-    bottom: 32px;
     border-radius: 6px 6px 35px 35px;
-    width: 97%;
+    width: 100%;
+    padding: 2px 0;
+
+    @include maxWidthMediaQuery(1000px) {
+        order: -1;
+        border-radius: 35px 35px 6px 6px;
+    }
 
     ul {
         list-style: none;
@@ -20,6 +19,8 @@
     }
 
     .nav-icon {
+        font-size: 1.25rem;
+        color: #57595f;
         padding: 10px 0;
         background-image: linear-gradient(#57595f, #515560);
         background-size: 0% 0.1em;

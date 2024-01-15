@@ -1,8 +1,14 @@
+@use 'src/scss/common/media' as *;
+
 .products {
     padding: 0 0 0 50px;
     overflow-y: auto;
-    height: 95.5vh;
     width: 100%;
+    max-height: 75vh;
+
+    @include maxWidthMediaQuery(1000px) {
+        max-height: initial;
+    }
 
     &::-webkit-scrollbar {
         width: 7px;
