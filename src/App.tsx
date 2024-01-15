@@ -40,7 +40,7 @@ const state = dehydrate(queryClient);
 hydrate(queryClient, state);
 // Resume the paused mutations:
 queryClient.resumePausedMutations();
-const NOTIFICATIONS_WEBSOCKET_URL = process.env.REACT_APP_DEV_WEBSOCKET_URL || process.env.REACT_APP_WEBSOCKET_URL;
+const NOTIFICATIONS_WEBSOCKET_URL = process.env.REACT_APP_DEV_WEBSOCKET_URL || process.env.REACT_APP_BACKEND_WEBSOCKET_URL;
 
 function App() {
   const { pathname } = useLocation();
