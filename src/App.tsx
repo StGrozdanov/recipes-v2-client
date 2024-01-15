@@ -62,100 +62,102 @@ function App() {
   });
 
   return (
-    <BlockedContextProvider>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          {pathname !== '/' && <Navigation />}
-          <Routes>
-            <Route path='/' element={<Landing />} />
-            <Route path='/catalogue' element={<Catalogue />} />
-            <Route path='/search' element={<Search />} />
-            <Route path='/category' element={<Category />} />
-            <Route path='/login' element={
-              <Suspense fallback={<LoadingPan />}>
-                <InputModalProvider>
-                  <Login />
-                </InputModalProvider>
-              </Suspense>
-            } />
-            <Route path='/register' element={<Register />} />
-            <Route path='/reset-password/:id' element={
-              <Suspense fallback={<LoadingPan />}>
-                <PasswordReset />
-              </Suspense>
-            } />
-            <Route path='/details/:name' element={
-              <ModalProvider >
-                <RecipeDetails />
-              </ModalProvider>
-            } />
-            <Route path='/details/:name/comments' element={
-              <ModalProvider >
-                <RecipeDetails />
-              </ModalProvider>
-            } />
-            <Route path='/user/:username' element={
-              <Suspense fallback={<LoadingPan />}>
-                <UserProfile />
-              </Suspense>
-            } />
-            <Route path='/profile' element={
-              <Suspense fallback={<LoadingPan />}>
-                <ProfileRoot>
-                  <Profile />
-                </ProfileRoot>
-              </Suspense>
-            } />
-            <Route path='/profile/notifications' element={
-              <Suspense fallback={<LoadingPan />}>
-                <ProfileRoot>
-                  <Notifications />
-                </ProfileRoot>
-              </Suspense>
-            } />
-            <Route path='/profile/favourite-recipes' element={
-              <Suspense fallback={<LoadingPan />}>
-                <ProfileRoot>
-                  <FavouriteRecipes />
-                </ProfileRoot>
-              </Suspense>
-            } />
-            <Route path='/profile/my-recipes' element={
-              <Suspense fallback={<LoadingPan />}>
-                <ProfileRoot>
-                  <MyRecipes />
-                </ProfileRoot>
-              </Suspense>
-            } />
-            <Route path='/profile/edit' element={
-              <Suspense fallback={<LoadingPan />}>
-                <ProfileRoot>
-                  <ModalProvider >
-                    <ProfileEdit />
-                  </ModalProvider>
-                </ProfileRoot>
-              </Suspense>
-            } />
-            <Route path='/create' element={
-              <Suspense fallback={<LoadingPan />}>
-                <AuthRoute>
-                  <CreateRecipe />
-                </AuthRoute>
-              </Suspense>
-            } />
-            <Route path='/edit/:name' element={
-              <Suspense fallback={<LoadingPan />}>
-                <RecipeOwnerRoute>
-                  <EditRecipe />
-                </RecipeOwnerRoute>
-              </Suspense>
-            } />
-            <Route path='*' element={<Page404 />} />
-          </Routes>
-          <Footer />
-        </AuthProvider>
-      </QueryClientProvider>
-    </BlockedContextProvider>
+    <main style={{overflowX: "hidden"}}>
+      <BlockedContextProvider>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            {pathname !== '/' && <Navigation />}
+            <Routes>
+              <Route path='/' element={<Landing />} />
+              <Route path='/catalogue' element={<Catalogue />} />
+              <Route path='/search' element={<Search />} />
+              <Route path='/category' element={<Category />} />
+              <Route path='/login' element={
+                <Suspense fallback={<LoadingPan />}>
+                  <InputModalProvider>
+                    <Login />
+                  </InputModalProvider>
+                </Suspense>
+              } />
+              <Route path='/register' element={<Register />} />
+              <Route path='/reset-password/:id' element={
+                <Suspense fallback={<LoadingPan />}>
+                  <PasswordReset />
+                </Suspense>
+              } />
+              <Route path='/details/:name' element={
+                <ModalProvider >
+                  <RecipeDetails />
+                </ModalProvider>
+              } />
+              <Route path='/details/:name/comments' element={
+                <ModalProvider >
+                  <RecipeDetails />
+                </ModalProvider>
+              } />
+              <Route path='/user/:username' element={
+                <Suspense fallback={<LoadingPan />}>
+                  <UserProfile />
+                </Suspense>
+              } />
+              <Route path='/profile' element={
+                <Suspense fallback={<LoadingPan />}>
+                  <ProfileRoot>
+                    <Profile />
+                  </ProfileRoot>
+                </Suspense>
+              } />
+              <Route path='/profile/notifications' element={
+                <Suspense fallback={<LoadingPan />}>
+                  <ProfileRoot>
+                    <Notifications />
+                  </ProfileRoot>
+                </Suspense>
+              } />
+              <Route path='/profile/favourite-recipes' element={
+                <Suspense fallback={<LoadingPan />}>
+                  <ProfileRoot>
+                    <FavouriteRecipes />
+                  </ProfileRoot>
+                </Suspense>
+              } />
+              <Route path='/profile/my-recipes' element={
+                <Suspense fallback={<LoadingPan />}>
+                  <ProfileRoot>
+                    <MyRecipes />
+                  </ProfileRoot>
+                </Suspense>
+              } />
+              <Route path='/profile/edit' element={
+                <Suspense fallback={<LoadingPan />}>
+                  <ProfileRoot>
+                    <ModalProvider >
+                      <ProfileEdit />
+                    </ModalProvider>
+                  </ProfileRoot>
+                </Suspense>
+              } />
+              <Route path='/create' element={
+                <Suspense fallback={<LoadingPan />}>
+                  <AuthRoute>
+                    <CreateRecipe />
+                  </AuthRoute>
+                </Suspense>
+              } />
+              <Route path='/edit/:name' element={
+                <Suspense fallback={<LoadingPan />}>
+                  <RecipeOwnerRoute>
+                    <EditRecipe />
+                  </RecipeOwnerRoute>
+                </Suspense>
+              } />
+              <Route path='*' element={<Page404 />} />
+            </Routes>
+            <Footer />
+          </AuthProvider>
+        </QueryClientProvider>
+      </BlockedContextProvider>
+    </main>
   );
 }
 
