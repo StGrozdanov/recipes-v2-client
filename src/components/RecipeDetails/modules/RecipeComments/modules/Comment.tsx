@@ -119,7 +119,7 @@ export default function Comment({ content, createdAt, owner, id }: CommentsProps
                         {
                             editComment
                                 ?
-                                <>
+                                <section style={{display: 'flex'}}>
                                     <FontAwesomeIcon
                                         icon={faCircleCheck}
                                         className={styles.icon}
@@ -132,7 +132,7 @@ export default function Comment({ content, createdAt, owner, id }: CommentsProps
                                         style={{ color: 'darkred' }}
                                         onClick={() => { setEditComment(false); setCommentContent(content) }}
                                     />
-                                </>
+                                </section>
                                 :
                                 <>
                                     <FontAwesomeIcon
