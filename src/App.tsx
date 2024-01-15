@@ -40,11 +40,10 @@ const state = dehydrate(queryClient);
 hydrate(queryClient, state);
 // Resume the paused mutations:
 queryClient.resumePausedMutations();
-const NOTIFICATIONS_WEBSOCKET_URL = process.env.REACT_APP_BACKEND_WEBSOCKET_URL;
 
 function App() {
   const { pathname } = useLocation();
-  useWebSocket(NOTIFICATIONS_WEBSOCKET_URL!, {
+  useWebSocket('wss://recipes-v2-server.fly.dev/realtime-notifications', {
     shouldReconnect: (_closeEvent) => true,
     onMessage: (event: WebSocketEventMap['message']) => {
       let usernames: string[] = [];
