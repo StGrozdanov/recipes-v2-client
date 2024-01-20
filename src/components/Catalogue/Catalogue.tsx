@@ -7,6 +7,7 @@ import { capitalizatorUtil } from '../../utils/capitalizatorUtil';
 import Notification from '../common/Notification/Notification';
 import recipesFallback from './recipesFallback.json';
 import { useRecipesService } from '../../services/recipesService';
+import { RecipeSummary } from '../../services/types';
 
 export default function Catalogue() {
     const loader = useRef(null);
@@ -26,17 +27,24 @@ export default function Catalogue() {
         <section className={styles["cards-section"]}>
             <ul className={styles["recipe-card-list"]}>
                 {
-                    !isLoading && recipes?.map(recipe => {
-                        recipe.recipeName = capitalizatorUtil(recipe.recipeName);
-                        return (
-                            <RecipeCard
-                                key={recipe.imageURL + recipe.recipeName}
-                                {...recipe}
-                                style={{ margin: '40px 35px 10px 35px' }}
-                                animate
-                            />
-                        );
-                    })
+                    !isLoading &&
+                    recipes?.reduce((accumulator: RecipeSummary[], current) => {
+                        if (!accumulator.find((recipe: RecipeSummary) => recipe.recipeName === current.recipeName)) {
+                            accumulator.push(current);
+                        }
+                        return accumulator;
+                    }, [])
+                        .map(recipe => {
+                            recipe.recipeName = capitalizatorUtil(recipe.recipeName);
+                            return (
+                                <RecipeCard
+                                    key={recipe.imageURL + recipe.recipeName}
+                                    {...recipe}
+                                    style={{ margin: '40px 35px 10px 35px' }}
+                                    animate
+                                />
+                            );
+                        })
                 }
             </ul>
             <div ref={loader} />
