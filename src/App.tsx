@@ -7,7 +7,7 @@ import Catalogue from "./components/Catalogue/Catalogue";
 import Search from "./components/Search/Search";
 import Category from "./components/Category/Category";
 import { AuthProvider } from "./contexts/AuthContext";
-import Register from "./components/Authentication/Register";
+// import Register from "./components/Authentication/Register";
 import { InputModalProvider } from "./contexts/InputModalContext";
 import RecipeDetails from "./components/RecipeDetails/RecipeDetails";
 import { ModalProvider } from "./contexts/ModalContext";
@@ -77,7 +77,7 @@ function App() {
                   </InputModalProvider>
                 </Suspense>
               } />
-              <Route path='/register' element={<Register />} />
+              {/* <Route path='/register' element={<Register />} /> */}
               <Route path='/reset-password/:id' element={
                 <Suspense fallback={<LoadingPan />}>
                   <PasswordReset />

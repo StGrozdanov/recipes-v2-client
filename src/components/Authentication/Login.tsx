@@ -141,9 +141,9 @@ export default function Login() {
                         Забравена парола
                     </Link>
                     <footer className={style['form-footer']}>
-                        <Link to={'/register'}>
+                        {/* <Link to={'/register'}>
                             Все още нямате акаунт? Кликнете тук.
-                        </Link>
+                        </Link> */}
                     </footer>
                 </article>
             </div >
