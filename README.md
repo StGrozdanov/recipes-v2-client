@@ -1,4 +1,4 @@
-# Recipes Mobile
+# Recipes Client
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/StGrozdanov/recipes-v2-client)
 
