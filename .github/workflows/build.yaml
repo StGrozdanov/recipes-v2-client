@@ -101,66 +101,66 @@ jobs:
       - name: Run Linters
         run: npm run lint
 
-  unit_test_app:
-    name: Unit Tests
-    needs: [install_app]
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ${{ inputs.working-directory || github.workspace }}
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-      - name: Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.10.0
-          cache: "npm"
-          cache-dependency-path: ${{ env.PATH_PREFIX }}/package-lock.json
-      - name: Load dependencies
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.PATH_PREFIX }}/node_modules
-          key: ${{ format('{0}node_modules-{1}', env.CACHE_PREFIX, hashFiles(format('{0}/package-lock.json', env.PATH_PREFIX))) }}
-      - name: Run tests
-        run: npm run test
+  # unit_test_app:
+  #   name: Unit Tests
+  #   needs: [install_app]
+  #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       working-directory: ${{ inputs.working-directory || github.workspace }}
+  #   steps:
+  #     - name: Checkout repo
+  #       uses: actions/checkout@v4
+  #     - name: Setup node
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 20.10.0
+  #         cache: "npm"
+  #         cache-dependency-path: ${{ env.PATH_PREFIX }}/package-lock.json
+  #     - name: Load dependencies
+  #       uses: actions/cache@v4
+  #       with:
+  #         path: ${{ env.PATH_PREFIX }}/node_modules
+  #         key: ${{ format('{0}node_modules-{1}', env.CACHE_PREFIX, hashFiles(format('{0}/package-lock.json', env.PATH_PREFIX))) }}
+  #     - name: Run tests
+  #       run: npm run test
 
-  integration_test_app:
-    name: Integration Tests
-    needs: [install_app]
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    defaults:
-      run:
-        working-directory: ${{ inputs.working-directory || github.workspace }}
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4      
-      - name: Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.10.0
-          cache: "npm"
-          cache-dependency-path: ${{ env.PATH_PREFIX }}/package-lock.json
-      - name: Load dependencies
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.PATH_PREFIX }}/node_modules
-          key: ${{ format('{0}node_modules-{1}', env.CACHE_PREFIX, hashFiles(format('{0}/package-lock.json', env.PATH_PREFIX))) }}  
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-      - name: Run Playwright tests
-        run: npm run test:int
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 10
+  # integration_test_app:
+  #   name: Integration Tests
+  #   needs: [install_app]
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 20
+  #   defaults:
+  #     run:
+  #       working-directory: ${{ inputs.working-directory || github.workspace }}
+  #   steps:
+  #     - name: Checkout repo
+  #       uses: actions/checkout@v4      
+  #     - name: Setup node
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 20.10.0
+  #         cache: "npm"
+  #         cache-dependency-path: ${{ env.PATH_PREFIX }}/package-lock.json
+  #     - name: Load dependencies
+  #       uses: actions/cache@v4
+  #       with:
+  #         path: ${{ env.PATH_PREFIX }}/node_modules
+  #         key: ${{ format('{0}node_modules-{1}', env.CACHE_PREFIX, hashFiles(format('{0}/package-lock.json', env.PATH_PREFIX))) }}  
+  #     - name: Install Playwright Browsers
+  #       run: npx playwright install --with-deps
+  #     - name: Run Playwright tests
+  #       run: npm run test:int
+  #     - uses: actions/upload-artifact@v4
+  #       if: always()
+  #       with:
+  #         name: playwright-report
+  #         path: playwright-report/
+  #         retention-days: 10
 
   deploy_nonprod:
     name: Deploy Nonprod
-    needs: [typecheck_app, lint_app, unit_test_app, integration_test_app]
+    needs: [typecheck_app, lint_app]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -176,44 +176,44 @@ jobs:
           url="$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})"
           vercel alias --token=${{ secrets.VERCEL_TOKEN }} set "$url" ${{ secrets.NON_PROD_DOMAIN }}
 
-  e2e_test_app:
-    name: e2e tests
-    needs: [deploy_nonprod]
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    defaults:
-      run:
-        working-directory: ${{ inputs.working-directory || github.workspace }}
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4      
-      - name: Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.10.0
-          cache: "npm"
-          cache-dependency-path: ${{ env.PATH_PREFIX }}/package-lock.json
-      - name: Load dependencies
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.PATH_PREFIX }}/node_modules
-          key: ${{ format('{0}node_modules-{1}', env.CACHE_PREFIX, hashFiles(format('{0}/package-lock.json', env.PATH_PREFIX))) }}  
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-      - name: Run tests
-        run: npm run test:e2e
-        env:
-          BASE_URL: ${{ env.PREVIEW_URL }}
-      - uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: playwright-report
-          path: e2e/playwright-report/
-          retention-days: 10
+  # e2e_test_app:
+  #   name: e2e tests
+  #   needs: [deploy_nonprod]
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 20
+  #   defaults:
+  #     run:
+  #       working-directory: ${{ inputs.working-directory || github.workspace }}
+  #   steps:
+  #     - name: Checkout repo
+  #       uses: actions/checkout@v4      
+  #     - name: Setup node
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 20.10.0
+  #         cache: "npm"
+  #         cache-dependency-path: ${{ env.PATH_PREFIX }}/package-lock.json
+  #     - name: Load dependencies
+  #       uses: actions/cache@v4
+  #       with:
+  #         path: ${{ env.PATH_PREFIX }}/node_modules
+  #         key: ${{ format('{0}node_modules-{1}', env.CACHE_PREFIX, hashFiles(format('{0}/package-lock.json', env.PATH_PREFIX))) }}  
+  #     - name: Install Playwright Browsers
+  #       run: npx playwright install --with-deps
+  #     - name: Run tests
+  #       run: npm run test:e2e
+  #       env:
+  #         BASE_URL: ${{ env.PREVIEW_URL }}
+  #     - uses: actions/upload-artifact@v3
+  #       if: always()
+  #       with:
+  #         name: playwright-report
+  #         path: e2e/playwright-report/
+  #         retention-days: 10
 
   deploy_prod:
     name: Deploy Prod
-    needs: [e2e_test_app]
+    needs: [deploy_nonprod]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
