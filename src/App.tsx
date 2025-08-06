@@ -20,7 +20,7 @@ import { Suspense, lazy } from 'react';
 import LoadingPan from "./components/common/LoadingPan/LoadingPan";
 import Page404 from "./components/common/404/404";
 
-const PasswordReset = lazy(() => import('./components/Authentication/PasswordReset'));
+// const PasswordReset = lazy(() => import('./components/Authentication/PasswordReset'));
 const UserProfile = lazy(() => import('./components/UserProfile/UserProfile'));
 const Profile = lazy(() => import('./components/Profile/modules/Profile/Profile'));
 const Notifications = lazy(() => import('./components/Profile/modules/Notifications/Notifications'));
@@ -78,11 +78,11 @@ function App() {
                 </Suspense>
               } />
               {/* <Route path='/register' element={<Register />} /> */}
-              <Route path='/reset-password/:id' element={
+              {/* <Route path='/reset-password/:id' element={
                 <Suspense fallback={<LoadingPan />}>
                   <PasswordReset />
                 </Suspense>
-              } />
+              } /> */}
               <Route path='/details/:name' element={
                 <ModalProvider >
                   <RecipeDetails />
