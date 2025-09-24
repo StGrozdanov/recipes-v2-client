@@ -57,7 +57,7 @@ export default function RecipeDetailsHeader({
                 }
                 <h4 className={styles['recipe-owner']}>
                     <span className={styles.published}>Публикувано от:</span>
-                    <Link to={`/user/${ownerName}`}>{ownerName}</Link>
+                    <Link className={styles['owner-name']} to={`/user/${ownerName}`}>{ownerName}</Link>
                 </h4>
                 <h4 className={styles.method}>Метод на приготвяне</h4>
             </section>

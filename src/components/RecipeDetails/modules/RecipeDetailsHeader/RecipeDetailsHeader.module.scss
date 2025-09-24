@@ -14,6 +14,11 @@
     padding-right: 10px;
 }
 
+.owner-name {
+    color: $white-orange-accent-color;
+    text-decoration: underline;
+}
+
 .recipe-name {
     display: inline-block;
     width: 300px;
