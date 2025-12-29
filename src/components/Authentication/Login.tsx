@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRightToBracket, faUser, faKey, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import style from './Authenticate.module.scss';
@@ -6,8 +6,8 @@ import { useFormik } from 'formik';
 import { LoginData } from '../../services/types';
 import { validationSchemas } from '../../configs/yupConfig';
 import { useAuthContext } from '../../hooks/useAuthContext';
-// import { useInputModalContext } from '../../hooks/useInputModalContext';
-// import { useSendEmail } from './hooks/useSendEmail';
+import { useInputModalContext } from '../../hooks/useInputModalContext';
+import { useSendEmail } from './hooks/useSendEmail';
 import Notification from '../common/Notification/Notification';
 import { useState } from 'react';
 import { useAuthService } from '../../services/authService';
@@ -20,32 +20,32 @@ const initialLoginValues: LoginData = {
 export default function Login() {
     const { userLogin } = useAuthContext();
     const navigate = useNavigate();
-    const { useLogin } = useAuthService();
+    const { useLogin, useRequestVerificationCode } = useAuthService();
     const { login, isLoading } = useLogin();
-    // const inputModal = useInputModalContext();
-    // const { sendEmailHandler } = useSendEmail();
-    // const { requestVerificationCode } = useRequestVerificationCode();
-    // const [verificationEmailError, setVerificationEmailError] = useState(false);
-    // const [showSuccessNotification, setShowSuccessNotification] = useState(false);
+    const inputModal = useInputModalContext();
+    const { sendEmailHandler } = useSendEmail();
+    const { requestVerificationCode } = useRequestVerificationCode();
+    const [verificationEmailError, setVerificationEmailError] = useState(false);
+    const [showSuccessNotification, setShowSuccessNotification] = useState(false);
     const [authError, setAuthError] = useState(false);
 
-    // const updatePasswordHandler = async (emailInput: string) => {
-    //     verificationEmailError && setVerificationEmailError(false);
+    const updatePasswordHandler = async (emailInput: string) => {
+        verificationEmailError && setVerificationEmailError(false);
 
-    //     try {
-    //         const { verificationCodeResponse } = await requestVerificationCode(emailInput);
-    //         const data = await verificationCodeResponse;
+        try {
+            const { verificationCodeResponse } = await requestVerificationCode(emailInput);
+            const data = await verificationCodeResponse;
 
-    //         if (data) {
-    //             sendEmailHandler(data);
-    //             setShowSuccessNotification(true);
-    //         }
+            if (data) {
+                sendEmailHandler(data);
+                setShowSuccessNotification(true);
+            }
 
-    //     } catch (err) {
-    //         setVerificationEmailError(true);
-    //         console.error(err);
-    //     }
-    // }
+        } catch (err) {
+            setVerificationEmailError(true);
+            console.error(err);
+        }
+    }
 
     const submitHandler = async (values: LoginData) => {
         try {
@@ -126,7 +126,7 @@ export default function Login() {
                             />
                         </div>
                     </form>
-                    {/* <Link
+                    <Link
                         to={'#'}
                         className={style['forgotten-password']}
                         onClick={() => {
@@ -139,7 +139,7 @@ export default function Login() {
                         }}
                     >
                         Забравена парола
-                    </Link> */}
+                    </Link>
                     <footer className={style['form-footer']}>
                         {/* <Link to={'/register'}>
                             Все още нямате акаунт? Кликнете тук.
@@ -149,12 +149,12 @@ export default function Login() {
             </div >
             <Notification
                 type={'fail'}
-                isVisible={false}
+                isVisible={verificationEmailError}
                 message={'Въведохте несъществуващ имейл адрес.'}
             />
             <Notification
                 type={'success'}
-                isVisible={false}
+                isVisible={showSuccessNotification}
                 message={'Успешно заявихте промяна на паролата си. Очаквайте имейл с последващи инструкции'}
             />
         </>
