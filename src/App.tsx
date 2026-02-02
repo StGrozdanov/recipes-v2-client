@@ -20,6 +20,7 @@ import { Suspense, lazy } from 'react';
 import LoadingPan from "./components/common/LoadingPan/LoadingPan";
 import Page404 from "./components/common/404/404";
 
+// disable new registrations and password reset for now
 // const PasswordReset = lazy(() => import('./components/Authentication/PasswordReset'));
 const UserProfile = lazy(() => import('./components/UserProfile/UserProfile'));
 const Profile = lazy(() => import('./components/Profile/modules/Profile/Profile'));
